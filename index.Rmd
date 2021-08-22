@@ -1,7 +1,10 @@
 ---
-title: "EDS 123: Optional MEDS Template"
-description: "A minimal website skeleton and theme for MEDS course with distill (by RStudio)"
+title: "EDS 222: Statistics for Environmental Data Science"
+description: "Master’s of Environmental Data Science Program, UC Santa Barbara"
 site: distill::distill_website
+header-includes:
+- \usepackage{caption}
+- \captionsetup[figure]{labelformat=empty}
 ---
 
 ```{r setup, include=FALSE}
@@ -15,89 +18,86 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
-```{r, out.width = "100%", fig.cap = "Update this image by dropping your new image into the img folder of the project, then open the index.Rmd & change the path to point to the new image. Image: Mississippi River south of Memphis, TN, from USGS shared on Unsplash (https://unsplash.com/photos/35Z2ylLRCO8)."}
+```{r, out.width = "100%", fig.cap = "Image from Informatica [What is data visualization?](https://www.informatica.com/resources/articles/what-is-data-visualization.html)", out.extra="class=external"}
 
 # UPDATE IMAGE HERE 
 # or copy/paste this code elsewhere, updating the file path, to add other images to your site!
-knitr::include_graphics("img/usgs_sat.jpeg")
+knitr::include_graphics("img/datavis.jpeg")
 ```
 
-## Welcome to the MEDS distill template
+## Welcome to EDS 222
 
-Welcome to the MEDS Course Website template! This template is made with [distill](https://rstudio.github.io/distill/), a package to build lightweight and robust websites in R. This method for creating a course website may make the most sense for MEDS teachers who are familiar with RStudio, R Markdown, git and GitHub (or who want to learn!). For those of you who do *not* want to create your website with distill in R, but still want a course website, check out [Course-in-a-Box](https://course-in-a-box.p2pu.org/) to create a site with no prior coding experience.
+Statistics is the science of collecting, manipulating, and analyzing empirical data. In this class, we will use statistics in an applied, hands-on way to draw conclusions about the environment and its interaction with social and economic systems. We will cover fundamental statistical concepts and tools, and then apply and expand upon those tools to learn particular statistical methods that are helpful in environmental data science. Welcome!  
 
-For those wanting to take the distill/R websites path: this template acts as both a starting point for your site, and place to learn basics ways to customize it (different topics currently populate the different modules, which I expect teachers will replace with different weeks or lessons or topics as useful for your courses). 
+### Some concepts we'll cover:
 
-### Some starting points:
+- Sampling and study design, descriptive statistics
 
-- Follow along with the "Getting started with the MEDS distill template" (COMING SOON) instructions to set up your own distill website. Please reach out to Allison for help getting your website started, and submit problems and suggestions as issues [here](https://github.com/allisonhorst/meds-distill-template). 
+- Linear and logistic regression
 
-- The "Weekly materials" section of this template site can be updated with your course materials, but also in this template serves the additional purpose of showing you how to customize some things on your page.
+- Hypothesis testing and inference
 
-- See the [EDS 212 Website](https://allisonhorst.github.io/EDS_212_essential-math/) for an example of what a customized live course site can look like using this template.
+- Spatial weighting, spatial clustering, spatial optimization
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>index.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+- Time series analysis
+
+- ... 
+
+<!-- <p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>index.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> 
 
 ## Course description
 
 <p style="color: #ba5e00"><b>NOTE:</b> A lot of this home page information can be directly from your syllabus.</p>
 
-Add your course description here.
+Add your course description here. -->
 
-## Teaching team
+## Instructor
 
-**Instructor:** Mike Wazowski (wazowski\@monstersinc.org)
+Tamma Carleton (tcarleton\@ucsb.edu)
 
--   **Office:** Closet 100
--   **Office hours:** Friday 9pm - 11pm
-
-**Teaching assistant:** Boo (boo\@monstersinc.org)
-
--   **Office:** Boo's Room
--   **Office hours:** Saturday 7am - 8am
+-   **Office:** Bren Hall 3418
+-   **Office hours:** TBD
 
 ## Important links
 
--   Link to full course syllabus (here is the [MEDS optional syllabus template](https://docs.google.com/document/d/1b2CElvwKk-haEA1axY5KvTEBbiSPUf7dIRUNX7gCI6w/edit?usp=sharing))
+-   Syllabus [TBD] <!-- (here is the [MEDS optional syllabus template](https://docs.google.com/document/d/1b2CElvwKk-haEA1axY5KvTEBbiSPUf7dIRUNX7gCI6w/edit?usp=sharing)) -->
 
--   Link to Code of Conduct (Bren / UCSB)
+-   [UCSB Code of Conduct](https://www.sa.ucsb.edu/regulations/student-conduct-code/student-conduct-code)
 
--   Link to course GitHub Classroom, other essential resources
+-   Link to course GitHub Classroom [TBD]
+
 
 ## Weekly course schedule
 
--   **Lectures:** MW 8am - 9:15am (Warehouse Room 1)
--   **Labs:** Th 10am - 12pm (Warehouse Room 2)
+-   **Lectures:** Tuesday 9:30am - 10:45am (1414 Bren Hall)
+-   **Labs (not optional!):** Thursdays 9:30am - 10:45am (1414 Bren Hall)
 
 ## Learning objectives
 
-Condimentum id venenatis a condimentum. Ultricies mi quis hendrerit dolor magna eget est. Turpis egestas maecenas pharetra convallis. Sem nulla pharetra diam sit amet. Diam volutpat commodo sed egestas egestas fringilla. Mauris in aliquam sem fringilla ut morbi tincidunt augue interdum. Ornare massa eget egestas purus viverra accumsan in.
+The goal of this course is to enable MEDS students to confidently and competently apply statistical tools to environmental and socio-environmental datasets. 
 
--   Vulputate eu scelerisque felis imperdiet proin.
--   Euismod nisi porta lorem mollis aliquam.
--   Urna molestie at elementum eu facilisis sed odio morbi quis.
--   Convallis a cras semper auctor neque. Semper quis lectus nulla at volutpat diam ut venenatis tellus.
+-   **Master fundamental statistical concepts** and learn to apply them in `R`
+-   **Design, conduct, and interpret linear and nonlinear regression models** 
+-   **Apply spatial statistical methods** to environmental data
+-   **Learn about and address** common spatial and temporal dependency issues that arise in environmental datasets
 
 ## Course requirements
 
 ### Computing
 
--   Minimum device requirements
+-   [Minimum MEDS device requirements](https://ucsb-meds.github.io/computer_reqs.html)
 
--   Software requirements
+-   R version 4.0.2 (or higher)
 
--   Account requirements
+-   RStudio version 1.4.1103 (or higher)
 
-### Textbook
+### Textbooks
 
--   Required textbook / information
+-   _Introduction to Modern Statistics_, by Mine Çetinkaya-Rundel and Johanna Hardin ([link](https://openintro-ims.netlify.app/))
 
-### Other requirements
+-   _Geographic Information Analysis_, by David O'Sullivan and David Unwin 
 
--   Anything else
--   Important for students to know
-
-## Tentative topics
+## Tentative topics [TBD]
 
 | Week | Lecture topics | Lab topics |
 |------|----------------|------------|
