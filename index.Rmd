@@ -2,9 +2,6 @@
 title: "EDS 222: Statistics for Environmental Data Science"
 description: "Master’s of Environmental Data Science Program, UC Santa Barbara"
 site: distill::distill_website
-header-includes:
-- \usepackage{caption}
-- \captionsetup[figure]{labelformat=empty}
 ---
 
 ```{r setup, include=FALSE}
