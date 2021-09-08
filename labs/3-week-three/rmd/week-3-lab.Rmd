@@ -1,0 +1,81 @@
+---
+title: "EDS 222: Week 1: In-class Assignment"
+author: "{STUDENT NAME}"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load all the packages needed here
+library(tidyverse)
+library(readr)
+library(gt)
+
+setwd("/Users/fatiq/Dropbox/EDS222_data")
+
+```
+
+# Summarize and describe Categorical data
+
+## Contingency Table:
+
+## Bar Plots: 
+
+## Row and Column Proportions: 
+
+## Pie Charts: 
+
+## Waffle Charts: 
+
+## Numerical Data across Charts: 
+
+## Faceting:
+
+# Summarize and describe Numerical data
+
+## Summary Statistics, Mean, SD and Outliers
+
+## Histograms, Bimodal and Skewness 
+
+## Box plots, quartiles, and the median
+
+
+
+# Simulation/Proofs to illustrate the Law of Large Numbers
+
+## Result 1: The law of large numbers says that as the sample size increases, the sample average converges towards the expected value. This means that both the sample Mean and standard deviation (SD) approach the true mean and SD as N $\righarrow$ $\infty$. Plot your results in a graph. 
+
+Hint: Generate a distribution, sample from the distribution and take the mean. Repeat this process and each time you repeat an iteration increase the sample size. Use this method to show that the mean of the samples will approach the expected value.
+
+```{r}
+
+# I will use the example of a fair six-side dice which has a true mean of 6.5 for one roll. 
+set.seed(1234)
+vmean <- numeric(1000)
+
+for (i in 1:1000) {
+  vmean[i] <- mean(sample(1:6, i, replace = TRUE))
+}
+plot(vmean)
+
+```
+
+
+```{r}
+
+# I will use the example of a fair six-side dice which has a true sd of 1.75 for one roll. 
+set.seed(1234)
+vsd <- numeric(1000)
+
+for (i in 1:1000) {
+  vsd[i] <- sd(sample(1:6, i, replace = TRUE))
+}
+plot(vsd)
+
+```
+
+
+## Result 2: The Convergence towards the population mean and SD slows down if the data is noisier. Illustrate this. 
+    
+    
