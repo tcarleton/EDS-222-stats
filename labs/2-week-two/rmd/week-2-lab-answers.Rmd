@@ -20,9 +20,9 @@ _(All case studies in this exercise are fictional Any resemblance to actual even
 
 # Sampling in R
 
-Knowing how the observational units were selected from a larger entity will allow for generalizations back to the population from which the data were randomly selected. Additionally, by understanding the structure of the study, causal relationships can be separated from those relationships which are only associated. A good question to ask oneself before working with the data at all is,“How were these observations collected?” You will learn a lot about the data by understanding its source.
+Knowing how the observational units were selected from a larger entity will allow for generalizations back to the population from which the data were randomly selected. Additionally, by understanding the structure of the study, causal relationships can be separated from those relationships which are only associated. A good question to ask oneself before working with the data at all is,“How were these observations collected?” The following exercise will help you ask this question. 
 
-In an effort to reverse the effects of climate change and understand the distribution of air quality in the U.S., the Environmental Protection Agency (EPA) intends to intiate an effort to collect data on air quality across the U.S. However, limited funding from President Crump only allow them to collect data from 150 counties. You are an environmental data scientist at the EPA who is tasked to select 150 counties. You are conveniently given access to a list of all 3142 counties from the census. This is publicly available information and is contained in the county dataset in the `usdata` package. You can read more about the data using `help(county)`
+In an effort to reverse the effects of climate change and understand the distribution of air quality in the U.S., the Environmental Protection Agency (EPA) intends to initiate an effort to collect data on air quality across the U.S. However, limited funding from President Grump only allow them to collect data from 150 counties. You are an environmental data scientist at the EPA who is tasked to select 150 counties. You are conveniently given access to a list of all 3142 counties from the census. This is publicly available information and is contained in the county data-set in the `usdata` package. You can read more about the data using `help(county)`
 
 
 You have previously learned in class that there two types of sampling methodologies here: (i) Simple Random Sampling and; (ii) Stratified Sampling. Use these strategies to solve the first part of this exercise. For this we will make use of the county level data from the `usdata` package. This data frame contains data from counties in all 50 states plus the District of Columbia. 
@@ -64,7 +64,7 @@ county_srs %>%
 
 ## Step 4: 
 
-Using your answer from step 3, think about why or why not is the sampling strategy in step 2 representative of the population. Use the concepts of stratified random sampling learned in class to select an equal number of counties in each state. This can also be referred to as stratification on state, can you explain why or why not would this strategy make the sampling mor representative. 
+Using your answer from step 3, think about why or why not is the sampling strategy in step 2 representative of the population. Use the concepts of stratified random sampling learned in class to select an equal number of counties in each state. This can also be referred to as stratification on state, can you explain why or why not would this strategy make the sampling more representative. 
 
 ```{r}
 county_str <- 
@@ -76,7 +76,7 @@ county_str <-
 
 # Step 5: 
 
-President Crump and his team is not convinced that you are selecting a random sample of all the counties of the U.S. Write in a few words how you would defend your sampling strategy in Step 4. 
+President Grump and his team is not convinced that you are selecting a random sample of all the counties of the U.S. Write in a few words how you would defend your sampling strategy in Step 4. 
 
 
 # Sampling issues in real data: 
@@ -85,9 +85,9 @@ President Crump and his team is not convinced that you are selecting a random sa
 
 As we have learned in the lectures that statistic derived from the population data and the sample data differ. The statistic derived from the population is referred to as the estimand where the statistic derived from the sample data is referred to as the estimate.
 
-In this exercise we will look at a case study from the developing world. We will take the case of air quality in South Asia. Out of the 6 South Asian countries, Pakistan was ranked to contain the second most air pollution in the world in 2020 (IQAIR, 2020). In 2019 Lahore, Pakistan was the 12th most polluted city in the world with a population of 11.1 million people.
+In this exercise we will look at a case study from the developing world. We will take the case of air quality in South Asia. Out of the 6 South Asian countries, Pakistan was ranked to contain the second most air pollution in the world in 2020 (IQAIR, 2020). In 2019 Lahore, Pakistan was the 12th most polluted city in the world with a population of 11.1 million people. You are given two data-sets from Lahore, Pakistan and are asked to compare the two different data collection strategies from this city. 
 
-We make use of two sources of data: (i) crowdsourced data from air quality monitors in people's homes; (ii) government data from official monitors installed at selected places in Lahore.
+We make use of two sources of data: (i) crowd-sourced data from air quality monitors in people's homes; (ii) government data from official monitors installed at selected places in Lahore.
 
 ## Step 1: Load the data from dropbox and label it as `crowdsourced` and `govt` accordingly: 
 
@@ -136,7 +136,9 @@ govt %>%
 
 # Designing an experiment
 
-In this section, we will work through how a randomized controlled trial (RCT) is designed. We will go through how a data for a randomized trial can be simulated. 
+Randomized controlled trials (RCT) are the gold-standard for causal data collection. However, conducting an RCT in real life is monetarily and logistically an expensive research design to implement. 
+
+You are tasked to design a randomized controlled trial on air quality in Lahore, Pakistan. To know more about the context of air quality in Lahore, please read [this](https://www.dropbox.com/s/lrv496l15p2mgap/paper_432.pdf?dl=0). The experiment you design should have one treatment and one control group. Since, RCT are expensive and difficult to execute, your funder wants to see some preliminary data simulations on what kinds of results you can hypothetically expect. As described in [Blair et al 2019](https://www.cambridge.org/core/journals/american-political-science-review/article/declaring-and-diagnosing-research-designs/3CB0C0BB0810AEF8FF65446B3E2E4926) the benefits of doing Monte Carlo simulations before implementing a research design help reduce researcher bias, improve the design and forecast problems in potential analyses. Although, the RCT design is due in your homework, in this exercise, we will generate do Monte Carlo simulations to foresee some potential issues in our analyses. 
 
 
 ## Step 1: Generate a data frame with 100 observations. Add a random normal variable for potential outcomes for Y0 and Y1:
@@ -205,7 +207,7 @@ experiment_run <- function() {
     
 ```
     
-## Step 7: add blocking within the sampling part: 
+## Step 7: add blocking within the sampling part:  
     
 ### Step 7.1: First we need to identify what blocking is and why is it needed. For this we need to see what is the bias that our experiment suffers from due to lack of blocking. To do this, design an experiment, randomize the treatment status and see the bias in the simulated variable. Prove that in over 10,000 iterations this bias is reduced to 0. 
 
