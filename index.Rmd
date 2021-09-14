@@ -67,7 +67,7 @@ Tamma Carleton (tcarleton\@ucsb.edu)
 ## Weekly course schedule
 
 -   **Lectures:** Tuesday 9:30am - 10:45am (1414 Bren Hall)
--   **Labs (not optional!):** Thursdays 9:30am - 10:45am (1414 Bren Hall)
+-   **Labs:** Thursdays 9:30am - 10:45am (1414 Bren Hall)
 
 ## Learning objectives
 
@@ -98,16 +98,16 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 | Week | Lecture topics (Tues) | Lab topics (Thurs) |
 |------|----------------|------------|
-| 1    | n/a        | Class intro        |
+| 1    | No class        | Class intro        |
 | 2    | Sampling \& study design         | Biased data collection     |
 | 3    | Summarizing and visualizing data         | Simulations in `R`     |
 | 4    | Linear regression         | Linear regression in `R`     |
 | 5    | Inference \& hypothesis testing         |   Inference, cont'd   |
 | 6    | Slack time, review         | Midterm Exam     |
 | 7    | Time series analysis       | Temporal lag models, serial correlation     |
-| 8    | Point processes         | Clustering algorithms     |
+| 8    | Point processes, clustering algorithms         | No class     |
 | 9    | Interpolation \& kriging         | Spatial weighting     |
-| 10   | Regression in space         | Spatial autocorrelation \& aggregation bias     |
+| 10   | Regression in space, spatial autocorrelation         |   No class   |
 | 11   | TBD         | Final project presentations     |
 | Finals week   | Final project presentations         | n/a     |
 
