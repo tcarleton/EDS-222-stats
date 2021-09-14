@@ -110,3 +110,5 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 10   | Regression in space         | Spatial autocorrelation \& aggregation bias     |
 | 11   | TBD         | Final project presentations     |
 | Finals week   | Final project presentations         | n/a     |
+
+**This webpage was designed following [a template](https://github.com/allisonhorst/meds-distill-template) by Dr. Allison Horst.**
