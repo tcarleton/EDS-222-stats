@@ -6,10 +6,21 @@ title: "Course resources"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p>
+<!-- <p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> -->
 
-### More on `distill`
+### Lecture slides
 
+[All lecture slides will be linked here before Tuesday classes.]
+
+### Labs
+
+[All labs will be linked here before Thursday classes. Lab solutions will be linked _after_ class.]
+
+### Assignments
+
+All assignments will be posted, submitted, and graded through our [Github Classrooms page](https://classroom.github.com/classrooms/89556369-eds222-fall-2021).
+
+<!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
-
+-->

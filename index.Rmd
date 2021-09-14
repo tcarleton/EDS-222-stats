@@ -92,13 +92,13 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 -   _Introduction to Modern Statistics_, by Mine Çetinkaya-Rundel and Johanna Hardin ([link](https://openintro-ims.netlify.app/))
 
--   _Geographic Information Analysis_, by David O'Sullivan and David Unwin (optional)
+-   _Geographic Information Analysis_, by David O'Sullivan and David Unwin (optional) [link](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470549094)
 
-## Tentative topics 
+## Weekly topics [subject to change] 
 
-| Week | Lecture topics | Lab topics |
+| Week | Lecture topics (Tues) | Lab topics (Thurs) |
 |------|----------------|------------|
-| 1    | Class intro        | n/a        |
+| 1    | n/a        | Class intro        |
 | 2    | Sampling \& study design         | Biased data collection     |
 | 3    | Summarizing and visualizing data         | Simulations in `R`     |
 | 4    | Linear regression         | Linear regression in `R`     |
