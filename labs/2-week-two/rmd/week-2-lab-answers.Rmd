@@ -16,14 +16,16 @@ setwd("/Users/fatiq/Dropbox/EDS222_data")
 
 ```
 
+_(All case studies in this exercise are fictional Any resemblance to actual events or locales or persons, living or dead, is entirely coincidental.)_
+
 # Sampling in R
 
-We are going to learn two types of sampling methodologies here: 
+Knowing how the observational units were selected from a larger entity will allow for generalizations back to the population from which the data were randomly selected. Additionally, by understanding the structure of the study, causal relationships can be separated from those relationships which are only associated. A good question to ask oneself before working with the data at all is,“How were these observations collected?” You will learn a lot about the data by understanding its source.
 
-(i) Simple Random Sampling and; 
-(ii) Stratified Sampling. 
+In an effort to reverse the effects of climate change and understand the distribution of air quality in the U.S., the Environmental Protection Agency (EPA) intends to intiate an effort to collect data on air quality across the U.S. However, limited funding from President Crump only allow them to collect data from 150 counties. You are an environmental data scientist at the EPA who is tasked to select 150 counties. You are conveniently given access to a list of all 3142 counties from the census. This is publicly available information and is contained in the county dataset in the `usdata` package. You can read more about the data using `help(county)`
 
-For this we will make use of the county level data from the `usdata` package. This data frame contains data from counties in all 50 states plus the District of Columbia. 
+
+You have previously learned in class that there two types of sampling methodologies here: (i) Simple Random Sampling and; (ii) Stratified Sampling. Use these strategies to solve the first part of this exercise. For this we will make use of the county level data from the `usdata` package. This data frame contains data from counties in all 50 states plus the District of Columbia. 
 
 ## Step 1: 
 
@@ -38,7 +40,7 @@ county <-
 
 ## Step 2: 
 
-You are tasked at the EPA to collect data on air quality from all 50 states in the US. However, the current president has initiated significant budget cuts in the EPA which only allows them to collect data from 150 out of the ~3000 counties in the United States. Take a random sample of 150 counties that you think can be representative of the US and store them in a tidy data frame called `county_srs` You are encouraged to write a function to do this.
+Take a random sample of 150 counties that you think can be representative of the US and store them in a tidy data frame called `county_srs` You are encouraged to write a function to do this.
 
 ```{r}
 # simple way
@@ -66,11 +68,15 @@ Using your answer from step 3, think about why or why not is the sampling strate
 
 ```{r}
 county_str <- 
-  county_noDC %>%
+  county %>%
   group_by(state) %>%
   slice_sample(n = 3) %>% 
   ungroup()
 ```
+
+# Step 5: 
+
+President Crump and his team is not convinced that you are selecting a random sample of all the counties of the U.S. Write in a few words how you would defend your sampling strategy in Step 4. 
 
 
 # Sampling issues in real data: 
