@@ -1,8 +1,7 @@
-# MEDS course websites - optional template
+# Statistics for Environmental Data Science (EDS 222)
+## UCSB Master's of Environmental Data Science
 
-This website template is made with [`distill` by RStudio](https://rstudio.github.io/distill/) as an optional starting point for teachers in the Master of Environmental Data Science Program at the Bren School (UC Santa Barbara). 
+This is the course website for EDS 222. All lecture slides and labs will be here, as well as other course resources. 
 
-[Click here](https://allisonhorst.github.io/meds-distill-template/) for a template preview.
-
-[Click here](https://docs.google.com/document/d/1iC0f8VONz269Fm6dVHXeiQuWubNOgOiHjF6oHNBLD-o/edit?usp=sharing) for step-by-step instructions to create your own website from this template. 
+This website is made with [`distill` by RStudio](https://rstudio.github.io/distill/), following [these](https://docs.google.com/document/d/1iC0f8VONz269Fm6dVHXeiQuWubNOgOiHjF6oHNBLD-o/edit?usp=sharing) helpful instructions by [Allison Horst](https://github.com/allisonhorst). 
 
