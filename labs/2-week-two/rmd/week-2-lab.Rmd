@@ -1,8 +1,15 @@
 ---
-title: "EDS 222: Week 1: In-class Assignment"
+title: "EDS 222: Week 2: In-class Assignment"
 author: "{STUDENT NAME}"
 date: "`r Sys.Date()`"
-output: pdf_document
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
 ---
 
 ```{r setup, include=FALSE}
@@ -12,178 +19,111 @@ library(tidyverse)
 library(readr)
 library(gt)
 
-setwd("/Users/fatiq/Dropbox/EDS222_data")
+setwd("/Users/fatiq/Dropbox/EDS222_data/data")
 
 ```
 
+_(All case studies in this exercise are fictional. Any resemblance to actual events or locales or persons, living or dead, is entirely coincidental.)_
+
 # Sampling in R
 
-We are going to learn two types of sampling methodologies here: 
+Knowing how observational units are selected from a larger entity can allow for generalizations back to the population from which the data were randomly selected. Additionally, by understanding the structure of the study, causal relationships can be separated from those relationships which are only associated. A good question to ask oneself before working with any form of data at all is, “How were these observations collected?” The following exercise will help you ask this question. 
 
-(i) Simple Random Sampling and; 
-(ii) Stratified Sampling. 
+In an effort to reverse the effects of climate change and understand the distribution of air quality in the U.S., the Environmental Protection Agency (EPA) intends to initiate an effort to collect data on air quality across the U.S. However, EPA received limited funding from President Grump fro this project which allows them to only collect data from 150 counties. You are an environmental data scientist at the EPA who is tasked to select 150 of these counties while making sure that these counties are representative of the United States. You are conveniently given access to a list of all 3142 counties from the census. This is publicly available information and is contained in the county data-set in the `usdata` package. You can read more about the data using `help(county)`
 
-For this we will make use of the county level data from the `usdata` package. This data frame contains data from counties in all 50 states plus the District of Columbia. 
+You have previously learned in class that there two types of sampling methodologies: (i) Simple Random Sampling and; (ii) Stratified Sampling. Use these strategies to solve the first part of this exercise. For this we will make use of the county level data from the `usdata` package. This data frame contains data from counties in all 50 states plus the District of Columbia. 
 
 ## Step 1: 
 
 Use the `library(usdata)` to load the data. 
 
-```{r}
-
-```
-
 ## Step 2: 
 
-You are tasked at the EPA to collect data on air quality from all 50 states in the US. However, the current president has initiated significant budget cuts in the EPA which only allows them to collect data from 150 out of the ~3000 counties in the United States. Take a random sample of 150 counties that you think can be representative of the US and store them in a tidy data frame called `county_srs` You are encouraged to write a function to do this.
-
-```{r}
-
-```
+Take a random sample of 150 counties that you think can be representative of the US and store them in a tidy data frame called `county_srs` You are encouraged to write a function to do this.
 
 ## Step 3: 
 
 Evaluate the distribution of sampled counties across different states in the data frame `county_srs`. Are the number of sampled counties in each state different? Would you call this a representative sample? 
 
-```{r}
-
-```
-
 ## Step 4: 
 
-Using your answer from step 3, think about why or why not is the sampling strategy in step 2 representative of the population. Use the concepts of stratified random sampling learned in class to select an equal number of counties in each state. This can also be referred to as stratification on state, can you explain why or why not would this strategy make the sampling mor representative. 
+Using your answer from step 3, think about why or why not is the sampling strategy in step 2 representative of the population. Use the concepts of stratified random sampling learned in class to select an equal number of counties in each state. This can also be referred to as stratification on state, can you explain why or why not would this strategy make the sampling more representative. 
 
-```{r}
+# Step 5: 
 
-```
-
+President Grump and his team is not convinced that you are selecting a random sample of all the counties of the U.S. Write in a few words how you would defend your sampling strategy in Step 4. Please note that President Grump and his team will reduce your funding if you use any jargon. Explain in simple language what you are doing in steps 1-4. 
 
 # Sampling issues in real data: 
 
 ## How does sampling influence your data and what you can learn from it?
 
-As we have learned in the lectures that statistic derived from the population data and the sample data differ. The statistic derived from the population is referred to as the estimand where the statistic derived from the sample data is referred to as the estimate.
+As we have learned in the lectures that statistics derived from the population data and the sample data differ. The statistic derived from the population is referred to as the `estimand` whereas the statistic derived from the sample data is referred to as the `estimate`.
 
-In this exercise we will look at a case study from the developing world. We will take the case of air quality in South Asia. Out of the 6 South Asian countries, Pakistan was ranked to contain the second most air pollution in the world in 2020 (IQAIR, 2020). In 2019 Lahore, Pakistan was the 12th most polluted city in the world with a population of 11.1 million people.
+In this exercise we will look at a case study from the developing world. We will take the case of air quality in South Asia. Out of the 6 South Asian countries, Pakistan was ranked to contain the second most air pollution in the world in 2020 (IQAIR, 2020). In 2019 Lahore, Pakistan was the 12th most polluted city in the world with a population of 11.1 million people. However, 84% of the citizens in Lahore say that the air pollution in the city is not a problem at all and 76% say that the air quality levels are within the safe zone. Your intial investigation has found that lack of resources and poor planning by the government and local bodies has led to data collection strategies that are not robust. You are given two data-sets from Lahore, Pakistan and are asked to compare the two different data collection strategies from this city and report back to the climate change minister on your findings. 
 
-We make use of two sources of data: (i) crowdsourced data from air quality monitors in people's homes; (ii) government data from official monitors installed at selected places in Lahore.
+We make use of two sources of data: (i) crowd-sourced data from air quality monitors in people's homes; (ii) government data from official monitors installed at selected places in Lahore.
 
 ## Step 1: 
 
 Load the data from dropbox and label it as `crowdsourced` and `govt` accordingly: 
 
-```{r}
-
-```
-
 ## Step 2: 
 
 Explain in words what the ideal population dataframe for air quality in Lahore would look like. Use both the crowdsourced data and the government and try to identify how both of these datasets can be products of different sampling strategies.
-
-```{r}
-
-```
-
 
 ## Step 3: 
 
 For each of the government data and crowdsourced generate estimates of the mean, min, max of the data and discuss how the sampling strategy biases (or doesn’t) those parameters as approximations of population statistics. 
 
-```{r}
-
-```
-
-
-```{r}
-
-```
-
 ## Step 5: 
 
-Identify why the government and corwdsourced data differ and how can they be related to biases generated as a result of the sampling process. 
-
-
-```{r}
-
-```
-
+Identify why the government and corwdsourced data differ and how can they be related to biases generated as a result of the sampling process. Write a note to the climate change minister on how they can reform government and private bodies to collect robust and representative data.
 
 # Designing an experiment
 
-In this section, we will work through how a randomized controlled trial (RCT) is designed. We will go through how a data for a randomized trial can be simulated. 
+Randomized controlled trials (RCT) are the gold-standard for causal data collection. However, conducting an RCT in real life is monetarily and logistically expensive to implement. 
 
+You are tasked to design a randomized controlled trial on air quality in Lahore, Pakistan. To know more about the context of air quality in Lahore, please read [this paper](https://www.dropbox.com/s/lrv496l15p2mgap/paper_432.pdf?dl=0). The experiment you design should have one treatment and one control group. Since, RCT are expensive and difficult to execute, the Jill and Belinda Gates Foundation (your funder) wants to see some preliminary data simulations on what kinds of problems you can hypothetically expect. As described in [Blair et al 2019](https://www.cambridge.org/core/journals/american-political-science-review/article/declaring-and-diagnosing-research-designs/3CB0C0BB0810AEF8FF65446B3E2E4926) the benefits of doing Monte Carlo simulations before implementing a research design help reduce researcher bias, improve the design and forecast problems in potential analyses. Although, the RCT design is due in your homework, in t≠his exercise, we will generate do Monte Carlo simulations to foresee some potential issues in our analyses and address concerns by our funder. 
 
 ## Step 1: 
 
-Generate a data frame with 100 observations. Add a random normal variable for potential outcomes for Y0 and Y1:
-
-
-```{r}
-
-```
+Generate a data frame with 100 observations. Add a random normal variable for potential outcomes for Y0 and Y1.
 
 ## Step 2: 
 
-Assign a binary treatment variable `Z` which has equal probability of being in control and treatment:
-
-```{r}
-
-```
+Assign a binary treatment variable `Z` which has equal probability of being in control and treatment.
 
 ## Step 3: 
 
-Contruct observed outcome using Y0 and Y1:
-
-```{r}
-
-```
+Contruct observed outcome using Y0 and Y1.
 
 ## Step 4: 
 
-Use a simple difference in means to calculate the treatment effect as the estimand and the estimate:
-
-```{r}
-
-```
-    
+Use a simple difference in means to calculate the treatment effect as the estimand and the estimate.
     
 ## Step 5: 
 
 Now, we would like to do this in a simulation over multiple trials. First, start with doing steps 1-4 in a single pipeline and generating a function to execute them.
 
-```{r}
-
-```
-
 ## Step 6: 
 
 Using the function in 5 and replicate it times and report what you observe about the results:
-
-```{r}
-
     
-```
-    
-## Step 7: 
+## Step 8: 
 
-add blocking within the sampling part: 
+Jill and Belinda and Gates Foundation are not accustomed to the technical training in statistics and are worried that sampling or measurement error can affect the results that come out of your RCT.  Write a note to your funder about how will your mean treatment effects will be within a certain range using your results from step 1-6. Please note that your funders are not at all accustomed to statistical terminlogies and you need to explain them your monte carlo simulations in jargon-free language.  
+
+## Step 9: 
+
+Jill and Belinda and Gates Foundation has hired a statistical expert, Dr. Imdens, to conduct a peer-review of your work. Dr. Imdens is risk averse and has concluded that your RCT will still be affected by some key confounding variables and hence wants you to control for these variables. Use the tools on blocking learnt in class and implement them here to address the Dr. Imdens' concerns. 
     
 ### Step 7.1: 
 
 First we need to identify what blocking is and why is it needed. For this we need to see what is the bias that our experiment suffers from due to lack of blocking. To do this, design an experiment, randomize the treatment status and see the bias in the simulated variable. Prove that in over 10,000 iterations this bias is reduced to 0. 
 
-```{r}    
-
-```
-
-
 ### Step 7.2: 
 
 Show the iterated bias generated in step 1 in a plot
-    
-```{r}
-
-```  
 
 ### Step 7.3: 
 
@@ -196,6 +136,3 @@ we need to create a block indicator. Blocks are based on observed units being si
 ### Step 7.3.2: 
 
 Now, once we have blocks, we need to randomize all the units within the blocks where one unit will go to treatment and one will go to control. randomize *within* blocks, exactly one to treatment and one to control. 
-```{r}
-
-```

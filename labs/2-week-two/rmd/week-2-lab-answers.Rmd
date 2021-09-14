@@ -12,7 +12,7 @@ library(tidyverse)
 library(readr)
 library(gt)
 
-setwd("/Users/fatiq/Dropbox/EDS222_data")
+setwd("/Users/fatiq/Dropbox/EDS222_data/data")
 
 ```
 
@@ -136,9 +136,9 @@ govt %>%
 
 # Designing an experiment
 
-Randomized controlled trials (RCT) are the gold-standard for causal data collection. However, conducting an RCT in real life is monetarily and logistically an expensive research design to implement. 
+Randomized controlled trials (RCT) are the gold-standard for causal data collection. However, conducting an RCT in real life is monetarily and logistically expensive to implement. 
 
-You are tasked to design a randomized controlled trial on air quality in Lahore, Pakistan. To know more about the context of air quality in Lahore, please read [this](https://www.dropbox.com/s/lrv496l15p2mgap/paper_432.pdf?dl=0). The experiment you design should have one treatment and one control group. Since, RCT are expensive and difficult to execute, your funder wants to see some preliminary data simulations on what kinds of results you can hypothetically expect. As described in [Blair et al 2019](https://www.cambridge.org/core/journals/american-political-science-review/article/declaring-and-diagnosing-research-designs/3CB0C0BB0810AEF8FF65446B3E2E4926) the benefits of doing Monte Carlo simulations before implementing a research design help reduce researcher bias, improve the design and forecast problems in potential analyses. Although, the RCT design is due in your homework, in this exercise, we will generate do Monte Carlo simulations to foresee some potential issues in our analyses. 
+You are tasked to design a randomized controlled trial on air quality in Lahore, Pakistan. To know more about the context of air quality in Lahore, please read [this paper](https://www.dropbox.com/s/lrv496l15p2mgap/paper_432.pdf?dl=0). The experiment you design should have one treatment and one control group. Since, RCT are expensive and difficult to execute, the Jill and Belinda Gates Foundation (your funder) wants to see some preliminary data simulations on what kinds of results you can hypothetically expect. As described in [Blair et al 2019](https://www.cambridge.org/core/journals/american-political-science-review/article/declaring-and-diagnosing-research-designs/3CB0C0BB0810AEF8FF65446B3E2E4926) the benefits of doing Monte Carlo simulations before implementing a research design help reduce researcher bias, improve the design and forecast problems in potential analyses. Although, the RCT design is due in your homework, in this exercise, we will generate do Monte Carlo simulations to foresee some potential issues in our analyses and address concerns by our funder. 
 
 
 ## Step 1: Generate a data frame with 100 observations. Add a random normal variable for potential outcomes for Y0 and Y1:
@@ -175,7 +175,7 @@ sample <-
 ## Step 4: Use a simple difference in means to calculate the treatment effect as the estimand and the estimate:
 
 ```{r}
-    sample %>% summarize(
+    fixed_population <- sample %>% summarize(
       estimand = mean(Y1 - Y0),
       estimate = mean(Y[Z == 1]) - mean(Y[Z == 0]))
 ```
@@ -185,7 +185,7 @@ sample <-
 
 ```{r}
 experiment_run <- function() {
-  fixed_population %>%
+  sample %>%
     mutate(Z = sample(c(0, 1), 100, replace = TRUE, prob = c(.5, .5))) %>%
     mutate(Y = if_else(Z == 1, Y1, Y0)) %>%
     summarize(estimand = mean(Y1 - Y0),
@@ -200,14 +200,31 @@ experiment_run <- function() {
     many_runs <-
       replicate(
         n = 1000,
-        expr = run_experiment(),
+        expr = experiment_run(),
         simplify = TRUE)
     
     apply(many_runs, 1, mean)
     
 ```
     
-## Step 7: add blocking within the sampling part:  
+    
+## Step 8: Jill and Belinda and Gates Foundation are not accustomed to the technical training in statistics and are worried that sampling or measurement error can affect the results that come out of your RCT.  Write a note to your funder about how will your mean treatment effects will be within a certain range using your results from step 1-6. Please note that your funders are not at all accustomed to statistical terminlogies and you need to explain them your monte carlo simulations in jargon-free language.  
+
+```{r}
+    many_runs <-
+      replicate(
+        n = 1000,
+        expr = run_experiment(),
+        simplify = TRUE)
+    
+    apply(many_runs, 1, max)
+    apply(many_runs, 1, min)
+    
+```
+
+
+
+## Step 9: add blocking within the sampling part:  
     
 ### Step 7.1: First we need to identify what blocking is and why is it needed. For this we need to see what is the bias that our experiment suffers from due to lack of blocking. To do this, design an experiment, randomize the treatment status and see the bias in the simulated variable. Prove that in over 10,000 iterations this bias is reduced to 0. 
 
