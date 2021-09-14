@@ -2532,7 +2532,7 @@ Topics
 <li><a href="#computing">Computing</a></li>
 <li><a href="#textbooks">Textbooks</a></li>
 </ul></li>
-<li><a href="#tentative-topics-tbd">Tentative topics [TBD]</a></li>
+<li><a href="#tentative-topics">Tentative topics</a></li>
 </ul>
 </nav>
 </div>
@@ -2545,15 +2545,15 @@ Figure 1: Image from Informatica <a href="https://www.informatica.com/resources/
 </div>
 </div>
 <h2 id="welcome-to-eds-222">Welcome to EDS 222</h2>
-<p>Statistics is the science of collecting, manipulating, and analyzing empirical data. In this class, we will use statistics in an applied, hands-on way to draw conclusions about the environment and its interaction with social and economic systems. We will cover fundamental statistical concepts and tools, and then apply and expand upon those tools to learn particular statistical methods that are helpful in environmental data science. Welcome!</p>
+<p>Statistics is the science of collecting, manipulating, and analyzing empirical data. In this class, we will learn the statistical fundamentals that will enable us to draw conclusions about the environment and its interaction with social and economic systems. We will cover fundamental statistical concepts and tools, and then apply and expand upon those tools to learn some temporal and spatial statistical methods that are particularly helpful in environmental data science. Welcome!</p>
 <h3 id="some-concepts-well-cover">Some concepts we’ll cover:</h3>
 <ul>
 <li><p>Sampling and study design, descriptive statistics</p></li>
-<li><p>Linear and logistic regression</p></li>
+<li><p>Linear and logistic regression (univariate and multivariate)</p></li>
 <li><p>Hypothesis testing and inference</p></li>
 <li><p>Spatial weighting, spatial clustering, spatial optimization</p></li>
-<li><p>Time series analysis</p></li>
-<li><p>…</p></li>
+<li><p>Time series analysis, point-wise regression</p></li>
+<li><p>Moving window regression, spatial lag models, spatial auto-correlation</p></li>
 </ul>
 <!-- <p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>index.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> 
 
@@ -2566,13 +2566,13 @@ Add your course description here. -->
 <p>Tamma Carleton (tcarleton@ucsb.edu)</p>
 <ul>
 <li><strong>Office:</strong> Bren Hall 3418</li>
-<li><strong>Office hours:</strong> TBD</li>
+<li><strong>Office hours:</strong> 3pm-4pm Tuesdays</li>
 </ul>
 <h2 id="important-links">Important links</h2>
 <ul>
 <li><p>Syllabus [TBD] <!-- (here is the [MEDS optional syllabus template](https://docs.google.com/document/d/1b2CElvwKk-haEA1axY5KvTEBbiSPUf7dIRUNX7gCI6w/edit?usp=sharing)) --></p></li>
 <li><p><a href="https://www.sa.ucsb.edu/regulations/student-conduct-code/student-conduct-code">UCSB Code of Conduct</a></p></li>
-<li><p>Link to course GitHub Classroom [TBD]</p></li>
+<li><p><a href="https://classroom.github.com/classrooms/89556369-eds222-fall-2021">Link</a> to course GitHub Classroom</p></li>
 </ul>
 <h2 id="weekly-course-schedule">Weekly course schedule</h2>
 <ul>
@@ -2591,15 +2591,15 @@ Add your course description here. -->
 <h3 id="computing">Computing</h3>
 <ul>
 <li><p><a href="https://ucsb-meds.github.io/computer_reqs.html">Minimum MEDS device requirements</a></p></li>
-<li><p>R version 4.0.2 (or higher)</p></li>
+<li><p><code>R</code> version 4.0.2 (or higher)</p></li>
 <li><p>RStudio version 1.4.1103 (or higher)</p></li>
 </ul>
 <h3 id="textbooks">Textbooks</h3>
 <ul>
 <li><p><em>Introduction to Modern Statistics</em>, by Mine Çetinkaya-Rundel and Johanna Hardin (<a href="https://openintro-ims.netlify.app/">link</a>)</p></li>
-<li><p><em>Geographic Information Analysis</em>, by David O’Sullivan and David Unwin</p></li>
+<li><p><em>Geographic Information Analysis</em>, by David O’Sullivan and David Unwin (optional)</p></li>
 </ul>
-<h2 id="tentative-topics-tbd">Tentative topics [TBD]</h2>
+<h2 id="tentative-topics">Tentative topics</h2>
 <table>
 <thead>
 <tr class="header">
@@ -2611,53 +2611,63 @@ Add your course description here. -->
 <tbody>
 <tr class="odd">
 <td>1</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Class intro</td>
+<td>n/a</td>
 </tr>
 <tr class="even">
 <td>2</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Sampling &amp; study design</td>
+<td>Biased data collection</td>
 </tr>
 <tr class="odd">
 <td>3</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Summarizing and visualizing data</td>
+<td>Simulations in <code>R</code></td>
 </tr>
 <tr class="even">
 <td>4</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Linear regression</td>
+<td>Linear regression in <code>R</code></td>
 </tr>
 <tr class="odd">
 <td>5</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Inference &amp; hypothesis testing</td>
+<td>Inference, cont’d</td>
 </tr>
 <tr class="even">
 <td>6</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Slack time, review</td>
+<td>Midterm Exam</td>
 </tr>
 <tr class="odd">
 <td>7</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Time series analysis</td>
+<td>Temporal lag models, serial correlation</td>
 </tr>
 <tr class="even">
 <td>8</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Point processes</td>
+<td>Clustering algorithms</td>
 </tr>
 <tr class="odd">
 <td>9</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Interpolation &amp; kriging</td>
+<td>Spatial weighting</td>
 </tr>
 <tr class="even">
 <td>10</td>
-<td>Topics</td>
-<td>Topics</td>
+<td>Regression in space</td>
+<td>Spatial autocorrelation &amp; aggregation bias</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>TBD</td>
+<td>Final project presentations</td>
+</tr>
+<tr class="even">
+<td>Finals week</td>
+<td>Final project presentations</td>
+<td>n/a</td>
 </tr>
 </tbody>
 </table>

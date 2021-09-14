@@ -24,21 +24,21 @@ knitr::include_graphics("img/datavis.jpeg")
 
 ## Welcome to EDS 222
 
-Statistics is the science of collecting, manipulating, and analyzing empirical data. In this class, we will use statistics in an applied, hands-on way to draw conclusions about the environment and its interaction with social and economic systems. We will cover fundamental statistical concepts and tools, and then apply and expand upon those tools to learn particular statistical methods that are helpful in environmental data science. Welcome!  
+Statistics is the science of collecting, manipulating, and analyzing empirical data. In this class, we will learn the statistical fundamentals that will enable us to draw conclusions about the environment and its interaction with social and economic systems. We will cover fundamental statistical concepts and tools, and then apply and expand upon those tools to learn some temporal and spatial statistical methods that are particularly helpful in environmental data science. Welcome!  
 
 ### Some concepts we'll cover:
 
 - Sampling and study design, descriptive statistics
 
-- Linear and logistic regression
+- Linear and logistic regression (univariate and multivariate)
 
 - Hypothesis testing and inference
 
 - Spatial weighting, spatial clustering, spatial optimization
 
-- Time series analysis
+- Time series analysis, point-wise regression
 
-- ... 
+- Moving window regression, spatial lag models, spatial auto-correlation 
 
 <!-- <p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>index.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> 
 
@@ -53,7 +53,7 @@ Add your course description here. -->
 Tamma Carleton (tcarleton\@ucsb.edu)
 
 -   **Office:** Bren Hall 3418
--   **Office hours:** TBD
+-   **Office hours:** 3pm-4pm Tuesdays
 
 ## Important links
 
@@ -61,7 +61,7 @@ Tamma Carleton (tcarleton\@ucsb.edu)
 
 -   [UCSB Code of Conduct](https://www.sa.ucsb.edu/regulations/student-conduct-code/student-conduct-code)
 
--   Link to course GitHub Classroom [TBD]
+-   [Link](https://classroom.github.com/classrooms/89556369-eds222-fall-2021) to course GitHub Classroom
 
 
 ## Weekly course schedule
@@ -84,7 +84,7 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 -   [Minimum MEDS device requirements](https://ucsb-meds.github.io/computer_reqs.html)
 
--   R version 4.0.2 (or higher)
+-   `R` version 4.0.2 (or higher)
 
 -   RStudio version 1.4.1103 (or higher)
 
@@ -92,19 +92,21 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 -   _Introduction to Modern Statistics_, by Mine Çetinkaya-Rundel and Johanna Hardin ([link](https://openintro-ims.netlify.app/))
 
--   _Geographic Information Analysis_, by David O'Sullivan and David Unwin 
+-   _Geographic Information Analysis_, by David O'Sullivan and David Unwin (optional)
 
-## Tentative topics [TBD]
+## Tentative topics 
 
 | Week | Lecture topics | Lab topics |
 |------|----------------|------------|
-| 1    | Topics         | Topics     |
-| 2    | Topics         | Topics     |
-| 3    | Topics         | Topics     |
-| 4    | Topics         | Topics     |
-| 5    | Topics         | Topics     |
-| 6    | Topics         | Topics     |
-| 7    | Topics         | Topics     |
-| 8    | Topics         | Topics     |
-| 9    | Topics         | Topics     |
-| 10   | Topics         | Topics     |
+| 1    | Class intro        | n/a        |
+| 2    | Sampling \& study design         | Biased data collection     |
+| 3    | Summarizing and visualizing data         | Simulations in `R`     |
+| 4    | Linear regression         | Linear regression in `R`     |
+| 5    | Inference \& hypothesis testing         |   Inference, cont'd   |
+| 6    | Slack time, review         | Midterm Exam     |
+| 7    | Time series analysis       | Temporal lag models, serial correlation     |
+| 8    | Point processes         | Clustering algorithms     |
+| 9    | Interpolation \& kriging         | Spatial weighting     |
+| 10   | Regression in space         | Spatial autocorrelation \& aggregation bias     |
+| 11   | TBD         | Final project presentations     |
+| Finals week   | Final project presentations         | n/a     |
