@@ -8,20 +8,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <!-- <p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> -->
 
-### Lecture slides
+All lecture slides, readings, and labs will be posted here each week. Assignments will be mentioned here, but all assignments will be posted, submitted, and graded through our [Github Classrooms page](https://classroom.github.com/classrooms/89556369-eds222-fall-2021).
 
-[All lecture slides will be linked here before Tuesday classes.]
+### Week 1
 
-- [01: Course intro](slides/01-intro/01-intro.html)
-- 02: Summarizing data
+- [**Slides 01**: Course intro](slides/01-intro/01-intro.html)
 
-### Labs
+- **Reading:** 
+  + [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + Optional reading: Rolf et al. (2021) ["Representation matters"](https://arxiv.org/abs/2103.03399)
+  + Optional reading/watching: ["Gender shades"](http://gendershades.org/)
+  + Optional watching: Esther Duflo on [Randomized Control Trials](https://www.youtube.com/watch?v=0zvrGiPkVcs)
 
-[All labs will be linked here before Thursday classes. Lab solutions will be linked _after_ class.]
+- **Lab:** No lab this week
+  
+- **Assignment:** Homework 1 posted 9/23; due 9/30, 5pm
 
-### Assignments
 
-All assignments will be posted, submitted, and graded through our [Github Classrooms page](https://classroom.github.com/classrooms/89556369-eds222-fall-2021).
 
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
