@@ -12,6 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 [All lecture slides will be linked here before Tuesday classes.]
 
+- [01: Course intro](slides/01-intro/01-intro.html)
+- 02: Summarizing data
+
 ### Labs
 
 [All labs will be linked here before Thursday classes. Lab solutions will be linked _after_ class.]

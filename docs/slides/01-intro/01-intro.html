@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Course intro &amp; motivation</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tamma Carleton" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Course intro &amp; motivation
+## EDS 222
+### Tamma Carleton
+### Fall 2021
+
+---
+
+
+
+name: Overview
+
+# Today
+
+## Why are we here? 
+
+What is statistics? Why do we need it as environmental data scientists? 
+
+## Details
+
+Into the syllabus weeds 🌱
+
+## Getting dirty: Sample vs. population
+
+- What is a sample? What is a population?
+- How are samples constructed?
+- Study design: how _should_ we make a sample for our problem at hand?
+
+## [Extra] Study design 
+
+- Experiments
+- Observational studies
+
+---
+
+# Why are we we here? 
+
+## Statistics:
+The science of **collecting**, **manipulating**, and **analyzing** empirical data
+
+### Statistics enables us to use environmental data to follow the **scientific method** 
+&lt;!-- `\(\longrightarrow\)` Origins: Aristotle's logic, Francis Bacon's empiricism --&gt;
+&lt;img src="The_Scientific_Method.svg" width="45%" style="display: block; margin: auto;" /&gt;
+---
+
+# The scientific method: Example
+
+### **Step one:** Make an observation (cool, don't need stats)
+
+#### Ex: When Mt. Pinatubo erupted in 1991, much less sunlight was available for plants...
+- 20 Mt of sulfur dioxide `\(\longrightarrow\)` increased stratospheric sulfate aerosols, decreased sunlight reaching Earth's surface
+
+&lt;img src="ash-cloud2.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The scientific method: Example
+
+### **Step two:**  Ask a question (easy, also don't need stats)
+
+#### Ex: I wonder if these aerosols could decrease crop yields?
+
+
+&lt;img src="cropmodel.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The scientific method: Example
+
+### **Step three:**  Form a hypothesis / testable explanation (sounding somewhat stats-like, but still no pre-req's here)
+
+#### Ex: Did less sunlight from Mt. Pinatubo's aerosols lead to lower crop yields?
+&lt;img src="proctoretalfig2.png" width="45%" style="display: block; margin: auto;" /&gt;
+
+_Source_: Proctor et al. (_Nature_, 2018)
+---
+
+# The scientific method: Example
+
+### **Steps four/five:**  Analyze data &amp; test the hypothesis 
+(** !! NEED STATISTICS !! **)
+
+#### Ex: Assemble spatio-temporal dataset, run multivariate linear regression, test statistical significance of regression parameters
+&lt;img src="proctoretalfig3.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The scientific method: Example
+
+### **Step six:**  Report conclusions &amp; what they mean for your question
+
+#### Ex: Run simulation to consider the implications for solar radiation management (a form of geo-engineering)
+&lt;img src="proctoretalfig4.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# Statistics and the scientific method
+
+- Statistics will enable us to **test hypotheses**, **analyze data**, and **draw conclusions** about the world from the process
+
+- Otherwise, we'd be stuck at **observing** and **forming hypotheses**
+
+- ... and we'd have a lot of unanswered empirical questions! 
+
+&lt;img src="The_Scientific_Method.svg" width="40%" style="display: block; margin: auto;" /&gt;
+---
+
+# This course within MEDS
+
+### This course **is**:
+- Designed to build your fundamental statistical toolkit
+- Designed to teach you to _apply_ statistics in `R` 
+- Designed to show you key spatio-temporal methods that come up frequently in environmental data science
+- **Brand new!** `\(\longrightarrow\)` Things will not go according to plan. But you can help shape the curriculum!
+
+### This course is **not**:
+- A programming class `\(\longrightarrow\)` I will make mistakes. I don't know all the new exciting things. I will learn from you!
+- A class in program evaluation/causal inference (👀 EDS 241)
+- A class in spatial data analysis (👀 EDS 223)
+
+---
+# Syllabus 
+
+Syllabus can always be found on our [course website.](https://tcarleton.github.io/EDS-222-stats/)
+
+---
+
+# Sample versus population
+
+Consider a potential research question:
+&gt; What is the average mercury content in swordfish in the Atlantic Ocean?
+
+--
+
+###Some definitions
+
+-- 
+
+- **Population**: The entire target population of interest.
+  - Ex: All swordfish in the Atlantic Ocean
+  
+--
+
+- **Census**: A data collection including _all_ individuals in the population
+  + Ex: Count every single swordfish in the Atlantic Ocean (hard and 💰)
+  
+-- 
+
+- **Sample**: A subset of the target population for which we actually have data
+  + Ex: 60 tagged swordfish from a government survey in the Atlantic Ocean
+  
+---
+# Parameters and statistics
+&lt;!-- `$$\\[1in]$$` --&gt; 
+
+#### Usually we are interested in a numerical summary of the _population_ (e.g., mean, slope, intercept, variance)
+
+- **Parameter**: A numerical summary of the **population**
+  + Ex: _average_ mercury content in swordfish in the Atlantic Ocean
+
+- **Statistic**: A numerical summary of the **sample**
+  + Ex: _average_ mercury content of the 60 swordfish collected in a government survey in the Atlantic Ocean
+
+
+#### We use _statistics_ (from a sample) in hopes of learning about _parameters_ (from the population)
+
+- This means that every time you do ``statistics'', you should be thinking...
+  + What is the population of interest?
+  + What is my sample?
+  + How are they different?
+  
+---
+# All samples are not created equal
+
+From _IMS_: Suppose we want to estimate time to graduation for Duke undergraduates in the last five years using a sample of recent students.
+- Q: Who is the population?
+
+Suppose we take a **random** sample (i.e., every individual in the population has the same probability of being selected)
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="01-intro_files/figure-html/unnamed-chunk-8-1.png" alt="10 graduates are randomly selected from the population to be included in the sample." width="70%" /&gt;
+&lt;p class="caption"&gt;10 graduates are randomly selected from the population to be included in the sample.&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# All samples are not created equal
+  
+Suppose we ask a nutrition major to pick a few of her friends for the sample.
+- What might go wrong here? 
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="01-intro_files/figure-html/unnamed-chunk-9-1.png" alt="Asked to pick a sample of graduates, a nutrition major might inadvertently pick a disproportionate number of graduates from health-related majors." width="70%" /&gt;
+&lt;p class="caption"&gt;Asked to pick a sample of graduates, a nutrition major might inadvertently pick a disproportionate number of graduates from health-related majors.&lt;/p&gt;
+&lt;/div&gt;
+
+---
+  
+# All samples are not created equal
+
+When a sample is _not_ drawn randomly, it is likely your statistic will be a biased estimate of the population parameter
+
+Some other examples of biased sampling:
+
+- **Systematic non-response** (e.g., only people from a certain group respond to the phone survey)
+
+- **Convenience sampling** (e.g., biologists only take forest transects near the edge of a large forested area)  
+
+--
+
+Under-represented groups may be particularly misrepresented due to improper sampling
+
+- Rolf et al., ["Representation Matters"](https://arxiv.org/abs/2103.03399)
+  + Show the value of diverse samples for training machine learning algorithms 
+  
+- Buolamwini et al., ["Gender shades"](http://gendershades.org/)
+  + Facial analysis benchmark datasets (i.e., samples) are overwhelmingly white, leading to misclassification for darker-skinned subjects
+
+---
+
+# Four (random) sampling strategies
+
+Nearly all statistical methods are based on assumptions of randomness. If data are not collected randomly from the population, estimates are likely to be biased. 
+
+### Strategy 1: Simple random sampling
+
+- As simple as it sounds!
+- To consider for later classes: What problems might arise if your (simple random) sample is small?
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="simplerand_sample.png" alt="Source: IMS" width="100%" /&gt;
+&lt;p class="caption"&gt;Source: IMS&lt;/p&gt;
+&lt;/div&gt;
+
+---
+
+# Four (random) sampling strategies
+
+### Strategy 2: Stratified sampling
+
+- More complex to analyze sample to construct estimates of population parameters (but still possible)
+- Helpful when individuals within a strata are quite similar
+- Used often as a method of variance reduction (we'll discuss this later)
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="stratified_sample.png" alt="Source: IMS" width="100%" /&gt;
+&lt;p class="caption"&gt;Source: IMS&lt;/p&gt;
+&lt;/div&gt;
+
+---
+
+# Four (random) sampling strategies
+
+### Strategy 3: Cluster random sampling
+
+- Helpful when individuals within a cluster are quite _different_ from one another
+- Used often when costs of data collection are high per cluster (e.g., Demographic and Health Surveys)
+- Also more complex to estimate population parameters
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="cluster_sample.png" alt="Source: IMS" width="100%" /&gt;
+&lt;p class="caption"&gt;Source: IMS&lt;/p&gt;
+&lt;/div&gt;
+
+---
+
+# Four (random) sampling strategies
+
+
+### Strategy 4: Multi-stage sampling
+
+- Very similar to cluster sampling, just take fewer samples (randomly)
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="clusterrand_sample.png" alt="Source: IMS" width="100%" /&gt;
+&lt;p class="caption"&gt;Source: IMS&lt;/p&gt;
+&lt;/div&gt;
+
+---
+# Study design
+
+### When we conduct statistical analyses, where do our samples come from?
+
+- **Experimental** studies
+  + Sample is collected to fit the study's needs
+  
+- **Observational** studies
+  + Sample exists, design your study to make best use of available data
+
+--
+
+### In both cases, the researcher generally aims to _causally_ identify a population parameter
+
+- Ex: What is the effect of increased atmospheric aerosols on crop yields? (Proctor et al., 2018)
+- Ex: What is the effect of a vaccine booster shot on the risk of COVID-19 hospitalization?
+- **You will talk a lot more about this in EDS 241!**
+
+---
+# [Very] short foray into study design
+
+&lt;img src="01-intro_files/figure-html/sun-causes-cancer-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+&gt; Q: Does sunscreen lower risk of skin cancer?
+
+- Experiment 
+  + Randomly sample 50% of individuals and assign them the sunscreen "treatment", require the other 50% to wear no sunscreen
+  + Follow individuals for 20 years, compare cancer outcomes
+  
+- Observational study
+  + Collect data on sunscreen use, skin cancer, and sun exposure
+  + Compare cancer rates for individuals with different sunscreen use habits
+  
+---
+class: center, middle
+
+# Thanks!
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
