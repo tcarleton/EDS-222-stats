@@ -35,16 +35,11 @@ What is statistics? Why do we need it as environmental data scientists?
 
 Into the syllabus weeds 🌱
 
-## Getting dirty: Sample vs. population
+## Getting started: Sample vs. population
 
 - What is a sample? What is a population?
 - How are samples constructed?
-- Study design: how _should_ we make a sample for our problem at hand?
-
-## [Extra] Study design 
-
-- Experiments
-- Observational studies
+- Study design: how are samples constructed to fit a question?
 
 ---
 
@@ -92,11 +87,10 @@ _Source_: Proctor et al. (_Nature_, 2018)
 
 # The scientific method: Example
 
-### **Steps four/five:**  Analyze data &amp; test the hypothesis 
-(** !! NEED STATISTICS !! **)
+### **Steps four/five:**  Analyze data &amp; test the hypothesis (** !! NEED STATISTICS !! **)
 
 #### Ex: Assemble spatio-temporal dataset, run multivariate linear regression, test statistical significance of regression parameters
-&lt;img src="proctoretalfig3.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="proctoretalfig3.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -148,17 +142,25 @@ Consider a potential research question:
 
 ###Some definitions
 
--- 
 
 - **Population**: The entire target population of interest.
   - Ex: All swordfish in the Atlantic Ocean
   
---
 
 - **Census**: A data collection including _all_ individuals in the population
   + Ex: Count every single swordfish in the Atlantic Ocean (hard and 💰)
   
--- 
+
+---
+
+# Sample versus population
+
+Consider a potential research question:
+&gt; What is the average mercury content in swordfish in the Atlantic Ocean?
+
+
+###Some definitions
+
 
 - **Sample**: A subset of the target population for which we actually have data
   + Ex: 60 tagged swordfish from a government survey in the Atlantic Ocean
@@ -175,6 +177,8 @@ Consider a potential research question:
 - **Statistic**: A numerical summary of the **sample**
   + Ex: _average_ mercury content of the 60 swordfish collected in a government survey in the Atlantic Ocean
 
+---
+# Parameters and statistics
 
 #### We use _statistics_ (from a sample) in hopes of learning about _parameters_ (from the population)
 
@@ -219,8 +223,9 @@ Some other examples of biased sampling:
 
 - **Convenience sampling** (e.g., biologists only take forest transects near the edge of a large forested area)  
 
---
+---
 
+# All samples are not created equal
 Under-represented groups may be particularly misrepresented due to improper sampling
 
 - Rolf et al., ["Representation Matters"](https://arxiv.org/abs/2103.03399)
@@ -241,7 +246,7 @@ Nearly all statistical methods are based on assumptions of randomness. If data a
 - To consider for later classes: What problems might arise if your (simple random) sample is small?
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="simplerand_sample.png" alt="Source: IMS" width="100%" /&gt;
+&lt;img src="simplerand_sample.png" alt="Source: IMS" width="90%" /&gt;
 &lt;p class="caption"&gt;Source: IMS&lt;/p&gt;
 &lt;/div&gt;
 
@@ -271,7 +276,7 @@ Nearly all statistical methods are based on assumptions of randomness. If data a
 - Also more complex to estimate population parameters
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="cluster_sample.png" alt="Source: IMS" width="100%" /&gt;
+&lt;img src="cluster_sample.png" alt="Source: IMS" width="90%" /&gt;
 &lt;p class="caption"&gt;Source: IMS&lt;/p&gt;
 &lt;/div&gt;
 
@@ -292,7 +297,7 @@ Nearly all statistical methods are based on assumptions of randomness. If data a
 ---
 # Study design
 
-### When we conduct statistical analyses, where do our samples come from?
+#### When we conduct statistical analyses, where do our samples come from?
 
 - **Experimental** studies
   + Sample is collected to fit the study's needs
@@ -302,7 +307,7 @@ Nearly all statistical methods are based on assumptions of randomness. If data a
 
 --
 
-### In both cases, the researcher generally aims to _causally_ identify a population parameter
+#### In both cases, the researcher generally aims to _causally_ identify a population parameter
 
 - Ex: What is the effect of increased atmospheric aerosols on crop yields? (Proctor et al., 2018)
 - Ex: What is the effect of a vaccine booster shot on the risk of COVID-19 hospitalization?
@@ -319,16 +324,51 @@ Nearly all statistical methods are based on assumptions of randomness. If data a
   + Randomly sample 50% of individuals and assign them the sunscreen "treatment", require the other 50% to wear no sunscreen
   + Follow individuals for 20 years, compare cancer outcomes
   
+---
+# [Very] short foray into study design
+
+&lt;img src="01-intro_files/figure-html/sun-causes-cancer2-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+&gt; Q: Does sunscreen lower risk of skin cancer?
+
 - Observational study
   + Collect data on sunscreen use, skin cancer, and sun exposure
   + Compare cancer rates for individuals with different sunscreen use habits
   
 ---
+# Homework 1 (warmup): Logistics
+
+### Where are the data?
+
+- All the data for Thursday labs and homeworks will be on Taylor
+- See EDS 214 for a refresher on how to access Taylor, compute on Taylor, and pull data to/from Taylor
+
+---
+# Homework 1 (warmup): Logistics
+
+### Where should I do computation? 
+
+- All the data we use will be small enough to load and work with _locally_ (e.g., use Cyberduck to pull data down)
+- But you're welcome to work on Taylor with an RStudio GUI or Workbench, etc.
+- You won't have write access to our class directory, but you do have your own directories on Taylor
+
+---
+# Homework 1 (warmup): Logistics
+
+### Github classrooms
+
+- I'm learning, you're learning, might be a little bumpy in the beginning
+- Please communicate and give me feedback! 
+
+---
 class: center, middle
 
-# Thanks!
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+---
+exclude: true
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
