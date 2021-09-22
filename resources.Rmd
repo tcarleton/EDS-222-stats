@@ -12,7 +12,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 ### Week 1
 
-- [**Slides 01**: Course intro](slides/01-intro/01-intro.html)
+- **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
 
 - **Reading:** 
   + [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_

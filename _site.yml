@@ -16,7 +16,7 @@ navbar:
     - text: "Resources"
       href: resources.html
     - icon: fab fa-github
-      href: https://github.com/allisonhorst/meds-distill-template
+      href: https://github.com/tcarleton/EDS-222-stats
 output:
   distill::distill_article:
     toc: true

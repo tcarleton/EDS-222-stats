@@ -16,7 +16,7 @@ output:
 ```{r Setup, include = F}
 options(htmltools.dir.version = FALSE)
 library(pacman)
-p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr)
+p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown)
 # Define pink color
 red_pink <- "#e64173"
 # Notes directory
@@ -106,11 +106,10 @@ _Source_: Proctor et al. (_Nature_, 2018)
 
 # The scientific method: Example
 
-### **Steps four/five:**  Analyze data & test the hypothesis 
-(** !! NEED STATISTICS !! **)
+### **Steps four/five:**  Analyze data & test the hypothesis (** !! NEED STATISTICS !! **)
 
 #### Ex: Assemble spatio-temporal dataset, run multivariate linear regression, test statistical significance of regression parameters
-```{r, out.width = "70%", echo=FALSE, fig.align='center'}
+```{r, out.width = "60%", echo=FALSE, fig.align='center'}
 knitr::include_graphics("proctoretalfig3.png")
 ```
 
@@ -168,17 +167,25 @@ Consider a potential research question:
 
 ###Some definitions
 
--- 
 
 - **Population**: The entire target population of interest.
   - Ex: All swordfish in the Atlantic Ocean
   
---
 
 - **Census**: A data collection including _all_ individuals in the population
   + Ex: Count every single swordfish in the Atlantic Ocean (hard and 💰)
   
--- 
+
+---
+
+# Sample versus population
+
+Consider a potential research question:
+> What is the average mercury content in swordfish in the Atlantic Ocean?
+
+
+###Some definitions
+
 
 - **Sample**: A subset of the target population for which we actually have data
   + Ex: 60 tagged swordfish from a government survey in the Atlantic Ocean
@@ -195,6 +202,8 @@ Consider a potential research question:
 - **Statistic**: A numerical summary of the **sample**
   + Ex: _average_ mercury content of the 60 swordfish collected in a government survey in the Atlantic Ocean
 
+---
+# Parameters and statistics
 
 #### We use _statistics_ (from a sample) in hopes of learning about _parameters_ (from the population)
 
@@ -325,8 +334,9 @@ Some other examples of biased sampling:
 
 - **Convenience sampling** (e.g., biologists only take forest transects near the edge of a large forested area)  
 
---
+---
 
+# All samples are not created equal
 Under-represented groups may be particularly misrepresented due to improper sampling
 
 - Rolf et al., ["Representation Matters"](https://arxiv.org/abs/2103.03399)
@@ -346,7 +356,7 @@ Nearly all statistical methods are based on assumptions of randomness. If data a
 - As simple as it sounds!
 - To consider for later classes: What problems might arise if your (simple random) sample is small?
 
-```{r, out.width = "100%", echo=FALSE, fig.align='center', fig.cap="Source: IMS"}
+```{r, out.width = "90%", echo=FALSE, fig.align='center', fig.cap="Source: IMS"}
 knitr::include_graphics("simplerand_sample.png")
 ```
 
@@ -374,7 +384,7 @@ knitr::include_graphics("stratified_sample.png")
 - Used often when costs of data collection are high per cluster (e.g., Demographic and Health Surveys)
 - Also more complex to estimate population parameters
 
-```{r, out.width = "100%", echo=FALSE, fig.align='center', fig.cap="Source: IMS"}
+```{r, out.width = "90%", echo=FALSE, fig.align='center', fig.cap="Source: IMS"}
 knitr::include_graphics("cluster_sample.png")
 ```
 
@@ -394,7 +404,7 @@ knitr::include_graphics("clusterrand_sample.png")
 ---
 # Study design
 
-### When we conduct statistical analyses, where do our samples come from?
+#### When we conduct statistical analyses, where do our samples come from?
 
 - **Experimental** studies
   + Sample is collected to fit the study's needs
@@ -404,7 +414,7 @@ knitr::include_graphics("clusterrand_sample.png")
 
 --
 
-### In both cases, the researcher generally aims to _causally_ identify a population parameter
+#### In both cases, the researcher generally aims to _causally_ identify a population parameter
 
 - Ex: What is the effect of increased atmospheric aerosols on crop yields? (Proctor et al., 2018)
 - Ex: What is the effect of a vaccine booster shot on the risk of COVID-19 hospitalization?
@@ -443,14 +453,77 @@ par(par_og) # restore original par
   + Randomly sample 50% of individuals and assign them the sunscreen "treatment", require the other 50% to wear no sunscreen
   + Follow individuals for 20 years, compare cancer outcomes
   
+---
+# [Very] short foray into study design
+
+```{r sun-causes-cancer2, echo=FALSE, out.width = "60%", fig.asp = 0.4}
+par_og <- par(no.readonly = TRUE) # save original par
+par(mar = rep(0, 4))
+plot(c(-0.05, 1.2),
+     c(0.39, 1),
+     type = 'n',
+     axes = FALSE)
+text(0.59, 0.89, 'sun exposure', cex = 1)
+rect(0.4, 0.8, 0.78, 1)
+text(0.3, 0.49, 'use sunscreen', cex = 1)
+rect(0.1, 0.4, 0.48, 0.6)
+arrows(0.49, 0.78, 0.38, 0.62,
+       length = 0.08, lwd = 1.5)
+text(0.87, 0.5, 'skin cancer', cex = 1)
+rect(0.71,0.4, 1.01, 0.6)
+arrows(0.67, 0.78, 0.8, 0.62,
+       length = 0.08, lwd = 1.5)
+arrows(0.5, 0.5, 0.69, 0.5,
+       length = 0.08, col = "gray")
+text(0.595, 0.565, "?",
+     cex = 1.5, col = "gray")
+par(par_og) # restore original par
+```
+
+> Q: Does sunscreen lower risk of skin cancer?
+
 - Observational study
   + Collect data on sunscreen use, skin cancer, and sun exposure
   + Compare cancer rates for individuals with different sunscreen use habits
   
 ---
+# Homework 1 (warmup): Logistics
+
+### Where are the data?
+
+- All the data for Thursday labs and homeworks will be on Taylor
+- See EDS 214 for a refresher on how to access Taylor, compute on Taylor, and pull data to/from Taylor
+
+---
+# Homework 1 (warmup): Logistics
+
+### Where should I do computation? 
+
+- All the data we use will be small enough to load and work with _locally_ (e.g., use Cyberduck to pull data down)
+- But you're welcome to work on Taylor with an RStudio GUI or Workbench, etc.
+- You won't have write access to our class directory, but you do have your own directories on Taylor
+
+---
+# Homework 1 (warmup): Logistics
+
+### Github classrooms
+
+- I'm learning, you're learning, might be a little bumpy in the beginning
+- Please communicate and give me feedback! 
+
+---
 class: center, middle
 
-# Thanks!
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
+---
+exclude: true
+
+```{R, print pdfs, echo = F, eval = F}
+pagedown::chrome_print(
+  input = "01-intro.html",
+  output = "01-intro.pdf",
+  timeout = 60
+)
+```
