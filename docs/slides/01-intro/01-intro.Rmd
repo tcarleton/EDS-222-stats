@@ -60,8 +60,8 @@ Into the syllabus weeds 🌱
 The science of **collecting**, **manipulating**, and **analyzing** empirical data
 
 ### Statistics enables us to use environmental data to follow the **scientific method** 
-<!-- $\longrightarrow$ Origins: Aristotle's logic, Francis Bacon's empiricism -->
-```{r, out.width = "45%", echo=FALSE, fig.align='center'}
+
+```{r, out.width = "40%", echo=FALSE, fig.align='center'}
 knitr::include_graphics("The_Scientific_Method.svg")
 ```
 ---
