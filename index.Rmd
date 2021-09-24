@@ -61,7 +61,7 @@ Tamma Carleton (tcarleton\@ucsb.edu)
 
 -   [UCSB Code of Conduct](https://www.sa.ucsb.edu/regulations/student-conduct-code/student-conduct-code)
 
--   [Link](https://classroom.github.com/classrooms/89556369-eds222-fall-2021) to course GitHub Classroom
+<!-- -   [Link](https://classroom.github.com/classrooms/89556369-eds222-fall-2021) to course GitHub Classroom -->
 
 
 ## Weekly course schedule
