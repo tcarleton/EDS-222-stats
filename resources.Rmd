@@ -22,9 +22,19 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Lab:** No lab this week
   
-- **Assignment:** Homework 1 posted 9/23; due 9/30, 5pm
+- **Assignment:** Assignment 1 posted 9/23; due 9/30, 5pm
 
 
+### Week 2
+
+- **Slides 02**: Summary statistics
+
+- **Reading:** 
+  + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** Summarizing and visualizing categorical and numerical data in R
+  
+- **Assignment:** Assignment 2 posted 9/30; due 10/7, 5pm
 
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
