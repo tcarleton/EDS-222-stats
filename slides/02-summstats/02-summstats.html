@@ -28,27 +28,27 @@ name: Overview
 
 # Today
 
-###  Types of variables
+####  Types of variables
 - Categorical, numerical, ordinal, ... 
 
 --
 
-### Probability density functions
+#### Probability density functions
 - Definitions, the normal pdf, skew
 
 --
 
-### Summary statistics
+#### Summary statistics
 - Central tendency and spread, quantiles, outliers
 
 --
 
-### Law of large numbers
+#### Law of large numbers
 - How big does my sample need to be? 
 
 --
 
-### Relationships between variables
+#### Relationships between variables
 - Covariance, correlation
 
 ---
@@ -111,6 +111,11 @@ class: clear, middle, inverse
   + Species of tree
   + Age group (e.g., &lt;15, 15-64, 65+) (watch out! continuous numerical data can often be stored as a categorical variable!)
 
+---
+# Types of variables
+
+## Categorical variables
+
 #### **Nominal** variables are unordered descriptions
 #### **Ordinal** variables are categories with a natural ordering
 #### **Binary** variables only take on 0 or 1 
@@ -122,7 +127,7 @@ class: clear, middle, inverse
 ## Categorical variables
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="categorical.jpg" alt="Source: Allison Horst" width="90%" /&gt;
+&lt;img src="categorical.jpg" alt="Source: Allison Horst" width="85%" /&gt;
 &lt;p class="caption"&gt;Source: Allison Horst&lt;/p&gt;
 &lt;/div&gt;
 
@@ -312,7 +317,7 @@ In the population: `$$Var(X) = \mathrm{E}[(X-\mu)^2] = \sigma^2 = \int_{\mathrm 
 In the sample: $$ s^2 = \frac{\sum_{i \in n}(x_i-\bar{x})^2}{n-1}$$
 &gt; Q: Why do we divide by `\(n-1\)`? 
 
-&gt; A: Lots of math to prove it (see [here](https://www.khanacademy.org/math/ap-statistics/summarizing-quantitative-data-ap/more-standard-deviation/v/review-and-intuition-why-we-divide-by-n-1-for-the-unbiased-sample-variance)), but trust me that your calculation of `\(s^2\)` will be a biased estimate of `\(\sigma^2\)` if you do not divide by `\(n-1\)`!
+&gt; A: Lots of math to prove it (see [here](https://www.khanacademy.org/math/ap-statistics/summarizing-quantitative-data-ap/more-standard-deviation/v/review-and-intuition-why-we-divide-by-n-1-for-the-unbiased-sample-variance)), but trust me, `\(s^2\)` will be a biased estimate of `\(\sigma^2\)` if you divide by `\(n\)`!
 
 #### Units of variance: units of the random variable, _squared_
 
@@ -383,7 +388,7 @@ In our sample, quantiles are cut points of our sample data
 Common quantiles have names you have head of, such as _quartiles_ for `\(q=4\)`:
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="quantiles_normal.png" alt="Quartiles of the normal distribution" width="75%" /&gt;
+&lt;img src="quantiles_normal.png" alt="Quartiles of the normal distribution" width="50%" /&gt;
 &lt;p class="caption"&gt;Quartiles of the normal distribution&lt;/p&gt;
 &lt;/div&gt;
 
@@ -411,8 +416,7 @@ Common quantiles have names you have head of, such as _quartiles_ for `\(q=4\)`:
 
 #### Examples of percentiles:
 - At 5'3", my height is the 40th percentile of the U.S. adult female height distribution `\(\rightarrow\)` 40% of American female adults are shorter than me
-- At 24.5 lbs, my son's weight is the 81st percentile of U.S. male babies of 13 months old `\(\rightarrow\)` 81% of American male 13 month olds are lighter than my son
-- Your GRE score is in the 90th percentile of tests taken this year `\(\rightarrow\)` 90% of GRE scores this year were lower than your score
+- At 24.5 lbs, my son is the 81st percentile of U.S. male 13 month old weight distribution `\(\rightarrow\)` 81% of American male 13 month olds are lighter than my son
 
 &gt; Exercise: Draw approximately where you think the 1st, 10th, 20th, 50th, 80th, 90th and 99th percentiles would be on a normal distribution. 
 
@@ -503,9 +507,7 @@ class: clear, middle, inverse
 ---
 # Big data
 
-### You probably have intuition that a larger sample is better than a smaller one...but why? 
-
-#### Goal: Use sample statistics to estimate population parameters.
+#### You probably have intuition that a larger sample is better than a smaller one...but why? 
 
 Suppose we have a **random** sample of some size `\(n\)`. How well does `\(\bar x\)` approximate `\(\mu\)`?  
 
@@ -604,13 +606,17 @@ But now, the magnitude is interpretable:
   
   - Ranges from -1 to 1, with magnitude indicating _strength_ of the relationship
 
---
+---
+# Correlation
+
+#### **Correlation** allows us to normalize covariance into interpretable units  
   
   In the population:
   `$$\rho_{X,Y} = corr(X,Y) = \frac{cov(X,Y)}{\sigma_x \sigma_y}$$`
   
   In the sample:
   `$$r_{x,y} = \frac{s_{x,y}}{s_x s_y} = \frac{1}{(n-1)s_x s_y}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$`
+  
 ---
   
 # Correlation
