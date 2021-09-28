@@ -27,7 +27,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 ### Week 2
 
-- **Slides 02**: Summary statistics [html](slides/02-summstats/02-summstats.html) 
+- **Slides 02**: Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf)
 
 - **Reading:** 
   + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
