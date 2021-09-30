@@ -32,7 +32,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-- **Lab:** [setup script](labs/_common.R), [markdown](labs/02-week-two/week-2-lab.Rmd), [answers](labs/02-week-two/week-2-lab-answers.Rmd), [answers in html](labs/02-week-two/week-2-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
+- **Lab:** [setup script](https://www.dropbox.com/s/2pwolalmlai8n5m/_common.R?dl=0), [markdown](labs/02-week-two/week-2-lab.Rmd), [answers](labs/02-week-two/week-2-lab-answers.Rmd), [answers in html](labs/02-week-two/week-2-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
   
 - **Assignment:** Assignment 2 posted 9/30; due 10/7, 5pm
 
