@@ -218,7 +218,7 @@ P.d.f.'s help us characterize the distribution of our population. The most commo
 ### Let's look at a **normal** distribution*
 The probability this normally distributed variable takes on a value between -2 and 0 is shown in pink:
 
-```{R, example: pdf, echo = F, fig.height = 2.8}
+```{R, examplepdf, echo = F, fig.height = 2.8}
 # Generate data for density's polygon
 tmp <- tibble(x = seq(-4, 4, 0.01), y = dnorm(x))
 tmp <- rbind(tmp, tibble(x = seq(4, -4, -0.01), y = 0))
@@ -237,7 +237,7 @@ $^*$This distribution happens to be what's called "standard" normal. We'll get i
 ### Let's look at a **normal** distribution*
 The probability this normally distributed variable takes on a value between -2 and 2 is shown in pink:
 
-```{R, example: pdf 2, echo = F, fig.height = 2.8}
+```{R, examplepdf2, echo = F, fig.height = 2.8}
 # Generate data for density's polygon
 tmp <- tibble(x = seq(-4, 4, 0.01), y = dnorm(x))
 tmp <- rbind(tmp, tibble(x = seq(4, -4, -0.01), y = 0))
@@ -278,7 +278,7 @@ Key terms to describe p.d.f.'s:
 
 ## Skew with a long right tail 
 #### (log-normal sample distribution)
-```{R, example: skew, echo = F, fig.height = 3}
+```{R, exampleskew, echo = F, fig.height = 3}
 # Generate data for density's polygon
 set.seed(1298)
 samp <- as.data.frame(rlnorm(1000))
@@ -295,7 +295,7 @@ ggplot(data = samp, aes(x=x)) +
 
 ## Uni-, bi-, and multi-modal
 #### (How many "peaks" do you see?)
-```{R, example: bimodal, echo = F, fig.height = 3}
+```{R, examplebimodal, echo = F, fig.height = 3}
 df_modes <- tibble(
   uni   = rchisq(100, 6),
   bi    = c(rchisq(40, 5.8), rnorm(60, 20, 2)),
@@ -332,7 +332,7 @@ As we learned last week, we rarely have a **census** so we rarely can directly d
 
 #### Instead, we use _statistics_ from a _sample_ to estimate _parameters_ of the _population_
 
-```{R, example: pdf 3, echo = F, fig.height = 3.5}
+```{R, examplepdf3, echo = F, fig.height = 3.5}
 # Generate data for density's polygon
 set.seed(1298)
 tmp <- tibble(x = seq(-4, 4, 0.01), y = dnorm(x))
@@ -372,7 +372,7 @@ In our **sample**, we compute the mean as: $$\bar{x}=\frac{1}{n}\sum_{i\in n} x_
 
 #### We use $\bar{x}$ as an *estimate* of the parameter of interest, $\mu$.
 
-```{R, example: mean, echo = F,  fig.height = 2.5}
+```{R, examplemean, echo = F,  fig.height = 2.5}
 # Generate data for density's polygon
 set.seed(1298)
 samp <- as.data.frame(rnorm(100))
@@ -397,7 +397,7 @@ In our **sample**, we compute the median as:
 - $n$ even? median = mean of the middle two values
 - $n$ odd? median = middle value
 
-```{R, example: median, echo = F,  fig.height = 2.5}
+```{R, examplemedian, echo = F,  fig.height = 2.5}
 # Generate data for density's polygon
 set.seed(1298)
 samp <- as.data.frame(rnorm(100))
@@ -419,7 +419,7 @@ ggplot(data = samp, aes(x=x)) +
 
 #### Non-normal distribution $\implies$ median and mean can diverge substantially
 
-```{R, example: median2, echo = F, fig.height = 3, fig.width=5.5}
+```{R, examplemedian2, echo = F, fig.height = 3, fig.width=5.5}
 # Generate data for density's polygon
 set.seed(1298)
 samp <- as.data.frame(rlnorm(1000))
@@ -445,7 +445,7 @@ ggplot(data = samp, aes(x=x)) +
 
 This is much more useful for discrete data (ask yourself why!)
 
-```{R, example: mode, echo = F, fig.height = 3.5, fig.width=6}
+```{R, examplemode, echo = F, fig.height = 3.5, fig.width=6}
 # Generate data for density's polygon
 set.seed(1298)
 samp <- as.data.frame(rlnorm(1000))

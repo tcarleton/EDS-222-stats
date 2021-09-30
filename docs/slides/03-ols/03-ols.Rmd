@@ -1,0 +1,170 @@
+---
+title: "Summarizing data"
+subtitle: "EDS 222"
+author: "Tamma Carleton"
+#institute: ""
+date: "Fall 2021"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown)
+# Define pink color
+red_pink <- "#e64173"
+# Notes directory
+dir_slides <- "~/Dropbox/Teaching/UCSB/EDS_222/EDS222_code/EDS-222-stats/slides/02-summstats/"
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  # dpi = 300,
+  # cache = T,
+  warning = F,
+  message = F
+)
+```
+
+name: Overview
+
+# Today
+
+1. Types of variables 
+  - Categorical, numerical, ordinal, ... 
+
+2. Probability density functions
+  - Definitions, measures of tendency and spread
+
+3. Law of large numbers
+
+4. Summary statistics
+
+5. Outliers and skew
+
+6. The normal distribution
+
+---
+layout: false
+class: clear, middle, inverse
+# Types of variables
+---
+
+# Types of variables
+
+## Numerical variables
+> Object class `numeric` in `R`
+- Can take on a wide range of possible values
+- Makes sense to add, subtract, multiply, etc.
+
+--
+ 
+- Examples: 
+  + Height of the tree canopy across the Amazon
+  + Length of Atlantic swordfish
+  + Daily average temperature
+
+#### **Discrete** numerical variables take on only a limited set of values, often counts (e.g., population)
+#### **Continuous** numerical variables: can take on infinite values within a range (e.g., arsenic concentration in groundwater)
+
+
+---
+
+# Types of variables
+
+## Numerical variables
+
+```{r, out.width = "70%", echo=FALSE, fig.align='center', fig.cap="Source: Allison Horst"}
+knitr::include_graphics("numerical.jpg")
+```
+
+---
+
+# Types of variables
+
+## Categorical variables
+> Object class `factor` in `R`
+
+- Values correspond to one of a fixed number of categories
+- Possible values are called **levels** 
+
+--
+ 
+- Examples: 
+  + States of the US
+  + Species of tree
+  + Age group (e.g., $<$15, 15-64, 65+) (watch out! continuous numerical data can often be stored as a categorical variable!)
+
+#### **Nominal** variables are unordered descriptions
+#### **Ordinal** variables are categories with a natural ordering
+#### **Binary** variables only take on 0 or 1 
+
+---
+
+# Types of variables
+
+## Categorical variables
+
+```{r, out.width = "90%", echo=FALSE, fig.align='center', fig.cap="Source: Allison Horst"}
+knitr::include_graphics("categorical.jpg")
+```
+
+---
+layout: false
+class: clear, middle, inverse
+# Probability density functions
+---
+
+<!--
+Notes on structure;
+- recall, we want to use samples to learn about the population
+- define population pdf -- probability density function (and cdf) 
+- define populatino mean for discrete and continuous variables
+- remember, we don't have censues. so we use sample
+- sample approximates population pdf with histogram
+- often we learn about population using w measures of central tendency in sample (mean, median, mode)
+- or measures of spread (range, variance, sd)
+- these are very useful when thinking about skew 
+- POP QUIZ: discrete and numeric random variables
+- outliers
+- the normal distribution (useful! will return to it) see allison's slides
+-->
+
+---
+# Pop Quiz! 
+
+1. Numerical or categorical? 
+
+--
+
+2. Ordinal or nominal? 
+
+--
+
+3. Discrete or continuous?
+
+
+---
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+---
+exclude: true
+
+```{R, print pdfs, echo = F, eval = F}
+pagedown::chrome_print(
+  input = "01-intro.html",
+  output = "01-intro.pdf",
+  timeout = 60
+)
+```

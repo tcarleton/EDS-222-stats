@@ -63,7 +63,7 @@ library(gt)
 library(openintro)
 
 # Where is the root directory where all your labs live? If you want to set up as an .RProj, go for it. 
-rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data/")
+rootdir <- "~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data/"
 
 # This runs the script _common.R, which loads all the packages we'll need for today and does some extra stuff we won't really use, at least for now.
 source(file.path(rootdir,"labs","_common.R"))
@@ -88,7 +88,7 @@ We will focus on two variables:
 
 ## Take a look at your data
 
-Let's investigate these variable types as stored in `R`. Do they make sense to you? What about the variable `interest_rate`?
+Let's investigate these variable types as stored in `R`. Do they make sense to you?^[Are these "ordinal" or "nominal" categorical variables?] What about the variable `interest_rate`?
 
 ```{r}
 class(loans_full_schema$homeownership)
@@ -106,6 +106,7 @@ loans <-
     homeownership    = fct_relevel(homeownership, "rent", "mortgage", "own"), 
     application_type = fct_relevel(application_type, "joint", "individual")
     ) 
+levels(loans$homeownership)
 ```
 
 ## Bar plots
@@ -115,9 +116,12 @@ A bar plot is a common way to display a single categorical variable. The left pa
 > Question: When might you prefer the left version of the bar plot? When might you prefer the right? 
 
 ```{r loan-homeownership-bar-plot, fig.cap = "Two bar plots: the left panel shows the counts and the right panel shows the proportions of values of the homeownership variable.", fig.asp=0.5, fig.fullwidth=TRUE}
+# Bar plot showing count of loans in each homeownership category
 p_count <- ggplot(loans, aes(x = homeownership)) +
   geom_bar(fill = IMSCOL["green", "full"]) + 
   labs(x = "Homeownership", y = "Count")
+
+# Bar plot showing proportion of loans in each homeownership category
 p_proportion <- loans %>%
   count(homeownership) %>%
   mutate(proportion = n / sum(n)) %>%
@@ -135,7 +139,7 @@ Each value in the table represents the number of times a particular combination 
 
 For example, the value 3496 corresponds to the number of loans in the dataset where the borrower rents their home and the application type was by an individual. Row and column totals are also included. The row totals provide the total counts across each row and the column totals down each column. 
 
-```{r loan-home-app-type-totals}
+```{r loan-home-app-type-totals, fig.fullwidth=TRUE}
 loans %>%
   count(application_type, homeownership) %>% # counts observations for each application_type X homeownership combination, creating a column called "n"
   pivot_wider(names_from = homeownership, values_from = n) %>% # names_from: What is the output column that you want called? values_from: What column should the cell values come from?
