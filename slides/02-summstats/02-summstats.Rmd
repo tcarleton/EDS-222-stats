@@ -387,7 +387,7 @@ ggplot(data = samp, aes(x=x)) +
   geom_text(aes(x=0, label="sample mean", y=10), colour="black", fontface="bold")
 ```
 ---
-# Median = middle value = 50th percentile
+# Median = middle value 
 
 In a **population**, the median $m$ is defined as: $$P(X\leq m) = \int_{-\infty}^m f(x)dx = \frac{1}{2} = \int_m^{\infty} f(x)dx = P(X\geq m)$$
 
@@ -424,11 +424,12 @@ ggplot(data = samp, aes(x=x)) +
 set.seed(1298)
 samp <- as.data.frame(rlnorm(1000))
   colnames(samp) = "x"
+samp <- samp %>% mutate(x = round(x,digits = 1))
 mn = mean(samp$x)
 md = median(samp$x)
 # Plot it
 ggplot(data = samp, aes(x=x)) +
-  geom_histogram(fill="grey85", bins=80) +
+  geom_histogram(fill="grey85", bins=50) +
   geom_hline(yintercept = 0, color = "black") +
   theme_simple + ggtitle("sample (n=100)") + 
   geom_vline(xintercept=mn, color="black", linetype="solid") +
@@ -449,7 +450,7 @@ This is much more useful for discrete data (ask yourself why!)
 set.seed(1298)
 samp <- as.data.frame(rlnorm(1000))
   colnames(samp) = "x"
-samp <- samp %>% mutate(x = round(x,digits = 3))
+samp <- samp %>% mutate(x = round(x,digits = 1))
 mn = mean(samp$x)
 md = median(samp$x)
 # Function to compute the mode
