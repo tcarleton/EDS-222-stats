@@ -98,12 +98,12 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 | Week | Lecture topics (Tues) | Lab topics (Thurs) |
 |------|----------------|------------|
-| 1    | No class        | Class intro        |
-| 2    | Sampling \& study design         | Biased data collection     |
-| 3    | Summarizing and visualizing data         | Simulations in `R`     |
-| 4    | Linear regression         | Linear regression in `R`     |
-| 5    | Inference \& hypothesis testing         |   Inference, cont'd   |
-| 6    | Slack time, review         | Midterm Exam     |
+| 1    | No class        | Class intro, sampling, study design        |
+| 2    | Summarizing and visualizing data | Summary stats in `R`  |
+| 3    |  Ordinary Least Squares        | OLS in `R`     |
+| 4    |  Multiple linear regression, logistic regression       | Regression in `R`, continued     |
+| 5    | Inference \& hypothesis testing         |   Hypothesis testing in `R`  |
+| 6    | Inference \& hypothesis testing        | Midterm Exam     |
 | 7    | Time series analysis       | Temporal lag models, serial correlation     |
 | 8    | Point processes, clustering algorithms         | No class     |
 | 9    | Interpolation \& kriging         | Spatial weighting     |

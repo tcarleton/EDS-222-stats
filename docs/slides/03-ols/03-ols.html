@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Ordinary Least Squares</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tamma Carleton" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Ordinary Least Squares
+## EDS 222
+### Tamma Carleton
+### Fall 2021
+
+---
+
+
+
+
+
+name: Overview
+
+# Today
+
+#### Relationships between variables
+- Covariance, correlation
+
+--
+
+#### Ordinary Least Squares
+- Finding the "best fit" line, properties of OLS, assumptions of OLS
+
+--
+
+#### Interpreting OLS output
+- Slopes, intercepts, unit conversions
+
+--
+
+#### Measures of model fit
+- Coefficient of variation
+
+--
+
+#### Notes on OLS
+- Missing data, outliers
+
+--
+
+#### Multiple linear regression
+- Just a preview
+
+
+---
+
+# Announcements/check-in
+
+- Assignment #1: No grading, answers posted this week
+
+--
+
+- Assignment #2: Updated data 
+
+--
+
+- Labs: Repo should fork for everyone; if you don't have all the packages installed please get in touch!
+
+--
+
+- Flag on IMS and linear regression
+
+--
+
+- Finals week: Project presentations!
+
+---
+layout: false
+class: clear, middle, inverse
+# Relationships between variables
+---
+# Two random variables
+
+### Often we are interested in the _relationship_ between two (or more) random variables.
+E.g., heat waves and heart attacks, nitrogen fertilizer and water pollution
+
+--
+
+&lt;img src="03-ols_files/figure-html/scatter1-1.svg" style="display: block; margin: auto;" /&gt;
+
+Note: these are simulated data. But the violence-temperature link is real! See [here](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080614-115430) for a summary of research.
+---
+# Two random variables
+
+### What metrics can we use to characterize the _relationship_ between two variables? 
+
+There are lots. But let's start with...
+
+--
+
+#### 1. Covariance
+
+
+#### 2. Correlation
+
+&lt;img src="03-ols_files/figure-html/scatter2-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Covariance 
+
+#### **Variance** indicates how dispersed a distribution is (average squared deviation from the mean)
+
+--
+
+#### **Covariance** is a measure of the _joint_ distribution of two variables 
+
+- Higher values of `\(X\)` correspond to higher values of `\(Y\)` `\(\rightarrow\)` **positive** covariance
+- Higher values of `\(X\)` correspond to lower values of `\(Y\)` `\(\rightarrow\)` **negative** covariance 
+
+--
+
+In the population:
+`$$Cov(X,Y) = E[(X-\mu_x)(Y-\mu_y)] = E[XY]-\mu_x\mu_y$$`
+
+In the sample:
+`$$s_{xy} = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$`
+---
+# Covariance 
+
+#### **Variance** indicates how dispersed a distribution is (average squared deviation from the mean)
+
+--
+
+#### **Covariance** is a measure of the _joint_ distribution of two variables 
+
+- Higher values of `\(X\)` correspond to higher values of `\(Y\)` `\(\rightarrow\)` **positive** covariance
+- Higher values of `\(X\)` correspond to lower values of `\(Y\)` `\(\rightarrow\)` **negative** covariance 
+
+#### The **sign** of `\(s_{xy}\)` tells us the sign of the linear relationship between `\(X\)` and `\(Y\)`, but the **magnitude** depends on the units of the variables and is therefore difficult to interpret
+
+---
+# Covariance
+
+### Example: positive covariance
+&lt;img src="03-ols_files/figure-html/covar1-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Covariance
+
+### Example: zero covariance
+
+&lt;img src="03-ols_files/figure-html/covar2-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Covariance
+
+### Example: Negative covariance
+
+&lt;img src="03-ols_files/figure-html/covar3-1.svg" style="display: block; margin: auto;" /&gt;
+
+How do I interpret these units?! Hard to compare across these three graphs...
+
+---
+
+# Correlation
+
+#### **Correlation** allows us to normalize covariance into interpretable units
+
+--
+
+The sign still tells us about the nature of the (linear) relationship between two variables:
+  
+  - **positive** covariance `\(\rightarrow\)` **positive** correlation (and vice versa)
+
+But now, the magnitude is interpretable:
+  
+  - Ranges from -1 to 1, with magnitude indicating _strength_ of the relationship
+
+---
+# Correlation
+
+#### **Correlation** allows us to normalize covariance into interpretable units  
+  
+In the population:
+`$$\rho_{X,Y} = corr(X,Y) = \frac{cov(X,Y)}{\sigma_x \sigma_y}$$`
+  
+--
+
+In the sample:
+`$$r_{x,y} = \frac{s_{x,y}}{s_x s_y} = \frac{1}{(n-1)s_x s_y}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$`
+  
+---
+  
+# Correlation
+  
+### Example: Strong positive correlation
+
+&lt;img src="03-ols_files/figure-html/corr1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Correlation
+  
+### Example: zero correlation
+  
+&lt;img src="03-ols_files/figure-html/corr2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Correlation
+  
+### Example: Moderate negative correlation
+  
+&lt;img src="03-ols_files/figure-html/corr3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+layout: false
+class: clear, middle, inverse
+# Ordinary Least Squares
+
+---
+# Linear regression
+
+Covariance and correlation give us a single summary of the **strength** of the relationship between two random variables `\(Y\)` and `\(X\)`...
+
+--
+
+...but we want to know more!
+
+--
+
+In particular, we are often interested in the **linear** relationship between `\(X\)` and `\(Y\)`:
+
+In the **population**:
+$$y = \beta_0 + \beta_1 x + u $$
+--
+
+### Can we use our sample to estimate `\(\beta_0\)` (the intercept) and `\(\beta_1\)` (the slope)? 
+
+---
+# Finding a "best fit" line
+
+Consider some sample data.
+
+&lt;img src="03-ols_files/figure-html/lines1-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Finding a "best fit" line
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)` `\(\color{#ffffff}{\bigg|}\)`
+
+&lt;img src="03-ols_files/figure-html/lines2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Finding a "best fit" line
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we can calculate errors: `\(e_i = y_i - \hat{y}_i\)` `\(\color{#ffffff}{\bigg|}\)`
+
+&lt;img src="03-ols_files/figure-html/lines3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Finding a "best fit" line
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we can calculate errors: `\(e_i = y_i - \hat{y}_i\)` `\(\color{#ffffff}{\bigg|}\)`
+
+&lt;img src="03-ols_files/figure-html/lines4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Finding a "best fit" line
+
+For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we can calculate errors: `\(e_i = y_i - \hat{y}_i\)` `\(\color{#ffffff}{\bigg|}\)`
+
+&lt;img src="03-ols_files/figure-html/lines5-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Ordinary Least Squares
+
+### OLS chooses a line that minimizes the **sum of squared errors**:
+
+`$$SSE = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x)^2$$`
+#### In other words, OLS gives us a combination of `\(\hat\beta_0\)` and `\(\hat\beta_1\)` that minimizes the SSE.
+
+#### Now you see where "least squares" comes from! 
+
+### In .mono[R]:
+
+`library(stats)`
+
+`lm(y ~ x, my_data)`
+
+#### Note: SSE is also called "sum of squared residuals" or SSR
+
+---
+# Ordinary Least Squares
+
+SSE squares the errors `\(\left(\sum e_i^2\right)\)`: bigger errors get bigger penalties. `\(\color{#ffffff}{\bigg|}\)`
+
+&lt;img src="03-ols_files/figure-html/lines6-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Ordinary Least Squares
+
+The OLS estimate is the combination of `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` that minimize SSE. `\(\color{#ffffff}{\bigg|}\)`
+
+&lt;img src="03-ols_files/figure-html/lines7-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# OLS, formally
+
+In simple linear regression, the OLS estimator comes from choosing the `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` that minimize the sum of squared errors (SSE), _i.e._,
+
+$$ \min_{\hat{\beta}_0,\, \hat{\beta}_1} \text{SSE} $$
+
+--
+
+but we already know `\(\text{SSE} = \sum_i e_i^2\)`. Now use the definitions of `\(e_i\)` and `\(\hat{y}\)`.
+
+$$
+\begin{align}
+  e_i^2 &amp;= \left( y_i - \hat{y}_i \right)^2 = \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2 \\
+  &amp;= y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2
+\end{align}
+$$
+
+--
+
+**Derivation:** Minimizing a multivariate function requires (**1**) first derivatives equal zero (the *1.super[st]-order conditions*) and (**2**) second-order conditions (concavity).
+
+--
+
+**See extra slides** if you want the full derivation. Basically, we take the first derivatives of the SSE above with respect to `\(\beta_0\)` and `\(\beta_1\)`, set them equal to zero, and solve for `\(\beta_0\)` and `\(\beta_1\)`.
+
+---
+# OLS, formally
+
+The OLS estimator for the slope is:
+
+$$ \hat{\beta}_1 = \dfrac{\sum_i (x_i - \overline{x})(y_i - \overline{y})}{\sum_i (x_i - \overline{x})^2} = \frac{cov(x,y)}{var(x)}$$
+
+and the intercept:
+
+$$ \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x} $$
+
+--
+
+**Note!** The expression for `\(\hat\beta_0\)` can be rearranged to show us that our regression line always passes through the sample mean of `\(x\)` and `\(y\)`.
+
+---
+# Let's collect some definitions
+
+True **population** relationship:
+$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+
+--
+
+Estimated **sample** relationship:
+$$ \hat y_i = \hat\beta_0 + \hat\beta_1 x_i  $$
+--
+
+- **Dependent variable** = regressand = `\(y\)`
+- **Independent variable** = explanatory variable = regressor = `\(x\)`
+- **Residual** = sample error = `\(y_i - \hat y_i\)`
+- Estimated **intercept** coefficient = `\(\hat\beta_0\)`
+- Estimated **slope** coefficient = `\(\hat\beta_1\)`
+
+---
+# Why choose the OLS line?
+
+### There are many possible ways to define a "best fit" linear relationship. For example:
+- Least absolute deviations: minimize `\(\sum_i | y_i - \hat y_i|\)`
+- Ridge regression: minimize `\(\sum_i \left[ (y_i - \hat y_i)^2 + \lambda \sum_k \hat\beta_k ^2 \right]\)`
+- ...
+
+--
+
+### So why do we often rely on OLS?
+- Under a key set of assumptions, OLS satisfies some very desirable properties that most statisticians, economists, political scientists put emphasis on
+
+--
+
+- However, you will see many other linear (and nonlinear) estimators in machine learning
+
+--
+
+- What estimator you use depends on what the goal of your analysis is, but OLS is the best option a LOT of the time
+
+---
+# Why choose the OLS line?
+
+## Under key assumptions, OLS satisfies two desirable properties:
+
+- OLS is **unbiased**.
+- OLS has the **minimum variance** of all unbiased linear estimators.
+
+--
+
+Let's dig into each of these for a moment so you can appreciate how amazing OLS is.
+
+---
+# OLS property #1: Unbiasedness
+
+### Under a key set of assumptions (we'll get into these in a few slides), OLS is **unbiased**
+
+#### Unbiasedness:
+
+On average (after *many* samples), does the estimator tend toward the true population value?
+
+**More formally:** The mean of estimator's distribution equals the population parameter it estimates:
+
+$$ \mathop{\text{Bias}}_\beta \left( \hat{\beta} \right) = \mathop{\boldsymbol{E}}\left[ \hat{\beta} \right] - \beta $$
+
+---
+# OLS property #1: Unbiasedness
+
+### Under a key set of assumptions (we'll get into these in a few slides), OLS is **unbiased**
+
+#### Unbiasedness:
+
+On average (after *many* samples), does the estimator tend toward the true population value?
+
+--
+
+`\(\rightarrow\)` You should think about the distribution of `\(\hat \beta\)` values as the distribution of regression results you would get if you could draw many random samples from the population and generate a new `\(\hat\beta\)` every time. 
+
+--
+
+`\(\rightarrow\)` In two weeks we'll talk a lot more about uncertainty in and distributions of estimators like `\(\hat\beta\)`.
+
+---
+# OLS property #1: Unbiasedness
+
+
+.pull-left[
+
+**Unbiased estimator:** `\(\mathop{\boldsymbol{E}}\left[ \hat{\beta} \right] = \beta\)`
+
+&lt;img src="03-ols_files/figure-html/unbiasedpdf-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+**Biased estimator:** `\(\mathop{\boldsymbol{E}}\left[ \hat{\beta} \right] \neq \beta\)`
+
+&lt;img src="03-ols_files/figure-html/biasedpdf-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# OLS property #2: Lowest variance
+
+### Under a key set of assumptions (again, let's wait a couple slides), OLS is the estimator with the **lowest variance**
+
+#### Lowest variance:
+
+Just as we discussed when defining summary statistics, the central tendencies (means) of distributions are not the only things that matter. We also care about the **variance** of an estimator.
+
+$$ \mathop{\text{Var}} \left( \hat{\beta} \right) = \mathop{\boldsymbol{E}}\left[ \left( \hat{\beta} - \mathop{\boldsymbol{E}}\left[ \hat{\beta} \right] \right)^2 \right] $$
+
+Lower variance estimators mean we get estimates closer to the mean in each sample.
+
+--
+
+`\(\rightarrow\)` Again, think about the distribution of `\(\hat \beta\)` values as the distribution of regression results you would get if you could draw many random samples from the population and generate a new `\(\hat\beta\)` every time. 
+
+---
+# OLS property #2: Lowest variance
+
+
+&lt;img src="03-ols_files/figure-html/variancepdf-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Properties of OLS
+
+
+**Property 1: Bias.**
+
+**Property 2: Variance.**
+
+**Subtlety:** The bias-variance tradeoff.
+
+Should we be willing to take a bit of bias to reduce the variance?
+
+In much of statistics, we choose unbiased estimators. But other disciplines (especially computer science) will choose estimators that sacrifice some bias in exchange for lower variance. 
+
+--
+
+You'll learn more about these estimators (e.g., ridge regression) in EDS 232 👀
+
+---
+# The bias-variance tradeoff.
+
+&lt;img src="03-ols_files/figure-html/variancebias-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# OLS: Assumptions
+
+These very nice properties depend on a key set of assumptions:
+
+--
+
+1. The population relationship is linear in parameters with an additive disturbance.
+
+--
+
+2. Our `\(X\)` variable is **exogenous**, _i.e._, `\(\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0\)`.
+  + I.e., is there no other variable correlated with `\(X\)` that also affects `\(Y\)`
+  + You will talk a lot more about this in EDS 241 👀
+
+--
+
+3. The `\(X\)` variable has variation (and if there are multiple explanatory variables, they are not perfectly collinear)
+  + Recall, `\(var(x)\)` is in the denominator of the OLS slope coefficient estimator!
+  
+--
+
+4. The population disturbances `\(u_i\)` are independently and identically distributed as **normal** random variables with mean zero `\(\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)\)` and variance `\(\sigma^2\)` (_i.e._,  `\(\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2\)`)
+  + Independently distributed and mean zero jointly imply `\(\mathop{\boldsymbol{E}}\left[ u_i u_j \right] = 0\)` for any `\(i\neq j\)`
+  + Constant variance means errors cannot vary with `\(X\)` (this is called "homoskedasticity")
+
+---
+# OLS: Assumptions
+
+These very nice properties depend on a key set of assumptions:
+
+--
+
+1. The population relationship is linear in parameters with an additive disturbance.
+
+--
+
+2. Our `\(X\)` variable is **exogenous**, _i.e._, `\(\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0\)`.
+  
+--
+
+3. The `\(X\)` variable has variation (and if there are multiple explanatory variables, they are not perfectly collinear)
+
+--
+
+4. The population disturbances `\(u_i\)` are independently and identically distributed as **normal** random variables with mean zero `\(\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)\)` and variance `\(\sigma^2\)` (_i.e._,  `\(\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2\)`)
+  + Independently distributed and mean zero jointly imply `\(\mathop{\boldsymbol{E}}\left[ u_i u_j \right] = 0\)` for any `\(i\neq j\)`
+  + Constant variance means errors cannot vary with `\(X\)` (this is called "homoskedasticity")
+
+---
+# OLS: Assumptions
+
+Different assumptions guarantee different properties:
+
+- Assumptions (1), (2), and (3) make OLS **unbiased**
+- Assumption (4) gives us an unbiased estimator for the **variance** of our OLS estimator (we will talk more about this when covering _inference_ in a couple weeks)
+
+--
+
+We will discuss the many ways real life may **violate these assumptions**. For instance:
+
+- Non-linear relationships in our parameters/disturbances (or misspecification) `\(\rightarrow\)` e.g., logistic regression
+- Disturbances that are not identically distributed and/or not independent `\(\rightarrow\)` lectures on _inference_
+- Violations of exogeneity (especially omitted-variable bias) `\(\rightarrow\)` mostly covered in EDS 241
+
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+#### Assumption 1: Linear in parameters. 
+
+You can look at your data to see if this might be reasonable. 
+
+--
+
+&lt;img src="03-ols_files/figure-html/logistic-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+#### Assumption 1: Linear in parameters. 
+
+You can look at your data to see if this might be reasonable. 
+
+- Note: this assumption does not require your model to be linear in `\(X\)`! As we discuss later, nonlinear relationships in `\(X\)` _can_ be easily accommodated with OLS:
+
+`$$y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + \varepsilon_i$$`
+
+This equation was estimated using OLS to give the nonlinear relationship on the next slide.
+
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+####Assumption 1: Linear in parameters. 
+
+You can look at your data to see if this might be reasonable. 
+
+&lt;img src="03-ols_files/figure-html/quadratic-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+#### Assumption 2: Exogeneity
+
+`$$\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0$$`
+
+
+#### This is not a testable assumption! 
+
+There are a lot of methods designed to probe this assumption, but it's fundamentally untestable since there are infinite possible correlates of `\(X\)` and `\(Y\)` that are unobservable to the researcher.
+
+In general, you should always think about what is in `\(u\)` that may be correlated with `\(X\)`.
+
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+#### Assumption 3: `\(X\)` has variation. 
+
+This is very easy to test:
+
+&lt;img src="03-ols_files/figure-html/rank-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+#### Assumption 4: The population disturbances `\(u_i\)` are independently and identically distributed as **normal** random variables with mean zero and variance `\(\sigma^2\)` 
+
+--
+
+Use the residuals from your regression to investigate this assumption
+
+--
+
+Step 1: Run linear regression
+$$y_i = \beta_0 + \beta_1 x_i + \varepsilon_i $$
+Step 2: Generate residuals
+
+`$$e_i = y_i - \hat y_i$$`
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+&gt; A: Some of them.
+
+#### Assumption 4: The population disturbances `\(u_i\)` are independently and identically distributed as **normal** random variables with mean zero and variance `\(\sigma^2\)` 
+
+--
+
+Use the residuals from your regression to investigate this assumption
+
+Step 3: Plot and investigate residuals [draw these examples]
+  + histogram (are they normal?)
+  + plot of `\(e_i\)` against `\(X\)` (are they uncorrelated? does the variance depend on `\(X\)`?)
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Interpreting regression results
+
+---
+# Interpreting OLS results
+
+#### Example: Ozone increases due to temperature (NYC)
+
+&lt;img src="03-ols_files/figure-html/nyc-1.svg" style="display: block; margin: auto;" /&gt;
+
+We can use `lm(y~x, my_data)` in .mono[R] to run a linear regression of `\(y\)` on `\(x\)`, including a constant term.
+
+
+```r
+mod &lt;- lm(Ozone ~ Temp, data=airquality)
+```
+
+---
+# Interpreting OLS results
+
+#### Example: Ozone increases due to temperature (NYC)
+
+`summary()` then lets us see the regression results. How do we interpret these??
+
+---
+# Interpreting OLS results
+
+
+```r
+summary(mod)
+```
+
+```
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Ozone ~ Temp, data = airquality)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -40.729 -17.409  -0.587  11.306 118.271 
+#&gt; 
+#&gt; Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) -146.9955    18.2872  -8.038 9.37e-13 ***
+#&gt; Temp           2.4287     0.2331  10.418  &lt; 2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 23.71 on 114 degrees of freedom
+#&gt;   (37 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.4877,	Adjusted R-squared:  0.4832 
+#&gt; F-statistic: 108.5 on 1 and 114 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Interpreting OLS results
+
+$$ Ozone_i = \beta_0 + \beta_1 Temp_i + \varepsilon_i $$
+&lt;img src="ozone_temp_coeffs.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+- **Slope**: Change in `\(y\)` for a one unit change in `\(x\)`.
+  + Here: On average, we expect to see ozone increase by 2.5 ppb for each 1 degree F increase in temperature.
+
+--
+
+- **Intercept**: Level of `\(y\)` when `\(x=0\)`.
+  + Here: On average, we expect Ozone to be -147 ppb when temperature is 0 degrees F. 
+  + **CAREFUL** with extrapolation! This doesn't even make sense! 
+
+---
+# Interpreting OLS results
+
+$$ Ozone_i = \beta_0 + \beta_1 Temp_i + \varepsilon_i $$
+&lt;img src="ozone_temp_coeffs.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+- Standard error, t-value, and Pr(&gt;t): These all concern **uncertainty** around our parameter estimates. We will tackle these fully in a week or so.
+
+---
+# Interpreting OLS results
+
+Visualizing our predicted model using `geom_smooth()`
+
+&gt; Where is `\(\beta_0\)`? Where is `\(\beta_1\)`?
+
+&lt;img src="03-ols_files/figure-html/nycfit-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Interpreting OLS results
+
+### Units matter! 
+
+
+```r
+airquality$TempC &lt;- (airquality$Temp - 32)*5/9
+summary(lm(Ozone~TempC, data=airquality))
+```
+
+```
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Ozone ~ TempC, data = airquality)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -40.729 -17.409  -0.587  11.306 118.271 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) -69.2770    10.9182  -6.345 4.65e-09 ***
+#&gt; TempC         4.3717     0.4196  10.418  &lt; 2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 23.71 on 114 degrees of freedom
+#&gt;   (37 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.4877,	Adjusted R-squared:  0.4832 
+#&gt; F-statistic: 108.5 on 1 and 114 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Measures of model fit
+
+---
+# Measures of model fit
+
+### Goal: quantify how "well" your regression model fits the data
+
+#### General idea: Larger variance in residuals suggests our model isn't very predictive
+
+.pull-left[
+
+&lt;img src="03-ols_files/figure-html/highvar-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="03-ols_files/figure-html/lowvar-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+---
+# Coefficient of determination
+
+- We already learned one measure of the strength of a linear relationship: correlation, `\(r\)`
+
+--
+
+- In OLS, we often rely on `\(R^2\)`, the **coefficient of determination**. In simple linear regression*, this is simply the square of the correlation.
+- Interpretation of `\(R^2\)`: **share of the variance in `\(y\)` that is explained by `\(x\)`**
+
+--
+$$
+SSR = \text{sum of squared residuals} = \sum_i (y_i - \hat y_i)^2 = \sum_i e_i^2 
+$$
+
+$$
+SST = \text{total sum of squares} = \sum_i (y_i - \bar y)^2 
+$$
+
+$$
+R^2 = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}
+$$
+
+---
+# Coefficient of determination
+
+$$
+R^2 = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}
+$$
+
+--
+
+- `\(R^2\)` varies between 0 and 1: Perfect model with `\(e_i=0\)` for all `\(i\)` has `\(R^2=1\)`. `\(R^2=0\)` if we just guess the mean `\(\bar y\)`.
+
+--
+
+*In more complex models, `\(R^2\)` is not the same as the square of the correlation coefficient. You should think of them as related but distinct concepts.
+
+---
+# Coefficient of determination
+
+About 49% of the variation in ozone can be explained with temperature alone!
+
+&lt;img src="ozone_temp_r2.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Coefficient of determination
+
+#### Definition: % of variance in `\(y\)` that is explained by `\(x\)` (and any other independent variables)
+
+--
+
+- Describes a _linear_ relationship between `\(y\)` and `\(\hat y\)`
+ 
+--
+
+- Higher `\(R^2\)` does not mean a model is "better" or more appropriate
+  + Predictive power is not often the goal of regression analysis (e.g., you may just care about getting `\(\beta_1\)` right)
+  + If you are focused on predictive power, many other measures of fit are appropriate (to discuss in machine learning)
+  + Always look at your data and residuals! 
+  
+--
+
+- Like OLS in general, `\(R^2\)` is very sensitive to outliers. Again...always look at your data!
+
+---
+# Coefficient of determination 
+
+Here, `\(R^2=0.94\)`. Does that mean a linear model is appropriate?
+
+
+&lt;img src="03-ols_files/figure-html/rsq-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Coefficient of determination 
+
+Here, `\(R^2=0\)`. Does that mean there is no relationship between these variables?
+
+
+&lt;img src="03-ols_files/figure-html/rsq2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Important notes on OLS
+
+---
+# Outliers
+
+Because OLS minimizes the sum of the **squared** errors, outliers can play a large role in our estimates.
+
+**Common responses**
+
+- Remove the outliers from the dataset
+
+- Replace outliers with the 99&lt;sup&gt;th&lt;/sup&gt; percentile of their variable (*winsorize*)
+
+- Take the log of the variable (This lowers the leverage of large values -- why?)
+
+- Do nothing. Outliers are not always bad. Some people are "far" from the average. It may not make sense to try to change this variation.
+
+---
+# Missing data
+
+Similarly, missing data can affect your results.
+
+.mono[R] doesn't know how to deal with a missing observation.
+
+```r
+1 + 2 + 3 + NA + 5
+```
+
+```
+#&gt; [1] NA
+```
+
+If you run a regression&lt;sup&gt;*&lt;/sup&gt; with missing values, .mono[R] drops the observations missing those values.
+
+If the observations are missing in a nonrandom way, a random sample may end up nonrandom.
+  + This is *systematic non-response* from Lecture 01
+
+.footnote[
+[*]: Or perform almost any operation/function
+]
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Multiple linear regression
+
+---
+# Multiple linear regression (preview)
+
+The true population model probably involves **other regressors**:
+
+$$ y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + ... + \beta_k x_{ik} + \varepsilon_i  $$
+
+This raises many questions:
+
+--
+
+- Which `\(x\)`'s should I include? This is the problem of "model selection".
+
+--
+
+- How does my interpretation of `\(\beta_1\)` change?
+
+--
+
+- What if my `\(x\)`'s interact with each other? E.g., race and gender, temperature and rainfall.
+
+--
+
+- How do I measure model fit now?
+
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+Some slides and slide components were borrowed from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Extra slides
+
+---
+# OLS, formally
+  
+In simple linear regression, the OLS estimator comes from choosing the `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)` that minimize the sum of squared errors (SSE), _i.e._,
+
+$$ \min_{\hat{\beta}_0,\, \hat{\beta}_1} \text{SSE} $$
+  
+--
+  
+but we already know `\(\text{SSE} = \sum_i e_i^2\)`. Now use the definitions of `\(e_i\)` and `\(\hat{y}\)`.
+
+$$
+\begin{align}
+e_i^2 &amp;= \left( y_i - \hat{y}_i \right)^2 = \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2 \\
+&amp;= y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2
+\end{align}
+$$
+  
+--
+  
+**Recall:** Minimizing a multivariate function requires (**1**) first derivatives equal zero (the *1.super[st]-order conditions*) and (**2**) second-order conditions (concavity).
+
+---
+# OLS, formally
+  
+We're getting close. We need to **minimize SSE**. We've showed how SSE relates to our sample (our data: `\(x\)` and `\(y\)`) and our estimates (_i.e._, `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)`).
+
+$$ \text{SSE} = \sum_i e_i^2 = \sum_i \left( y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2 \right) $$
+  
+For the first-order conditions of minimization, we now take the first derivates of SSE with respect to `\(\hat{\beta}_0\)` and `\(\hat{\beta}_1\)`.
+
+$$
+  \begin{align}
+\dfrac{\partial \text{SSE}}{\partial \hat{\beta}_0} &amp;= \sum_i \left( 2 \hat{\beta}_0 + 2 \hat{\beta}_1 x_i - 2 y_i \right) = 2n \hat{\beta}_0 + 2 \hat{\beta}_1 \sum_i x_i - 2 \sum_i y_i \\
+&amp;= 2n \hat{\beta}_0 + 2n \hat{\beta}_1 \overline{x} - 2n \overline{y}
+\end{align}
+$$
+  
+where `\(\overline{x} = \frac{\sum x_i}{n}\)` and `\(\overline{y} = \frac{\sum y_i}{n}\)` are sample means of `\(x\)` and `\(y\)` (size `\(n\)`).
+
+---
+# OLS, formally
+  
+The first-order conditions state that the derivatives are equal to zero, so:
+  
+  $$ \dfrac{\partial \text{SSE}}{\partial \hat{\beta}_0} = 2n \hat{\beta}_0 + 2n \hat{\beta}_1 \overline{x} - 2n \overline{y} = 0 $$
+  
+which implies
+
+$$ \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x} $$
+  
+Now for `\(\hat{\beta}_1\)`.
+
+---
+# OLS, formally
+  
+Take the derivative of SSE with respect to `\(\hat{\beta}_1\)`
+  
+$$
+  \begin{align}
+\dfrac{\partial \text{SSE}}{\partial \hat{\beta}_1} &amp;= \sum_i \left( 2 \hat{\beta}_0 x_i + 2 \hat{\beta}_1 x_i^2 - 2 y_i x_i \right) = 2 \hat{\beta}_0 \sum_i x_i + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i \\
+&amp;= 2n \hat{\beta}_0 \overline{x} + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i
+\end{align}
+$$
+  
+set it equal to zero (first-order conditions, again)
+
+$$ \dfrac{\partial \text{SSE}}{\partial \hat{\beta}_1} = 2n \hat{\beta}_0 \overline{x} + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i = 0 $$
+  
+and substitute in our relationship for `\(\hat{\beta}_0\)`, _i.e._, `\(\hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x}\)`. Thus,
+
+$$
+  2n \left(\overline{y} - \hat{\beta}_1 \overline{x}\right) \overline{x} + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i = 0
+$$
+  
+---
+# OLS, formally
+  
+Continuing from the last slide
+
+$$ 2n \left(\overline{y} - \hat{\beta}_1 \overline{x}\right) \overline{x} + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i = 0 $$
+  
+we multiply out
+
+$$ 2n \overline{y}\,\overline{x} - 2n \hat{\beta}_1 \overline{x}^2 + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i = 0 $$
+  
+$$ \implies 2 \hat{\beta}_1 \left( \sum_i x_i^2 - n \overline{x}^2 \right) = 2 \sum_i y_i x_i - 2n \overline{y}\,\overline{x} $$
+  
+$$ \implies \hat{\beta}_1 = \dfrac{\sum_i y_i x_i - 2n \overline{y}\,\overline{x}}{\sum_i x_i^2 - n \overline{x}^2} = \dfrac{\sum_i (x_i - \overline{x})(y_i - \overline{y})}{\sum_i (x_i - \overline{x})^2} $$
+  
+---
+# OLS, formally
+  
+Done!
+  
+We now have (lovely) OLS estimators for the slope
+
+$$ \hat{\beta}_1 = \dfrac{\sum_i (x_i - \overline{x})(y_i - \overline{y})}{\sum_i (x_i - \overline{x})^2} $$
+  
+and the intercept
+
+$$ \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x} $$
+  
+And now you know where the *least squares* part of ordinary least squares comes from. 🎊
+
+---
+exclude: true
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

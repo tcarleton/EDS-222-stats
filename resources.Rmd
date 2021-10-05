@@ -36,6 +36,17 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 2 posted 9/30; due 10/7, 5pm
 
+### Week 3
+
+- **Slides 03**: Ordinary Least Squares [html](slides/03-ols/03-ols.html) [pdf](slides/03-ols/03-ols.pdf)
+
+- **Reading:** 
+  + [Chapter 7](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** OLS in `R`
+  
+- **Assignment:** Assignment 3 posted 10/8; due 10/15, 5pm
+
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
