@@ -88,11 +88,6 @@ name: Overview
 #### Notes on OLS
 - Missing data, outliers
 
---
-
-#### Multiple linear regression
-- Just a preview
-
 
 ---
 
@@ -217,12 +212,12 @@ $$s_{xy} = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$
 
 #### **Variance** indicates how dispersed a distribution is (average squared deviation from the mean)
 
---
-
 #### **Covariance** is a measure of the _joint_ distribution of two variables 
 
 - Higher values of $X$ correspond to higher values of $Y$ $\rightarrow$ **positive** covariance
 - Higher values of $X$ correspond to lower values of $Y$ $\rightarrow$ **negative** covariance 
+
+--
 
 #### The **sign** of $s_{xy}$ tells us the sign of the linear relationship between $X$ and $Y$, but the **magnitude** depends on the units of the variables and is therefore difficult to interpret
 
@@ -328,6 +323,7 @@ But now, the magnitude is interpretable:
   
   - Ranges from -1 to 1, with magnitude indicating _strength_ of the relationship
 
+
 ---
 # Correlation
 
@@ -340,7 +336,10 @@ $$\rho_{X,Y} = corr(X,Y) = \frac{cov(X,Y)}{\sigma_x \sigma_y}$$
 
 In the sample:
 $$r_{x,y} = \frac{s_{x,y}}{s_x s_y} = \frac{1}{(n-1)s_x s_y}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$
-  
+.footnote[
+Want to proove that $-1 \leq r_{x,y} \leq 1$ ? Key result: Cauchy-Schwarz Inequality tells us that $|cov(X,Y)|^2 \leq var(X)var(Y)$.
+]
+
 ---
   
 # Correlation
@@ -616,15 +615,16 @@ $$ \min_{\hat{\beta}_0,\, \hat{\beta}_1} \text{SSE} $$
 
 but we already know $\text{SSE} = \sum_i e_i^2$. Now use the definitions of $e_i$ and $\hat{y}$.
 
-$$
-\begin{align}
-  e_i^2 &= \left( y_i - \hat{y}_i \right)^2 = \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2 \\
-  &= y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2
-\end{align}
-$$
+$$ e_i^2 = \left( y_i - \hat{y}_i \right)^2 = \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2$$
+this expands to:
+$$ e_i^2= y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2$$
 
---
+---
+# OLS, formally
 
+Choose the $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize the sum of squared errors (SSE), _i.e._,
+
+$$  \min_{\hat{\beta}_0,\, \hat{\beta}_1} \sum_i e_i^2 $$
 **Derivation:** Minimizing a multivariate function requires (**1**) first derivatives equal zero (the *1.super[st]-order conditions*) and (**2**) second-order conditions (concavity).
 
 --
@@ -644,7 +644,8 @@ $$ \hat{\beta}_0 = \overline{y} - \hat{\beta}_1 \overline{x} $$
 
 --
 
-**Note!** The expression for $\hat\beta_0$ can be rearranged to show us that our regression line always passes through the sample mean of $x$ and $y$.
+Note that the expression for $\hat\beta_0$ can be rearranged to show us that our regression line always passes through the sample mean of $x$ and $y$.
+
 
 ---
 # Let's collect some definitions
@@ -672,7 +673,10 @@ $$ \hat y_i = \hat\beta_0 + \hat\beta_1 x_i  $$
 - Ridge regression: minimize $\sum_i \left[ (y_i - \hat y_i)^2 + \lambda \sum_k \hat\beta_k ^2 \right]$
 - ...
 
---
+---
+# Why choose the OLS line?
+
+### There are many possible ways to define a "best fit" linear relationship. 
 
 ### So why do we often rely on OLS?
 - Under a key set of assumptions, OLS satisfies some very desirable properties that most statisticians, economists, political scientists put emphasis on
@@ -780,7 +784,14 @@ $$ \mathop{\text{Var}} \left( \hat{\beta} \right) = \mathop{\boldsymbol{E}}\left
 
 Lower variance estimators mean we get estimates closer to the mean in each sample.
 
---
+---
+# OLS property #2: Lowest variance
+
+### Under a key set of assumptions (again, let's wait a couple slides), OLS is the estimator with the **lowest variance**
+
+#### Lowest variance:
+
+Just as we discussed when defining summary statistics, the central tendencies (means) of distributions are not the only things that matter. We also care about the **variance** of an estimator.
 
 $\rightarrow$ Again, think about the distribution of $\hat \beta$ values as the distribution of regression results you would get if you could draw many random samples from the population and generate a new $\hat\beta$ every time. 
 
@@ -859,35 +870,21 @@ These very nice properties depend on a key set of assumptions:
 3. The $X$ variable has variation (and if there are multiple explanatory variables, they are not perfectly collinear)
   + Recall, $var(x)$ is in the denominator of the OLS slope coefficient estimator!
   
---
-
-4. The population disturbances $u_i$ are independently and identically distributed as **normal** random variables with mean zero $\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)$ and variance $\sigma^2$ (_i.e._,  $\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2$)
-  + Independently distributed and mean zero jointly imply $\mathop{\boldsymbol{E}}\left[ u_i u_j \right] = 0$ for any $i\neq j$
-  + Constant variance means errors cannot vary with $X$ (this is called "homoskedasticity")
-
 ---
 # OLS: Assumptions
 
 These very nice properties depend on a key set of assumptions:
 
---
-
 1. The population relationship is linear in parameters with an additive disturbance.
 
---
-
 2. Our $X$ variable is **exogenous**, _i.e._, $\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0$.
-  
---
 
-3. The $X$ variable has variation (and if there are multiple explanatory variables, they are not perfectly collinear)
-
---
+3. The $X$ variable has variation. 
 
 4. The population disturbances $u_i$ are independently and identically distributed as **normal** random variables with mean zero $\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)$ and variance $\sigma^2$ (_i.e._,  $\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2$)
   + Independently distributed and mean zero jointly imply $\mathop{\boldsymbol{E}}\left[ u_i u_j \right] = 0$ for any $i\neq j$
   + Constant variance means errors cannot vary with $X$ (this is called "homoskedasticity")
-
+  
 ---
 # OLS: Assumptions
 
@@ -1085,6 +1082,11 @@ theme_bw() +
   legend.position = "none")
 ```
 
+---
+# Interpreting OLS results
+
+#### Example: Ozone increases due to temperature (NYC)
+
 We can use `lm(y~x, my_data)` in .mono[R] to run a linear regression of $y$ on $x$, including a constant term.
 
 ```{R, lm, echo = T}
@@ -1096,7 +1098,9 @@ mod <- lm(Ozone ~ Temp, data=airquality)
 
 #### Example: Ozone increases due to temperature (NYC)
 
-`summary()` then lets us see the regression results. How do we interpret these??
+`summary()` then lets us see the regression results. 
+
+#### How do we interpret these??
 
 ---
 # Interpreting OLS results
@@ -1114,7 +1118,7 @@ knitr::include_graphics("ozone_temp_coeffs.png")
 ```
 
 - **Slope**: Change in $y$ for a one unit change in $x$.
-  + Here: On average, we expect to see ozone increase by 2.5 ppb for each 1 degree F increase in temperature.
+  + Here: On average, we expect to see ozone increase by 2.4 ppb for each 1 degree F increase in temperature.
 
 --
 
@@ -1215,7 +1219,7 @@ theme_empty
 
 --
 
-- In OLS, we often rely on $R^2$, the **coefficient of determination**. In simple linear regression*, this is simply the square of the correlation.
+- In OLS, we often rely on $R^2$, the **coefficient of determination**. In simple linear regression, this is simply the square of the correlation.
 - Interpretation of $R^2$: **share of the variance in $y$ that is explained by $x$**
 
 --
@@ -1231,20 +1235,20 @@ $$
 R^2 = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}
 $$
 
+
 ---
 # Coefficient of determination
 
 $$
 R^2 = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}
 $$
-
 --
 
 - $R^2$ varies between 0 and 1: Perfect model with $e_i=0$ for all $i$ has $R^2=1$. $R^2=0$ if we just guess the mean $\bar y$.
 
 --
 
-*In more complex models, $R^2$ is not the same as the square of the correlation coefficient. You should think of them as related but distinct concepts.
+- In more complex models, $R^2$ is not the same as the square of the correlation coefficient. You should think of them as related but distinct concepts.
 
 ---
 # Coefficient of determination
@@ -1408,12 +1412,11 @@ $$ \min_{\hat{\beta}_0,\, \hat{\beta}_1} \text{SSE} $$
   
 but we already know $\text{SSE} = \sum_i e_i^2$. Now use the definitions of $e_i$ and $\hat{y}$.
 
-$$
-\begin{align}
-e_i^2 &= \left( y_i - \hat{y}_i \right)^2 = \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2 \\
-&= y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2
-\end{align}
-$$
+$$ e_i^2 = \left( y_i - \hat{y}_i \right)^2 = \left( y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i \right)^2$$ 
+
+this expands to:
+
+$$ e_i^2 = y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2$$
   
 --
   
@@ -1429,10 +1432,10 @@ $$ \text{SSE} = \sum_i e_i^2 = \sum_i \left( y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i
 For the first-order conditions of minimization, we now take the first derivates of SSE with respect to $\hat{\beta}_0$ and $\hat{\beta}_1$.
 
 $$
-  \begin{align}
+  \begin{aligned}
 \dfrac{\partial \text{SSE}}{\partial \hat{\beta}_0} &= \sum_i \left( 2 \hat{\beta}_0 + 2 \hat{\beta}_1 x_i - 2 y_i \right) = 2n \hat{\beta}_0 + 2 \hat{\beta}_1 \sum_i x_i - 2 \sum_i y_i \\
 &= 2n \hat{\beta}_0 + 2n \hat{\beta}_1 \overline{x} - 2n \overline{y}
-\end{align}
+\end{aligned}
 $$
   
 where $\overline{x} = \frac{\sum x_i}{n}$ and $\overline{y} = \frac{\sum y_i}{n}$ are sample means of $x$ and $y$ (size $n$).
@@ -1456,10 +1459,9 @@ Now for $\hat{\beta}_1$.
 Take the derivative of SSE with respect to $\hat{\beta}_1$
   
 $$
-  \begin{align}
-\dfrac{\partial \text{SSE}}{\partial \hat{\beta}_1} &= \sum_i \left( 2 \hat{\beta}_0 x_i + 2 \hat{\beta}_1 x_i^2 - 2 y_i x_i \right) = 2 \hat{\beta}_0 \sum_i x_i + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i \\
-&= 2n \hat{\beta}_0 \overline{x} + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i
-\end{align}
+\dfrac{\partial \text{SSE}}{\partial \hat{\beta}_1} &= \sum_i \left( 2 \hat{\beta}_0 x_i + 2 \hat{\beta}_1 x_i^2 - 2 y_i x_i \right) = 2 \hat{\beta}_0 \sum_i x_i + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i $$
+
+$$ = 2n \hat{\beta}_0 \overline{x} + 2 \hat{\beta}_1 \sum_i x_i^2 - 2 \sum_i y_i x_i
 $$
   
 set it equal to zero (first-order conditions, again)
