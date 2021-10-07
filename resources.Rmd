@@ -43,7 +43,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapter 7](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-- **Lab:** OLS in `R`
+- **Lab:** OLS in `R` [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
   
 - **Assignment:** Assignment 3 posted 10/8; due 10/15, 5pm
 

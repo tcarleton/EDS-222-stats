@@ -1,0 +1,254 @@
+---
+title: "EDS 222: Week 3: In-class Lab"
+author: "ANSWER KEY"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+# Section 0: Getting set up
+
+From last week, you should already have done the following:
+
+1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
+2. Download `_common.R` and put it in the _Labs/_ folder.
+3. Install the following packages, if they are not already installed:^[Note: This will take a minute or two!]
+
+```{r setup, include=TRUE, echo = FALSE, eval = FALSE}
+suppressMessages({
+  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
+})
+```
+
+4. Load all the packages you need, plus the `_common.R` source file.^[Note: If you get a `namespace load` error for `tidyverse`, you want to remove the problem package, re install it, and then load `tidyverse` again.]
+
+```{r, echo = FALSE, eval = TRUE}
+# You probably already have these packages installed, so let's just load them
+library(tidyverse)
+library(readr)
+library(gt)
+library(openintro)
+library(ggplot2)
+library(modelr)
+
+options(scipen = 999) # disable scientific notation
+
+# Set your file path here! Or, set this up as an .Rproj if you'd like.
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
+
+# This runs the script _common.R, which loads all the packages we'll need for today and does some extra stuff we won't really use, at least for now.
+source(file.path(rootdir,"labs","_common.R"))
+
+# For labs, we want to see all our code
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1: Visualizing Scatterplots
+
+Using similar concepts from a histogram or a density plot, we can use a scatter plot to visualize the relationship between two variables. It is **always** a good idea to look at a scatter plot when trying to establish the relationship between two variables. A scatter plot is a simple two-dimensional plot in which the two coordinates of each dot represent the values of two variables measured on a single observation. The **dependent** or response variable is typically on the vertical axis and the **independent** or explanatory variable on the horizontal axis.
+
+Here we will use a data frame on possums and we will first try to see if (i) the total length of a possum is associated with the length of a possum's tail; (ii) the length of a possum's head is associated with the the length of possum's tail. Don't ask me why we might care about this, but I'm sure there are biologists who do! We just want some practice with `ggplot()`. 
+
+Split into groups of 2-3 and work on the following for about 10 minutes:
+
+The data are already loaded in `R`, and can be called using `data = possum`. Take a look at your variable names and make a scatter plot showing  (i) total length as a function of tail length and (ii) head length as a function of tail length. That is, treat tail length as your independent variable. 
+
+1. Make the two scatter plots described above.
+2. Discuss whether these two variables appear correlated, what sign you anticipate the correlation to be, and the strength of the correlation you expect.
+
+
+```{r}
+ggplot(data = possum, aes(y = total_l, x = tail_l)) +
+  geom_point() +
+  labs(x = "Length of Possum Tail (cm)",
+       y = "Total length of Possum (cm)")
+
+ggplot(data = possum, aes(y = head_l, x = tail_l)) +
+  geom_point() +
+  labs(x = "Length of Possum Tail (cm)",
+       y = "Length of Possum Head (cm)")
+
+```
+It looks like tail and total length are positively correlated, with a pretty strong relationship. Tail and head length appear somewhat positively correlated, but there's a lot more noise and the relationship appears much weaker.
+
+# Section 2: Calculating Correlations
+
+Visualizing values of the correlation between two quantities from their scatter plot can be very difficult. Research has shown that people’s perception of the strength of these relationships can be influenced by design choices like the size of the graph and the aspect ratio,^[The _aspect ratio_ is the ratio of the width to the height of a figure or image.] among other features. Hence, to more objectively report the relationship between two variables, we use correlation, computing the "correlation coefficient" $r$.^[Note: we just called this "correlation" in lecture, but people use "correlation" and "correlation coefficient" interchangeably. In most cases, this refers to the Pearson's correlation coefficient, as defined in lecture. There are other forms of correlation that are less common, such as rank correlation, but we won't use them in this class.] Here, we will compute correlation coefficients for the two possum relationships plotted above.
+
+**Exercise:**
+
+1. Use the plots from section 1 to write your best estimate of the correlation coefficient between each of the two examples in section 1. 
+  (i) the length of a possum's total length and the length of possum tail:
+  (ii) the length of a possum's head and the length of possum tail:
+
+2. Use the `cor()` function in `R` to calculate the correlation coefficient between the two variables in (i) and the two in (ii). Prize^[Prize in the form of honor and admiration.] to whoever's guess was closest! 
+
+```{r}
+# (i) total & tail:
+possum %>% 
+  summarize(total_tail = cor(total_l, tail_l)) %>% 
+  gt()
+```
+
+```{r, fig.margin=TRUE}
+# (ii) head & tail:
+possum %>% 
+  summarize(head_tail = cor(head_l, tail_l)) %>% 
+  gt()
+
+```
+
+# Section 3: Simple Linear Regression
+
+## Perform Simple Linear Regression
+
+To estimate the linear relationship between the variables explored above, we'll use `lm()` to fit a regression model using Ordinary Least Squares (OLS). The `lm()` function has two required arguments:
+
+(i) a formula that indicates which variable is the dependent variable and which is the independent variable;
+(ii) a data argument that identifies the data frame for the variables in (i).
+
+First let's consider the relationship between total length and tail length. We assume there is a linear population relationship, specified as:
+
+$$\text{possum total length} = \beta_0 + \beta_1 \text{possum tail length} + \epsilon$$
+
+**Exercise:**
+
+1. Use `lm()` to estimate $\hat\beta_0$ and $\hat\beta_1$ using this sample of data. Use `summary(lm())` or `gt()` to visualize the regression results.
+
+2. Interpret your two coefficients, paying careful attention to units. 
+
+3. Is your estimate of $\beta_0$ directly interpretable? What might you be concerned about when interpreting $\beta_0$? 
+
+4. Does your model suggest anything about the relationship tail length and body length^[Note that the "total" length is the sum of tail length plus body length.]? Why or why not? 
+
+5. [If we have time] Repeat the above steps for the relationship between possum tail length and possum head length. Can you learn anything from directly comparing magnitudes of $\hat\beta_1$ across these two regressions?
+
+**Answers:**
+
+```{r}
+# (i) the length of possum tail affects the length of a possum's body:
+lm(total_l ~ tail_l, data = possum) %>% 
+  tidy %>% 
+  gt()
+```
+
+The coefficient on tail length tells us that for each additional cm that a possum's tail increases, on average we expect the total length of a possum to increase by 1.24cm. 
+
+The intercept estimate tells us that on average, possums with no tail are 41cm long. **Note** that this doesn't make sense! I imagine nearly all possums have tails...this is a case where you want to be careful about extrapolating. That $\hat\beta_0$ is helping us fit the data well _in the range of our sample_, but you shouldn't go making predictions about tail-less possums using this model.
+
+Because the slope coefficient is $>1$, increasing tail length must be increasing body length as well. To see this, imagine that we instead found that $\hat\beta_1=1$. This would imply that increasing tail length by 1cm would simply increase $\text{total length} = \text{body length} + \text{tail length}$ by 1cm, leaving body length unchanged. Because we have $\hat\beta_1 = 1.24 > 1$, body length must also be increasing as tail length increases. 
+
+Here are analogous results for the relationship between head length and tail length:
+
+```{r}
+# (ii) the length of possum tail affects the length of a possum's head:
+lm(head_l ~ tail_l, data = possum) %>% 
+  tidy %>% 
+  gt()
+```
+
+For each additional cm that a possum's tail increases, on average the height of a possum's head increases by 0.524cm. 
+
+This coefficient is **not directly comparable** to the 1.24 estimate in the previous regression, because the outcome (i.e., dependent) variable changed. Head lengths are smaller than total lengths to begin with, so we would expect smaller effect sizes here.
+
+## Visualize Regression [if we have time]
+
+Here, we visualize our simple linear regression models above using the scatter plots from Section 1.
+
+**Exercise:** 
+
+Use the `geom_smooth()` function with method argument set to `lm`, which stands for “linear model”, to add the best fit OLS line to your scatter plots from Section 1. Use the option `se = FALSE` to turn off estimates of uncertainty. Don't worry, we'll dig into those in a week.
+
+**Answers:**
+
+```{r}
+# (i) the length of possum tail affects the total length of a possum:
+ggplot(data = possum, aes(y = total_l, x = tail_l)) +
+  geom_point() + 
+  geom_smooth(method = "lm", formula= y~x, se=FALSE, size=3) + 
+  labs(x = "Length of Possum Tail (cm)",
+       y = "Total Length of Possum (cm)")
+
+```
+
+
+```{r}
+# (ii) the length of possum tail affects the length of a possum's head:
+ggplot(data = possum, aes(y = head_l, x = tail_l)) +
+  geom_point() + 
+  geom_smooth(method = "lm", formula= y~x, se=FALSE, size=3) + 
+  labs(x = "Length of Possum Tail (cm)",
+       y = "Length of Possum Head (cm)")
+
+```
+
+## Residuals, Sum of Squared Errors
+
+The difference between what was observed in the data and what was predicted from the regression line is what we call an "error" or a “residual.” Observations that lie above the regression line exceeded their predicted value and have a _positive residual_. Observations that lie below the regression line are less than their predicted value and have a _negative residual_.
+
+Recall that one of our assumptions needed in order to prove that OLS is **unbiased** and has the **lowest variance** of all unbiased estimators was that the population error $u$ is: normally distributed, has a mean of zero, and has constant variance. While these assumptions are not directly testable because we can never observe $u$, we can use our regression residuals $e$ to assess the plausibility of these assumptions in the population. 
+
+**Exercise:**
+
+Using the regression of total length on tail length:
+
+1. Add to the `possum` dataframe a column of predicted total lengths $\hat y_i$ and a column of residuals $e_i = y_i-\hat y_i$.^[**Hint:** In `dplyr` you can use `add_predictions(mod)` where `mod` is a regression model to generate a new variable containing your model's predicted values.]
+
+2. Make a histogram of your residuals. Do they look approximately normally distributed?
+
+3. Compute the mean of your residuals. Is it basically zero?^[**Note:** OLS gives you this one for free. The OLS regression line will always go through the middle of your data, as it aims to minimize squared errors. So, you'll always end up with sample errors that are mean zero. This doesn't necessarily mean that in your population $u$ is mean zero!]
+
+4. Plot residuals against your independent variable, tail length. Does the variance look approximately constant across all values of tail length?
+
+```{r}
+# regression
+model_1 <- lm(total_l ~ tail_l, data = possum)
+
+# create predictions and residuals
+predictions <- possum %>% add_predictions(model_1) %>%
+  mutate(residuals = total_l-pred)
+
+# histogram
+ggplot(data=predictions) + geom_histogram(aes(residuals), bins=25)
+
+# mean
+mean(predictions$residuals)
+
+# variance in residuals against tail length
+ggplot(predictions) + geom_point(aes(x=tail_l, y=residuals)) 
+```
+
+## Coefficient of Determination in a Regression
+
+We estimated a linear relationship between possum tail length and total possum length above, and we recovered OLS estimates of $\hat\beta_0$ and $\hat\beta_1$. From our correlation calculations, we also have a sense of the strength of these linear relationships. Here, we will use a concept that is very closely related to correlation to quantify the overall fit of our linear regression model. 
+
+Recall that the coefficient of determination, or $R^2$, is the share of the variance in $y$ that is explained by your regression model. Defining SSR as the sum of squared residuals (sum of the square of all our prediction errors) and SST as the total sum of squares (proportional to variance of $y$), we have:
+
+$$R^{2}=1-\frac{S S R}{S S T}=1-\frac{\operatorname{Var}(e)}{\operatorname{Var}(y)}$$
+
+This is the most commonly cited measure of the fit of a regression model. $R^2$ ranges from 0 (my regression model explains none of the variation in $y$) to 1 (my regression model perfectly explains all variation in $y$).
+
+**Exercise**
+
+1. Use the function `summary()` after the regression to calculate the $R^2$ for both the total length and tail length relationship, _and_ the head length and tail length relationship. 
+
+2. Which regression model fits the data better? Is this what you expected based on the correlations computed above? Why or why not?
+
+```{r}
+# (i) the length of possum tail affects the total length of a possum:
+lm(total_l ~ tail_l, data = possum) %>% 
+  summary()
+
+# (i) the length of possum tail affects the length of a possum's head:
+lm(head_l ~ tail_l, data = possum) %>% 
+  summary()
+```
+
+
+
