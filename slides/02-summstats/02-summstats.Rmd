@@ -524,7 +524,7 @@ $$var(aX+b) = a^2var(X)$$
 
 **Green**: High variance/standard deviation $\sigma = 2$
 
-```{R, low variance, echo = F, fig.height=4}
+```{R, lowvariance, echo = F, fig.height=4}
 d4 <- tibble(x = seq(-7.5, 7.5, 0.01), y = dnorm(x, mean = 0, sd = 1)) %>%
   rbind(., tibble(x = seq(7.5, -7.5, -0.01), y = 0))
 d5 <- tibble(x = seq(-7.5, 7.5, 0.01), y = dnorm(x, mean = 0, sd = 2)) %>%
@@ -1078,7 +1078,7 @@ Some slide components were borrowed from [Ed Rubin's](https://github.com/edrubin
 ---
 exclude: true
 
-```{R, print pdfs, echo = F, eval = F}
+```{R, printpdfs, echo = F, eval = F}
 pagedown::chrome_print(
   input = "02-summstats.html",
   output = "02-summstats.pdf",
