@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Ordinary Least Squares, continued</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tamma Carleton" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/plotly-binding/plotly.js"></script>
+    <script src="libs/typedarray/typedarray.min.js"></script>
+    <script src="libs/jquery/jquery.min.js"></script>
+    <link href="libs/crosstalk/css/crosstalk.css" rel="stylesheet" />
+    <script src="libs/crosstalk/js/crosstalk.min.js"></script>
+    <link href="libs/plotly-htmlwidgets-css/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="libs/plotly-main/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Ordinary Least Squares, continued
+## EDS 222
+### Tamma Carleton
+### Fall 2021
+
+---
+
+
+
+
+# Announcements/check-in
+
+**New office hours location!!** We will now meet in the Pine Room (Bren Hall 3526) for office hours so we have more space.
+
+--
+
+- Assignment #2: Grades and answers by the end of the week
+
+--
+
+- Assignment #3: Posted, due Friday 5pm
+
+--
+
+- Labs and repos: No more .mono[git] for labs, please download directly
+
+--
+
+- Midterm heads up: week after next
+
+--
+
+- Thank you for the feedback on Slack
+
+---
+name: Overview
+
+# Today
+
+#### Notes on OLS
+- Unit conversions, missing data, outliers
+
+--
+
+#### Measures of model fit
+- Coefficient of variation `\(R^2\)`
+
+--
+
+#### Categorical variables
+- In .mono[R], interpretation
+
+--
+
+#### Multiple linear regression
+- Adding independent variables, interpretation of results
+- Nonlinearities
+- Adjusted `\(R^2\)`
+- Interaction effects [probably next time]
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Notes on OLS
+
+---
+# Units of X and Y matter
+
+### Original regression (Temperature in degrees F)
+
+
+```r
+mod &lt;- lm(Ozone ~ Temp, data=airquality)
+summary(mod)
+```
+
+```
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Ozone ~ Temp, data = airquality)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -40.729 -17.409  -0.587  11.306 118.271 
+#&gt; 
+#&gt; Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) -146.9955    18.2872  -8.038 9.37e-13 ***
+#&gt; Temp           2.4287     0.2331  10.418  &lt; 2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 23.71 on 114 degrees of freedom
+#&gt;   (37 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.4877,	Adjusted R-squared:  0.4832 
+#&gt; F-statistic: 108.5 on 1 and 114 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Units of X and Y matter
+
+### New regression (Temperature in degrees C)
+
+
+```r
+airquality$TempC &lt;- (airquality$Temp - 32)*5/9
+summary(lm(Ozone~TempC, data=airquality))
+```
+
+```
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Ozone ~ TempC, data = airquality)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -40.729 -17.409  -0.587  11.306 118.271 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) -69.2770    10.9182  -6.345 4.65e-09 ***
+#&gt; TempC         4.3717     0.4196  10.418  &lt; 2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 23.71 on 114 degrees of freedom
+#&gt;   (37 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.4877,	Adjusted R-squared:  0.4832 
+#&gt; F-statistic: 108.5 on 1 and 114 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Outliers
+
+Because OLS minimizes the sum of the **squared** errors, outliers can play a large role in our estimates.
+
+**Common responses**
+
+- Remove the outliers from the dataset
+
+- Replace outliers with the 99&lt;sup&gt;th&lt;/sup&gt; percentile of their variable (*winsorize*)
+
+- Take the log of the variable (This lowers the leverage of large values -- why?)
+
+- Do nothing. Outliers are not always bad. Some people are "far" from the average. It may not make sense to try to change this variation.
+
+---
+# Missing data
+
+Similarly, missing data can affect your results.
+
+.mono[R] doesn't know how to deal with a missing observation.
+
+```r
+1 + 2 + 3 + NA + 5
+```
+
+```
+#&gt; [1] NA
+```
+
+If you run a regression&lt;sup&gt;†&lt;/sup&gt; with missing values, .mono[R] drops the observations missing those values.
+
+If the observations are missing in a nonrandom way, a random sample may end up nonrandom.
+
+.footnote[
+[†]: Or perform almost any operation/function
+]
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Measures of model fit
+
+---
+# Measures of model fit
+
+### Goal: quantify how "well" your regression model fits the data
+
+#### General idea: Larger variance in residuals suggests our model isn't very predictive
+
+.pull-left[
+
+&lt;img src="04-ols-contd_files/figure-html/highvar-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="04-ols-contd_files/figure-html/lowvar-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+---
+# Coefficient of determination
+
+- We already learned one measure of the strength of a linear relationship: correlation, `\(r\)`
+
+--
+
+- In OLS, we often rely on `\(R^2\)`, the **coefficient of determination**. In simple linear regression, this is simply the square of the correlation.
+- Interpretation of `\(R^2\)`: **share of the variance in `\(y\)` that is explained by `\(x\)`**
+
+--
+$$
+SSR = \text{sum of squared residuals} = \sum_i (y_i - \hat y_i)^2 = \sum_i e_i^2 
+$$
+
+$$
+SST = \text{total sum of squares} = \sum_i (y_i - \bar y)^2 
+$$
+
+$$
+R^2 = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}
+$$
+
+
+---
+# Coefficient of determination
+
+$$
+R^2 = 1 - \frac{SSR}{SST} = 1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}
+$$
+--
+
+- `\(R^2\)` varies between 0 and 1: Perfect model with `\(e_i=0\)` for all `\(i\)` has `\(R^2=1\)`. `\(R^2=0\)` if we just guess the mean `\(\bar y\)`.
+
+--
+
+- In more complex models, `\(R^2\)` is not the same as the square of the correlation coefficient. You should think of them as related but distinct concepts.
+
+---
+# Coefficient of determination
+
+About 49% of the variation in ozone can be explained with temperature alone!
+
+&lt;img src="ozone_temp_r2.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Coefficient of determination
+
+#### Definition: % of variance in `\(y\)` that is explained by `\(x\)` (and any other independent variables)
+
+--
+
+- Describes a _linear_ relationship between `\(y\)` and `\(\hat y\)`
+ 
+--
+
+- Higher `\(R^2\)` does not mean a model is "better" or more appropriate
+  + Predictive power is not often the goal of regression analysis (e.g., you may just care about getting `\(\beta_1\)` right)
+  + If you are focused on predictive power, many other measures of fit are appropriate (to discuss in machine learning)
+  + Always look at your data and residuals! 
+  
+--
+
+- Like OLS in general, `\(R^2\)` is very sensitive to outliers. Again...always look at your data!
+
+---
+# Coefficient of determination 
+
+Here, `\(R^2=0.94\)`. Does that mean a linear model is appropriate?
+
+
+&lt;img src="04-ols-contd_files/figure-html/rsq-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Coefficient of determination 
+
+Here, `\(R^2=0\)`. Does that mean there is no relationship between these variables?
+
+
+&lt;img src="04-ols-contd_files/figure-html/rsq2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Indicator/categorical variables
+
+---
+# Categorical variables
+
+We have been talking a lot about **numerical** variables in linear regression...
+  + Ozone levels
+  + Possom tail lengths
+  + Temperature and precipitation amounts
+  + etc.
+
+--
+
+...but a lot of variables of interest are **categorical**:
+  + Male/female
+  + Presence/absence of a species
+  + In/out of compliance with a pollution standard
+  + etc.
+
+--
+
+#### How do we execute and interpret linear regression with categorical data?
+
+---
+# Categorical variables
+
+We use **dummy** or **indicator** variables in linear regression to capture the influence of a categorical independent variable (_x_) on a continuous dependent variable (_y_).
+
+--
+
+For example, let _x_ be a categorical variable indicating the gender of an individual. Suppose we are interested in the "gender wage gap", so _y_ is wages. We estimate:
+
+$$y_i = \beta_0 + \beta_1 MALE_i + \varepsilon_i $$
+--
+
+###Interpretation [draw it]:
+- `\(MALE_i\)` is an **indicator** variable that = 1 when `\(i\)` is male (0 otherwise)
+- `\(\beta_0=\)` average wages if `\(i\)` is **not** male
+- `\(\beta_0+\beta_1=\)` average wages if `\(i\)` is male
+- `\(\beta_1=\)` average _difference_ in wages between males and females
+
+---
+# Categorical variables
+
+#### For a categorical variable with two "levels", OLS reports the difference in means across the two groups
+
+&lt;img src="04-ols-contd_files/figure-html/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Categorical variables
+
+#### What if I have many categories?
+- E.g., species, education level, age group, ...
+
+For example, let _x_ be a categorical variable indicating the species of penguin, and _y_ is body mass. We estimate:
+
+$$y_i = \beta_0 + \beta_1 SPECIES_i + \varepsilon_i $$
+Where **species** can be one of:
+- Adelie
+- Chinstrap
+- Gentoo
+
+---
+# Categorical variables
+
+
+```r
+library(palmerpenguins) 
+head(penguins)
+```
+
+```
+#&gt; # A tibble: 6 x 8
+#&gt;   species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
+#&gt;   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
+#&gt; 1 Adelie  Torge…           39.1          18.7              181        3750 male 
+#&gt; 2 Adelie  Torge…           39.5          17.4              186        3800 fema…
+#&gt; 3 Adelie  Torge…           40.3          18                195        3250 fema…
+#&gt; 4 Adelie  Torge…           NA            NA                 NA          NA &lt;NA&gt; 
+#&gt; 5 Adelie  Torge…           36.7          19.3              193        3450 fema…
+#&gt; 6 Adelie  Torge…           39.3          20.6              190        3650 male 
+#&gt; # … with 1 more variable: year &lt;int&gt;
+```
+
+```r
+class(penguins$species)
+```
+
+```
+#&gt; [1] "factor"
+```
+
+---
+# Categorical variables
+
+
+```r
+summary(lm(body_mass_g ~ species, data = penguins))
+```
+
+```
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = body_mass_g ~ species, data = penguins)
+#&gt; 
+#&gt; Residuals:
+#&gt;      Min       1Q   Median       3Q      Max 
+#&gt; -1126.02  -333.09   -33.09   316.91  1223.98 
+#&gt; 
+#&gt; Coefficients:
+#&gt;                  Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)       3700.66      37.62   98.37   &lt;2e-16 ***
+#&gt; speciesChinstrap    32.43      67.51    0.48    0.631    
+#&gt; speciesGentoo     1375.35      56.15   24.50   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 462.3 on 339 degrees of freedom
+#&gt;   (2 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.6697,	Adjusted R-squared:  0.6677 
+#&gt; F-statistic: 343.6 on 2 and 339 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Categorical variables
+
+When your categorical variable takes on `\(k\)` values, .mono[R] will create dummy variables for `\(k-1\)` values, leaving one as the **reference** group:
+
+&lt;img src="penguins.png" width="1087" style="display: block; margin: auto;" /&gt;
+
+--
+
+To evaluate the outcome for the reference group, **set the dummy variables equal to zero for all other groups**.
+
+&gt; Q: What is the average body mass of an Adelie species?
+
+&gt; Q: What is the difference in body mass between Chinstrap and Adelie?
+
+
+---
+layout: false
+class: clear, middle, inverse
+# Multiple linear regression
+
+---
+
+# More explanatory variables
+
+We're moving from **simple linear regression** (one .pink[outcome variable] and one .purple[explanatory variable])
+
+$$ \color{#e64173}{y_i} = \beta_0 + \beta_1 \color{#6A5ACD}{x_i} + u_i $$
+
+--
+
+to the land of **multiple linear regression** (one .pink[outcome variable] and multiple .purple[explanatory variables])
+
+$$ \color{#e64173}{y\_i} = \beta\_0 + \beta\_1 \color{#6A5ACD}{x\_{1i}} + \beta\_2 \color{#6A5ACD}{x\_{2i}} + \cdots + \beta\_k \color{#6A5ACD}{x\_{ki}} + u\_i $$
+
+--
+
+**Why?**
+--
+ We can better explain the variation in `\(y\)`, improve predictions, avoid omitted-variable bias (i.e., second assumption needed for unbiased OLS estimates), ...
+
+---
+# More explanatory variables
+
+Multiple linear regression...
+
+$$ \color{#e64173}{y\_i} = \beta\_0 + \beta\_1 \color{#6A5ACD}{x\_{1i}} + \beta\_2 \color{#6A5ACD}{x\_{2i}} + \cdots + \beta\_k \color{#6A5ACD}{x\_{ki}} + u\_i $$
+--
+
+... raises many questions:
+
+--
+
+- Which `\(x\)`'s should I include? This is the problem of "model selection".
+
+--
+
+- How does my interpretation of `\(\beta_1\)` change?
+
+--
+
+- What if my `\(x\)`'s interact with each other? E.g., race and gender, temperature and rainfall.
+
+--
+
+- How do I measure model fit now?
+
+--
+
+**We will dig into each of these here,** and you will see these questions in other MEDS courses
+
+---
+# Multiple regression
+
+
+
+`\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i \quad\)` `\(x_1\)` is continuous `\(\quad x_2\)` is categorical
+
+--
+
+&lt;img src="04-ols-contd_files/figure-html/multregplot1-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+# Multiple regression
+
+The intercept and categorical variable `\(x_2\)` control for the groups' means.
+
+&lt;img src="04-ols-contd_files/figure-html/multregplot2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Multiple regression
+
+With groups' means removed:
+
+&lt;img src="04-ols-contd_files/figure-html/multregplot3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Multiple regression
+
+`\(\hat{\beta}_1\)` estimates the relationship between `\(y\)` and `\(x_1\)` after controlling for `\(x_2\)`.
+
+&lt;img src="04-ols-contd_files/figure-html/multregplot4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Multiple regression
+
+Another way to think about it:
+
+&lt;img src="04-ols-contd_files/figure-html/multregplot5-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Multiple regression
+
+More generally, how do we think about multiple explanatory variables?
+
+--
+
+Suppose `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i\)`
+
+
+
+.pull-left[
+
+&lt;img src="04-ols-contd_files/figure-html/yx1-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+--
+
+.pull-right[
+
+&lt;img src="04-ols-contd_files/figure-html/yx2-1.svg" style="display: block; margin: auto;" /&gt;
+
+]
+
+---
+# Multiple regression
+
+More generally, how do we think about multiple explanatory variables?
+
+<div id="htmlwidget-af6ac1c69230c2179f6a" style="width:756px;height:504px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-af6ac1c69230c2179f6a">{"x":{"visdat":{"75014c4b11ee":["function () ","plotlyVisDat"]},"cur_data":"75014c4b11ee","attrs":{"75014c4b11ee":{"x":[-2.31777953216806,0.733796428889036,0.655648397281766,0.740276650059968,2.16549230134115,0.841863631736487,-2.94302546186373,-1.60469696391374,0.996502549387515,0.0855068480595946,1.16154775070027,0.269849013537169,-1.30359849845991,2.54060090566054,-1.24610495846719,2.02377376891673,-1.28266029199585,-1.39907531999052,-1.8796632620506,-1.60664453683421,-1.10032527102157,-1.18383977562189,-2.04572398262098,-2.76002449169755,-1.68720275396481,1.86359131475911,0.154185280669481,2.48794899601489,1.98807028122246,-2.72537842020392,-0.263451105449349,-1.40887996880338,-1.17196678183973,0.0438412204384804,-1.91342275030911,1.55802381271496,-1.79251177422702,-1.44714108807966,2.95290250517428,1.84411404188722,0.320001544430852,0.878436564467847,-1.12905415752903,0.730915188789368,-1.02137894555926,0.0119848377071321,1.06256716372445,-0.0900525650940835,-1.53642703592777,1.59275872539729,-2.55732071958482,-1.14188038883731,1.30363046005368,0.0272754728794098,-2.08200624631718,0.0236009289510548,-0.0362344617024064,1.50720118219033,-1.95210105646402,2.09035446261987,2.18900299211964,-2.74885634891689,-1.09690706804395,-2.91750036505982,-1.56584563991055,1.23896770365536,-1.15143145713955,0.0512853940017521,-2.69012028397992,0.387419039849192,-2.27111887698993,2.35701829008758,-2.91223646560684,1.69872662192211,-2.46023200219497,0.115139884874225,-0.694399874657393,-2.57968501606956,-1.07613346679136,1.01097238250077,2.55840285820886,-0.16854167310521,-2.14430794073269,0.265618530102074,-1.82295208889991,2.39148293528706,-0.6630012919195,-1.13477532193065,-2.03982802201062,2.37711509736255,-2.0016373177059,2.40254757693037,-2.19553082948551,-2.21031519491225,-2.36827498488128,0.0695014866068959,-1.19880567630753,-2.83969862759113,-1.1421154118143,1.45271794265136],"y":[5.3545672702603,10.650761120487,7.80257776146755,7.04196316422895,6.33738898672163,8.25681924354285,6.55061969533563,6.29962139530107,9.35531059745699,5.38642652565613,12.1330156293698,6.00769041106105,14.5030493848026,6.21817762730643,7.19656620873138,14.1308776685037,14.4585312111303,7.79156222939491,6.23471087776124,12.9716045944951,12.442772150971,14.1597422375344,14.9459824501537,14.4236071500927,9.86135407583788,7.8345954278484,7.51545701175928,10.0325517076999,9.9696617317386,8.18445809651166,14.6222282689996,11.3409936823882,6.27433398040012,9.23046993790194,14.1431690962054,9.67792333336547,14.0816914546303,10.9774328372441,11.3174281595275,13.6915831873193,10.0274982256815,14.8363511473872,8.24386027408764,9.81374948518351,8.56987077509984,11.2747768405825,12.4160019052215,10.6596681731753,14.8078650655225,10.7681273552589,9.39042051788419,7.28599695023149,5.82158065633848,13.502649217844,7.34661261551082,14.8816744680516,11.0189754585735,14.9874080810696,8.7559937662445,10.5512663093396,9.29443962872028,10.7587778079323,9.32507397374138,7.24845763994381,5.84984737681225,11.3729825965129,9.31016370421275,5.72716093622148,13.024020192679,8.25278303353116,12.5728903501295,10.8427151734941,12.0883940672502,9.26975766429678,8.43572702025995,12.5911998515949,9.24030208028853,10.6088725384325,6.16135774413124,8.03021797677502,9.78802685858682,8.44830546760932,11.0071414010599,5.76083323219791,14.5599261112511,5.22206823108718,13.4171063243411,11.3244244875386,8.10094165150076,12.4256936623715,11.3891131361015,14.9251598725095,6.28269788343459,13.8323957775719,13.1008338788524,13.2185117830522,13.3470266242512,12.3273222055286,14.8304402432404,11.3920458266512],"z":[23.1505721475843,40.3945295795296,29.6206561422929,25.9250982244619,21.3580650584161,31.3524026221879,27.2492396169615,25.9713679327738,35.7797081014553,20.4080941376938,46.1745801480625,22.1118428791013,57.2060288062715,22.1813838062202,29.0547323194687,54.3308775224048,56.8724972851729,31.7343506513363,26.4916730800433,52.4667865383663,49.6800217063495,56.0409020790595,62.8878157709992,60.2049545452243,41.9568273596946,28.5548500377265,28.2762334674013,35.128969714751,36.2544768146469,34.6895123387477,58.7660545289135,46.0256048334226,24.0973543905991,36.5467528596943,55.8359982002863,35.787817272555,56.8031592639153,42.4086263897348,42.2368676553265,51.2993471125113,38.4559547082976,58.8621159176105,33.7411696649185,37.4156510549543,34.8146248243633,44.4863943318968,49.2642969045919,42.0046186613808,60.2741599212254,40.8273026706622,38.7417651436253,29.3834876528725,22.621436810422,52.1077289243071,30.5902167070015,59.8652276041005,42.8775152090739,56.3890483341449,35.1062925158061,38.7245837450913,33.1414054496319,44.5233281885469,36.9827832566676,30.7282801271156,24.3722912450401,43.8775958105983,39.0702920176953,21.7886646973192,53.4653611420378,33.0947188113243,53.2670096753348,40.0570864414462,49.9331554154741,32.5580686177019,36.6144024819815,48.4120770874284,35.5318454014162,47.0589410558948,24.956585751567,30.076640914486,32.8614850531826,32.8619729551006,46.1489052798948,22.1915833141407,59.9749786955145,19.480522189746,54.5005351032977,44.92373625667,34.1477748064792,46.1272432783013,46.0200190732271,53.4423332580885,25.5366755109601,57.0277129403637,55.9396430398103,52.3052402598828,54.2071223769795,50.183084239572,59.6265310928944,41.0372278220659],"mode":"markers","color":[23.1505721475843,40.3945295795296,29.6206561422929,25.9250982244619,21.3580650584161,31.3524026221879,27.2492396169615,25.9713679327738,35.7797081014553,20.4080941376938,46.1745801480625,22.1118428791013,57.2060288062715,22.1813838062202,29.0547323194687,54.3308775224048,56.8724972851729,31.7343506513363,26.4916730800433,52.4667865383663,49.6800217063495,56.0409020790595,62.8878157709992,60.2049545452243,41.9568273596946,28.5548500377265,28.2762334674013,35.128969714751,36.2544768146469,34.6895123387477,58.7660545289135,46.0256048334226,24.0973543905991,36.5467528596943,55.8359982002863,35.787817272555,56.8031592639153,42.4086263897348,42.2368676553265,51.2993471125113,38.4559547082976,58.8621159176105,33.7411696649185,37.4156510549543,34.8146248243633,44.4863943318968,49.2642969045919,42.0046186613808,60.2741599212254,40.8273026706622,38.7417651436253,29.3834876528725,22.621436810422,52.1077289243071,30.5902167070015,59.8652276041005,42.8775152090739,56.3890483341449,35.1062925158061,38.7245837450913,33.1414054496319,44.5233281885469,36.9827832566676,30.7282801271156,24.3722912450401,43.8775958105983,39.0702920176953,21.7886646973192,53.4653611420378,33.0947188113243,53.2670096753348,40.0570864414462,49.9331554154741,32.5580686177019,36.6144024819815,48.4120770874284,35.5318454014162,47.0589410558948,24.956585751567,30.076640914486,32.8614850531826,32.8619729551006,46.1489052798948,22.1915833141407,59.9749786955145,19.480522189746,54.5005351032977,44.92373625667,34.1477748064792,46.1272432783013,46.0200190732271,53.4423332580885,25.5366755109601,57.0277129403637,55.9396430398103,52.3052402598828,54.2071223769795,50.183084239572,59.6265310928944,41.0372278220659],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"x1"},"yaxis":{"title":"x2"},"zaxis":{"title":"y"}},"hovermode":"closest","showlegend":false,"legend":{"yanchor":"top","y":0.5}},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"x":[-2.31777953216806,0.733796428889036,0.655648397281766,0.740276650059968,2.16549230134115,0.841863631736487,-2.94302546186373,-1.60469696391374,0.996502549387515,0.0855068480595946,1.16154775070027,0.269849013537169,-1.30359849845991,2.54060090566054,-1.24610495846719,2.02377376891673,-1.28266029199585,-1.39907531999052,-1.8796632620506,-1.60664453683421,-1.10032527102157,-1.18383977562189,-2.04572398262098,-2.76002449169755,-1.68720275396481,1.86359131475911,0.154185280669481,2.48794899601489,1.98807028122246,-2.72537842020392,-0.263451105449349,-1.40887996880338,-1.17196678183973,0.0438412204384804,-1.91342275030911,1.55802381271496,-1.79251177422702,-1.44714108807966,2.95290250517428,1.84411404188722,0.320001544430852,0.878436564467847,-1.12905415752903,0.730915188789368,-1.02137894555926,0.0119848377071321,1.06256716372445,-0.0900525650940835,-1.53642703592777,1.59275872539729,-2.55732071958482,-1.14188038883731,1.30363046005368,0.0272754728794098,-2.08200624631718,0.0236009289510548,-0.0362344617024064,1.50720118219033,-1.95210105646402,2.09035446261987,2.18900299211964,-2.74885634891689,-1.09690706804395,-2.91750036505982,-1.56584563991055,1.23896770365536,-1.15143145713955,0.0512853940017521,-2.69012028397992,0.387419039849192,-2.27111887698993,2.35701829008758,-2.91223646560684,1.69872662192211,-2.46023200219497,0.115139884874225,-0.694399874657393,-2.57968501606956,-1.07613346679136,1.01097238250077,2.55840285820886,-0.16854167310521,-2.14430794073269,0.265618530102074,-1.82295208889991,2.39148293528706,-0.6630012919195,-1.13477532193065,-2.03982802201062,2.37711509736255,-2.0016373177059,2.40254757693037,-2.19553082948551,-2.21031519491225,-2.36827498488128,0.0695014866068959,-1.19880567630753,-2.83969862759113,-1.1421154118143,1.45271794265136],"y":[5.3545672702603,10.650761120487,7.80257776146755,7.04196316422895,6.33738898672163,8.25681924354285,6.55061969533563,6.29962139530107,9.35531059745699,5.38642652565613,12.1330156293698,6.00769041106105,14.5030493848026,6.21817762730643,7.19656620873138,14.1308776685037,14.4585312111303,7.79156222939491,6.23471087776124,12.9716045944951,12.442772150971,14.1597422375344,14.9459824501537,14.4236071500927,9.86135407583788,7.8345954278484,7.51545701175928,10.0325517076999,9.9696617317386,8.18445809651166,14.6222282689996,11.3409936823882,6.27433398040012,9.23046993790194,14.1431690962054,9.67792333336547,14.0816914546303,10.9774328372441,11.3174281595275,13.6915831873193,10.0274982256815,14.8363511473872,8.24386027408764,9.81374948518351,8.56987077509984,11.2747768405825,12.4160019052215,10.6596681731753,14.8078650655225,10.7681273552589,9.39042051788419,7.28599695023149,5.82158065633848,13.502649217844,7.34661261551082,14.8816744680516,11.0189754585735,14.9874080810696,8.7559937662445,10.5512663093396,9.29443962872028,10.7587778079323,9.32507397374138,7.24845763994381,5.84984737681225,11.3729825965129,9.31016370421275,5.72716093622148,13.024020192679,8.25278303353116,12.5728903501295,10.8427151734941,12.0883940672502,9.26975766429678,8.43572702025995,12.5911998515949,9.24030208028853,10.6088725384325,6.16135774413124,8.03021797677502,9.78802685858682,8.44830546760932,11.0071414010599,5.76083323219791,14.5599261112511,5.22206823108718,13.4171063243411,11.3244244875386,8.10094165150076,12.4256936623715,11.3891131361015,14.9251598725095,6.28269788343459,13.8323957775719,13.1008338788524,13.2185117830522,13.3470266242512,12.3273222055286,14.8304402432404,11.3920458266512],"z":[23.1505721475843,40.3945295795296,29.6206561422929,25.9250982244619,21.3580650584161,31.3524026221879,27.2492396169615,25.9713679327738,35.7797081014553,20.4080941376938,46.1745801480625,22.1118428791013,57.2060288062715,22.1813838062202,29.0547323194687,54.3308775224048,56.8724972851729,31.7343506513363,26.4916730800433,52.4667865383663,49.6800217063495,56.0409020790595,62.8878157709992,60.2049545452243,41.9568273596946,28.5548500377265,28.2762334674013,35.128969714751,36.2544768146469,34.6895123387477,58.7660545289135,46.0256048334226,24.0973543905991,36.5467528596943,55.8359982002863,35.787817272555,56.8031592639153,42.4086263897348,42.2368676553265,51.2993471125113,38.4559547082976,58.8621159176105,33.7411696649185,37.4156510549543,34.8146248243633,44.4863943318968,49.2642969045919,42.0046186613808,60.2741599212254,40.8273026706622,38.7417651436253,29.3834876528725,22.621436810422,52.1077289243071,30.5902167070015,59.8652276041005,42.8775152090739,56.3890483341449,35.1062925158061,38.7245837450913,33.1414054496319,44.5233281885469,36.9827832566676,30.7282801271156,24.3722912450401,43.8775958105983,39.0702920176953,21.7886646973192,53.4653611420378,33.0947188113243,53.2670096753348,40.0570864414462,49.9331554154741,32.5580686177019,36.6144024819815,48.4120770874284,35.5318454014162,47.0589410558948,24.956585751567,30.076640914486,32.8614850531826,32.8619729551006,46.1489052798948,22.1915833141407,59.9749786955145,19.480522189746,54.5005351032977,44.92373625667,34.1477748064792,46.1272432783013,46.0200190732271,53.4423332580885,25.5366755109601,57.0277129403637,55.9396430398103,52.3052402598828,54.2071223769795,50.183084239572,59.6265310928944,41.0372278220659],"mode":"markers","type":"scatter3d","marker":{"colorbar":{"title":"","ticklen":2},"cmin":19.480522189746,"cmax":62.8878157709992,"colorscale":[["0","rgba(68,1,84,1)"],["0.0608195786337915","rgba(71,25,103,1)"],["0.0900020525647142","rgba(72,34,113,1)"],["0.142874879475456","rgba(70,50,125,1)"],["0.190802366817273","rgba(66,65,132,1)"],["0.231555458536008","rgba(61,77,137,1)"],["0.269905097555625","rgba(58,87,139,1)"],["0.308275146262378","rgba(53,97,141,1)"],["0.337898343956364","rgba(49,105,142,1)"],["0.361662884060068","rgba(47,111,142,1)"],["0.388115043492106","rgba(45,117,142,1)"],["0.422169668350997","rgba(41,125,142,1)"],["0.462668030713122","rgba(38,135,141,1)"],["0.509855683628615","rgba(36,146,139,1)"],["0.536310119655725","rgba(34,153,138,1)"],["0.5849976113087","rgba(39,165,133,1)"],["0.614375624230725","rgba(45,171,129,1)"],["0.687343942768897","rgba(67,187,116,1)"],["0.737685253649249","rgba(93,197,101,1)"],["0.779874326091172","rgba(111,205,88,1)"],["0.804822905111806","rgba(129,209,80,1)"],["0.847276304612219","rgba(156,216,64,1)"],["0.868078254625906","rgba(168,219,55,1)"],["0.929679439122697","rgba(208,226,42,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[23.1505721475843,40.3945295795296,29.6206561422929,25.9250982244619,21.3580650584161,31.3524026221879,27.2492396169615,25.9713679327738,35.7797081014553,20.4080941376938,46.1745801480625,22.1118428791013,57.2060288062715,22.1813838062202,29.0547323194687,54.3308775224048,56.8724972851729,31.7343506513363,26.4916730800433,52.4667865383663,49.6800217063495,56.0409020790595,62.8878157709992,60.2049545452243,41.9568273596946,28.5548500377265,28.2762334674013,35.128969714751,36.2544768146469,34.6895123387477,58.7660545289135,46.0256048334226,24.0973543905991,36.5467528596943,55.8359982002863,35.787817272555,56.8031592639153,42.4086263897348,42.2368676553265,51.2993471125113,38.4559547082976,58.8621159176105,33.7411696649185,37.4156510549543,34.8146248243633,44.4863943318968,49.2642969045919,42.0046186613808,60.2741599212254,40.8273026706622,38.7417651436253,29.3834876528725,22.621436810422,52.1077289243071,30.5902167070015,59.8652276041005,42.8775152090739,56.3890483341449,35.1062925158061,38.7245837450913,33.1414054496319,44.5233281885469,36.9827832566676,30.7282801271156,24.3722912450401,43.8775958105983,39.0702920176953,21.7886646973192,53.4653611420378,33.0947188113243,53.2670096753348,40.0570864414462,49.9331554154741,32.5580686177019,36.6144024819815,48.4120770874284,35.5318454014162,47.0589410558948,24.956585751567,30.076640914486,32.8614850531826,32.8619729551006,46.1489052798948,22.1915833141407,59.9749786955145,19.480522189746,54.5005351032977,44.92373625667,34.1477748064792,46.1272432783013,46.0200190732271,53.4423332580885,25.5366755109601,57.0277129403637,55.9396430398103,52.3052402598828,54.2071223769795,50.183084239572,59.6265310928944,41.0372278220659],"line":{"colorbar":{"title":"","ticklen":2},"cmin":19.480522189746,"cmax":62.8878157709992,"colorscale":[["0","rgba(68,1,84,1)"],["0.0608195786337915","rgba(71,25,103,1)"],["0.0900020525647142","rgba(72,34,113,1)"],["0.142874879475456","rgba(70,50,125,1)"],["0.190802366817273","rgba(66,65,132,1)"],["0.231555458536008","rgba(61,77,137,1)"],["0.269905097555625","rgba(58,87,139,1)"],["0.308275146262378","rgba(53,97,141,1)"],["0.337898343956364","rgba(49,105,142,1)"],["0.361662884060068","rgba(47,111,142,1)"],["0.388115043492106","rgba(45,117,142,1)"],["0.422169668350997","rgba(41,125,142,1)"],["0.462668030713122","rgba(38,135,141,1)"],["0.509855683628615","rgba(36,146,139,1)"],["0.536310119655725","rgba(34,153,138,1)"],["0.5849976113087","rgba(39,165,133,1)"],["0.614375624230725","rgba(45,171,129,1)"],["0.687343942768897","rgba(67,187,116,1)"],["0.737685253649249","rgba(93,197,101,1)"],["0.779874326091172","rgba(111,205,88,1)"],["0.804822905111806","rgba(129,209,80,1)"],["0.847276304612219","rgba(156,216,64,1)"],["0.868078254625906","rgba(168,219,55,1)"],["0.929679439122697","rgba(208,226,42,1)"],["1","rgba(253,231,37,1)"]],"showscale":false,"color":[23.1505721475843,40.3945295795296,29.6206561422929,25.9250982244619,21.3580650584161,31.3524026221879,27.2492396169615,25.9713679327738,35.7797081014553,20.4080941376938,46.1745801480625,22.1118428791013,57.2060288062715,22.1813838062202,29.0547323194687,54.3308775224048,56.8724972851729,31.7343506513363,26.4916730800433,52.4667865383663,49.6800217063495,56.0409020790595,62.8878157709992,60.2049545452243,41.9568273596946,28.5548500377265,28.2762334674013,35.128969714751,36.2544768146469,34.6895123387477,58.7660545289135,46.0256048334226,24.0973543905991,36.5467528596943,55.8359982002863,35.787817272555,56.8031592639153,42.4086263897348,42.2368676553265,51.2993471125113,38.4559547082976,58.8621159176105,33.7411696649185,37.4156510549543,34.8146248243633,44.4863943318968,49.2642969045919,42.0046186613808,60.2741599212254,40.8273026706622,38.7417651436253,29.3834876528725,22.621436810422,52.1077289243071,30.5902167070015,59.8652276041005,42.8775152090739,56.3890483341449,35.1062925158061,38.7245837450913,33.1414054496319,44.5233281885469,36.9827832566676,30.7282801271156,24.3722912450401,43.8775958105983,39.0702920176953,21.7886646973192,53.4653611420378,33.0947188113243,53.2670096753348,40.0570864414462,49.9331554154741,32.5580686177019,36.6144024819815,48.4120770874284,35.5318454014162,47.0589410558948,24.956585751567,30.076640914486,32.8614850531826,32.8619729551006,46.1489052798948,22.1915833141407,59.9749786955145,19.480522189746,54.5005351032977,44.92373625667,34.1477748064792,46.1272432783013,46.0200190732271,53.4423332580885,25.5366755109601,57.0277129403637,55.9396430398103,52.3052402598828,54.2071223769795,50.183084239572,59.6265310928944,41.0372278220659]}},"frame":null},{"x":[-2.94302546186373,2.95290250517428],"y":[5.22206823108718,14.9874080810696],"type":"scatter3d","mode":"markers","opacity":0,"hoverinfo":"none","showlegend":false,"marker":{"colorbar":{"title":"","ticklen":2,"len":0.5,"lenmode":"fraction","y":1,"yanchor":"top"},"cmin":19.480522189746,"cmax":62.8878157709992,"colorscale":[["0","rgba(68,1,84,1)"],["0.0608195786337915","rgba(71,25,103,1)"],["0.0900020525647142","rgba(72,34,113,1)"],["0.142874879475456","rgba(70,50,125,1)"],["0.190802366817273","rgba(66,65,132,1)"],["0.231555458536008","rgba(61,77,137,1)"],["0.269905097555625","rgba(58,87,139,1)"],["0.308275146262378","rgba(53,97,141,1)"],["0.337898343956364","rgba(49,105,142,1)"],["0.361662884060068","rgba(47,111,142,1)"],["0.388115043492106","rgba(45,117,142,1)"],["0.422169668350997","rgba(41,125,142,1)"],["0.462668030713122","rgba(38,135,141,1)"],["0.509855683628615","rgba(36,146,139,1)"],["0.536310119655725","rgba(34,153,138,1)"],["0.5849976113087","rgba(39,165,133,1)"],["0.614375624230725","rgba(45,171,129,1)"],["0.687343942768897","rgba(67,187,116,1)"],["0.737685253649249","rgba(93,197,101,1)"],["0.779874326091172","rgba(111,205,88,1)"],["0.804822905111806","rgba(129,209,80,1)"],["0.847276304612219","rgba(156,216,64,1)"],["0.868078254625906","rgba(168,219,55,1)"],["0.929679439122697","rgba(208,226,42,1)"],["1","rgba(253,231,37,1)"]],"showscale":true,"color":[19.480522189746,62.8878157709992],"line":{"color":"rgba(255,127,14,1)"}},"z":[19.480522189746,62.8878157709992],"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
+
+---
+# Multiple regression
+
+### With **many** explanatory variables, we visualizing relationships means thinking about **hyperplanes** 🤯
+
+`$$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki} + u_i$$`
+#### Math notation looks very similar to simple linear regression, but _conceptually_ and _visually_ multiple regression is **very different**
+
+---
+# Multiple regression
+
+### Interpretation of coefficients
+
+`$$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki} + u_i$$`
+
+--
+
+- `\(\beta_k\)` tells us the change in `\(y\)` due to a one unit change in `\(x_k\)` when **all other variables are held constant**
+
+--
+
+- This is an "all else equal" interpretation
+
+--
+
+- E.g., how much do wages increase with one more year of education, _holding gender fixed_? 
+
+--
+
+- E.g., how much does ozone increase when temperature rises, _holding NOx emissions fixed_? 
+
+---
+# Tradeoffs
+
+There are tradeoffs to consider as we add/remove variables:
+
+**Fewer variables**
+
+- Generally explain less variation in `\(y\)`
+- Provide simple interpretations and visualizations (*parsimonious*)
+- May need to worry about omitted-variable bias
+
+**More variables**
+
+- More likely to find *spurious* relationships (statistically significant due to chance—does not reflect a true, population-level relationship)
+- More difficult to interpret the model
+- You may still miss important variables—still omitted-variable bias
+
+---
+# Omitted-variable bias
+
+You will study this in much more depth in EDS 241, but here's a primer.
+
+**Omitted-variable bias** (OVB) arises when we omit a variable that
+
+1. affects our outcome variable `\(y\)`
+
+2. correlates with an explanatory variable `\(x_j\)`
+
+As it's name suggests, this situation leads to bias in our estimate of `\(\beta_j\)`. In particular, it violates Assumption 2 of OLS from last week. 
+
+--
+
+**Note:** OVB Is not exclusive to multiple linear regression, but it does require multiple variables affect `\(y\)`.
+
+---
+# Omitted-variable bias
+
+**Example**
+
+Let's imagine a simple model for the amount individual `\(i\)` gets paid
+
+$$ \text{Pay}_i = \beta_0 + \beta_1 \text{School}_i + \beta_2 \text{Male}_i + u_i $$
+
+where
+
+- `\(\text{School}_i\)` gives `\(i\)`'s years of schooling
+- `\(\text{Male}_i\)` denotes an indicator variable for whether individual `\(i\)` is male.
+
+thus
+
+- `\(\beta_1\)`: the returns to an additional year of schooling (*ceteris paribus*)
+- `\(\beta_2\)`: the premium for being male (*ceteris paribus*)
+&lt;br&gt;If `\(\beta_2 &gt; 0\)`, then there is discrimination against women—receiving less pay based upon gender.
+
+---
+
+# Omitted-variable bias
+
+
+
+
+
+**Example, continued:** `\(\text{Pay}_i = 20 + 0.5 \times \text{School}_i + 10 \times \text{Male}_i + u_i\)`
+
+The relationship between pay and schooling.
+
+&lt;img src="04-ols-contd_files/figure-html/plotovb1-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Omitted-variable bias
+
+Biased regression estimate: `\(\widehat{\text{Pay}}_i = 32.2 + -1.1 \times \text{School}_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/plotovb2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Omitted-variable bias
+
+Recalling the omitted variable: Gender (**&lt;font color="#e64173"&gt;female&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;male&lt;/font&gt;**)
+
+&lt;img src="04-ols-contd_files/figure-html/plotovb3-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Omitted-variable bias
+
+Recalling the omitted variable: Gender (**&lt;font color="#e64173"&gt;female&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;male&lt;/font&gt;**)
+
+&lt;img src="04-ols-contd_files/figure-html/plotovb4-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Omitted-variable bias
+
+Unbiased regression estimate: `\(\widehat{\text{Pay}}_i = 20.3 + 0.4 \times \text{School}_i + 10.2 \times \text{Male}_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/plotovb5-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Model fit in multiple regression
+
+---
+# Nonlinear transformations
+
+Our linearity assumption requires that **parameters enter linearly** (_i.e._, the `\(\beta_k\)` multiplied by variables)
+
+We allow nonlinear relationships between `\(y\)` and the explanatory variables `\(x\)`.
+
+--
+
+**Examples**
+
+- **Polynomials** and **interactions:** `\(y_i = \beta_0 + \beta_1 x_1 + \beta_2 x_1^2 + \beta_3 x_2 + \beta_4 x_2^2 + \beta_5 \left( x_1 x_2 \right) + u_i\)`
+
+- **Exponentials** and **logs:** `\(\log(y_i) = \beta_0 + \beta_1 x_1 + \beta_2 e^{x_2} + u_i\)`
+
+- **Indicators** and **thresholds:** `\(y_i = \beta_0 + \beta_1 x_1 + \beta_2 \, \mathbb{I}(x_1 \geq 100) + u_i\)`
+
+---
+# Nonlinear transformations
+
+**Transformation challenge:** (literally) infinite possibilities. What do we pick?
+
+&lt;img src="04-ols-contd_files/figure-html/transfigurestart-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+`\(y_i = \beta_0 + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/transfigure0-1.svg" style="display: block; margin: auto;" /&gt;
+---
+count: false
+
+`\(y_i = \beta_0 + \beta_1 x + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/transfigure1-1.svg" style="display: block; margin: auto;" /&gt;
+---
+count: false
+
+`\(y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/transfigure2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+count: false
+
+`\(y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/transfigure3-1.svg" style="display: block; margin: auto;" /&gt;
+---
+count: false
+
+`\(y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \beta_4 x^4 + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/transfigure4-1.svg" style="display: block; margin: auto;" /&gt;
+---
+count: false
+
+`\(y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \beta_4 x^4 + \beta_5 x^5 + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/transfigure5-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+count: false
+
+**Truth:** `\(y_i = 2 e^{x} + u_i\)`
+
+&lt;img src="04-ols-contd_files/figure-html/trans figure 6-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Model fit with multiple regressors
+
+Measures of *goodness of fit* try to analyze how well our model describes (*fits*) the data.
+
+--
+
+**Common measure:** `\(R^2\)` [R-squared] (*a.k.a.* coefficient of determination)
+
+$$ R^2 =  1 - \dfrac{\sum_i \left( y_i - \hat{y}_i \right)^2}{\sum_i \left( y_i - \overline{y} \right)^2} =  1 - \dfrac{\sum_i e_i^2}{\sum_i \left( y_i - \overline{y} \right)^2} $$
+
+Recall `\(\sum_i \left( y_i - \hat{y}_i \right)^2 = \sum_i e_i^2\)` is the "sum of squared errors".
+
+--
+
+`\(R^2\)` literally tells us the share of the variance in `\(y\)` our current models accounts for. Thus `\(0 \leq R^2 \leq 1\)`.
+
+---
+# Model fit with multiple regressors
+
+**The problem:** As we add variables to our model, `\(R^2\)` *mechanically* increases.
+
+--
+
+**Intuition:** Even if our added variable has _no true relation to_ `\(y\)`, it can help lower `\(e_i\)` by fitting to the sampling noise
+
+--
+
+
+**One solution:**
+Penalize for the number of variables, _e.g._, .pink[adjusted] `\(\color{#e64173}{R^2}\)`:
+
+$$ \overline{R}^2 = 1 - \dfrac{\sum_i \left( y_i - \hat{y}_i \right)^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
+
+*Note:* Adjusted `\(R^2\)` need not be between 0 and 1.
+
+---
+
+# Model fit with multiple regressors
+
+#### We often use measures of model fit (or model "performance") to help choose a regression model from among multiple possibilities
+
+- Adjusted `\(R^2\)` is just one of **many possible performance metrics**
+
+--
+
+- For example, Akaike Information Criterion (AIC), Bayesian Information Criterion (BIC), Mean Squared Error (MSE), ...
+
+--
+
+- Lots more on the topic of model selection in EDS 232 👀
+
+--
+
+- Don't forget the _theory_ behind your data science! 
+
+---
+layout: false
+class: clear, middle, inverse
+# Interactions
+---
+# Interactions
+
+Interactions allow the effect of one variable to change based upon the level of another variable.
+
+**Examples**
+
+1. Does the effect of schooling on pay change by gender?
+
+1. Does the effect of gender on pay change by race?
+
+1. Does the effect of schooling on pay change by experience?
+
+---
+# Interactions
+
+Previously, we considered a model that allowed women and men to have different wages, but the model assumed the effect of school on pay was the same for everyone:
+
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + u_i $$
+
+but we can also allow the effect of school to vary by gender:
+
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+
+---
+# Interactions
+
+The model where schooling has the same effect for everyone (**&lt;font color="#e64173"&gt;F&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;M&lt;/font&gt;**):
+
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + u_i $$
+
+
+
+&lt;img src="04-ols-contd_files/figure-html/intplot1-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Interactions
+
+The model where schooling's effect can differ by gender (**&lt;font color="#e64173"&gt;F&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;M&lt;/font&gt;**):
+
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+
+&lt;img src="04-ols-contd_files/figure-html/intplot2-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+Some slides and slide components were borrowed from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
+
+  
+---
+exclude: true
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

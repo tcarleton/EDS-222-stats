@@ -26,3 +26,6 @@ theme: theme.css
 # To remove table of contents on each page, set toc: and toc_float: lines to false
 
 # To add or remove pages, create .Rmd (in root), add information (in the navbar) for the .html that is created from it, then build.
+
+# This should speed up update time online
+include: [".nojekyll"]

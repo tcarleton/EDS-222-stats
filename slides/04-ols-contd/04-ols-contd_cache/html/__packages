@@ -1,0 +1,16 @@
+base
+pacman
+leaflet
+ggplot2
+ggthemes
+viridisLite
+viridis
+dplyr
+magrittr
+knitr
+pagedown
+cowplot
+latex2exp
+palmerpenguins
+gg3D
+plotly

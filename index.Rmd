@@ -101,7 +101,7 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 1    | No class        | Class intro, sampling, study design        |
 | 2    | Summarizing and visualizing data | Summary stats in `R`  |
 | 3    |  Ordinary Least Squares        | OLS in `R`     |
-| 4    |  Multiple linear regression, logistic regression       | Regression in `R`, continued     |
+| 4    |  Multiple linear regression      | Regression in `R`, continued     |
 | 5    | Inference \& hypothesis testing         |   Hypothesis testing in `R`  |
 | 6    | Inference \& hypothesis testing        | Midterm Exam     |
 | 7    | Time series analysis       | Temporal lag models, serial correlation     |
