@@ -1311,9 +1311,18 @@ Slides created via the R package [**xaringan**](https://github.com/yihui/xaringa
 
 Some slides and slide components were borrowed from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
 
+
+```{css, echo = FALSE}
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```
   
 ---
 exclude: true
+
 
 ```{R, print pdfs, echo = F, eval = F}
 pagedown::chrome_print(
