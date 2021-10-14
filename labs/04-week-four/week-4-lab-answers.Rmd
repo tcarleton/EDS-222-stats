@@ -1,0 +1,261 @@
+---
+title: "EDS 222: Week 4: In-class Lab"
+author: "ANSWER KEY"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+# Section 0: Getting set up
+
+From last week, you should already have done the following:
+
+1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
+2. Download `_common.R` and put it in the _Labs/_ folder.
+3. Install the following packages, if they are not already installed:^[Note: This will take a minute or two!]
+
+```{r setup, include=TRUE, echo = FALSE, eval = FALSE}
+suppressMessages({
+  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
+})
+```
+
+4. Load all the packages you need, plus the `_common.R` source file.^[Note: If you get a `namespace load` error for `tidyverse`, you want to remove the problem package, re install it, and then load `tidyverse` again.]
+
+```{r, echo = FALSE, eval = TRUE}
+# You probably already have these packages installed, so let's just load them
+library(tidyverse)
+library(readr)
+library(gt)
+library(openintro)
+library(ggplot2)
+library(modelr)
+library(knitr)
+library(xtable)
+
+options(scipen = 999) # disable scientific notation
+
+# Set your file path here! Or, set this up as an .Rproj if you'd like.
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
+#rootdir <- ("~/Dropbox/EDS222_data")
+
+
+# This runs the script _common.R, which loads all the packages we'll need for today and does some extra stuff we won't really use, at least for now.
+source(file.path(rootdir,"labs","_common.R"))
+
+# For labs, we want to see all our code
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1: Coefficient of Determination in a Regression
+
+In the last class, we estimated a linear relationship between possum tail length and total possum length, and we recovered OLS estimates of $\hat\beta_0$ (the intercept) and $\hat\beta_1$ (the slope coefficient). From our correlation calculations, we also have a sense of the strength of these linear relationships. Here, we will use a concept that is very closely related to correlation to quantify the overall fit of our linear regression model. 
+
+Recall that the coefficient of determination, or $R^2$, is the share of the variance in $y$ that is explained by your regression model. Defining SSR as the sum of squared residuals (sum of the square of all our prediction errors) and SST as the total sum of squares (proportional to variance of $y$), we have:
+
+$$R^{2}=1-\frac{S S R}{S S T}=1-\frac{\operatorname{Var}(e)}{\operatorname{Var}(y)}$$
+
+This is the most commonly cited measure of the fit of a regression model. $R^2$ ranges from 0 (my regression model explains none of the variation in $y$) to 1 (my regression model perfectly explains all variation in $y$).
+
+Recall our regressions from last week: 
+
+$$\text{possum total length}_i = \beta_0 + \beta_1 \text{possum tail length}_i + \epsilon_i$$
+and:
+
+$$\text{possum head length}_i = \beta_0 + \beta_1 \text{possum tail length}_i + \epsilon_i$$
+Recall the graphs of these relationships that we made last week:
+
+```{r, echo = F}
+ggplot(data = possum, aes(y = total_l, x = tail_l)) +
+  geom_point() +
+  labs(x = "Length of Possum Tail (cm)",
+       y = "Total length of Possum (cm)")
+
+ggplot(data = possum, aes(y = head_l, x = tail_l)) +
+  geom_point() +
+  labs(x = "Length of Possum Tail (cm)",
+       y = "Length of Possum Head (cm)")
+
+```
+
+**Exercise**
+
+1. Use the function `summary()` after the regression to calculate the $R^2$ for both the total length and head length regressions. Recall that in the `possum` dataset, `total_l` is the total length of the possum, `head_l` is the head length, and `tail_l` is the tail length.
+
+2. Which regression model fits the data better? Is this what you expected based on the Scatter plots? Why or why not?
+
+**Answers** 
+
+```{r}
+# (i) the length of possum tail affects the total length of a possum:
+mod1 <- lm(total_l ~ tail_l, data = possum)
+
+# (ii) the length of possum tail affects the length of a possum's head:
+mod2 <- lm(head_l ~ tail_l, data = possum)
+
+# Recovering R2 from the regressions
+R2_tot = summary(mod1)$r.squared
+R2_head = summary(mod2)$r.squared
+print(paste0("R2 of total length on tail length is: ", round(R2_tot,2)))
+print(paste0("R2 of head length on tail length is: ", round(R2_head,2)))
+```
+
+
+# Section 2: Categorical variables in Ordinary Least Square (OLS) Regressions
+
+## Categorical Variables
+
+In this section we will consider a situation where a numerical or a binary variable might not be useful for our needs. 
+
+We will use an example from the automobile industry where which has data on fuel efficiency and automobile characteristics for cars of two vintages: 1999 cars, and 2008 cars. We are interested here to understand how highway fuel economy differs across these two vintages. The dataset is called `mpg` and is pre-loaded in `R`. 
+
+**Step 1: Get your variables ready.** 
+
+Note that we want to treat the year of the car as a **categorical** variable, as we just have two years and we want to treat the 1999 cars as one "group" and the 2008 cars as another "group." Take a moment to identify the class of the "year" variable, and then use the `as.factor()` command to turn it into a factor so we can trust `R` will treat it as a categorical variable:
+
+```{r}
+head(mpg)
+class(mpg$year)
+mpg <- mpg %>% mutate(year = as.factor(year))
+class(mpg$year) # confirm your class change worked
+```
+
+**Step 2: Visualize your data.** 
+
+As we showed in class, scatter plots are not all that helpful when we have a categorical variable. Use `geom_boxplot()` to plot "highway miles per gallon" (variable is called `hwy`) on the $y$-axis and vintage year on the $x$-axis. Do the distributions of fuel efficiency look different across the two groups?
+
+```{r}
+ggplot(data = mpg, aes(x = year, y = hwy)) + 
+  geom_boxplot() + 
+  labs(x = "Year",
+       y = "Fuel Efficiency")
+```
+
+**Step 3: Run a regression.**
+
+A linear regression will allow us to quantify the difference in average miles per gallon across the two car vintages. Note that in this case with a simple linear regression and one categorical variable with just two values (1999 and 2008), these regression estimates are equivalent to computing means for each group and differencing them. 
+
+Here is our regression:
+$$hwy_i=\beta_{0}+\beta_{1} \cdot vintage_i +\varepsilon_i$$
+Complete the following:
+
+1. Using the model specified above, use `lm()` to estimate $\hat\beta_0$ and $\hat\beta_1$ using this sample of data. Make sure you are treating `year` as a categorical variable! Use `summary(lm())`, `gt()` or `kable()` to visualize the regression results.
+
+2. What does the intercept tell you, in words?  
+
+3. What does the coefficient estimate on the 2008 vintage indicator variable tell you, in words? 
+
+4. Does your model suggest anything about whether fuel efficiency has evolved over time? Why or why not? 
+
+**Answers:**
+```{r}
+lm(hwy ~ year, data = mpg) %>%
+  summary() %>%
+  xtable() %>%
+  kable()
+```
+
+- **Intercept:** The predicted highway miles per gallon for a car with vintage of 1999 is 23.4 mpg. 
+
+- **Coefficient on year 2008 indicator variables:** Highway fuel efficiency is, on average, 0.03 miles per gallon higher in the 2008 car vintage than in the 1999 vintage.  
+
+The model is suggestive of some improvements in fuel efficiency over time, but the effect is very small (and imprecise).
+
+# Section 2: Multiple Linear Regressions
+
+In most situations a simple linear regression with one variable might not be useful enough to suit our needs. In this case, we have some evidence that fuel efficiency may have increased over time. However, we can't be sure if this is because of technological advances in fuel efficiency, or if it's just that consumer preferences changed over the two periods and people preferred cars with smaller engines, which have higher fuel efficiency when compared to those with larger engines.
+
+We can help "control" for this "omitted-variable bias" by adding additional variables to our regression.
+
+**Step 1: Adding in engine size** 
+
+As we showed in class, scatter plots are useful with numeric variables. The engine size for vehicles is stored as the variable `displ` and it is a numeric variable. Use `geom_point()` to plot "engine displacement, in litres" (variable is called `displ`) on the $x$-axis and "highway miles per gallon" (variable is called `hwy`) on the $y$-axis. Do the distributions of fuel efficiency look different as engine sizes increase?
+
+**Answers:**
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  labs(x = "Engine Displacement, in litres",
+       y = "Highway Miles per gallon")
+
+```
+
+While we know that fuel economy evolved over time but how did that really happen? Can the credit for better efficiency over time be given to developments in engineering? Or did consumer tastes change? How do we know that the increase in fuel economy was not just due to the cars in 2008 generally having different sized engines than cars in 1999? This problem might seem confusing but it a multiple variable regression can help us unpack it. 
+
+**Step 2: Run additional regressions**
+
+To resolve these questions we will need to assess the effects of engine size and vintage simultaneously on fuel efficiency. This means in simple words that we want to understand the effect of vintage on fuel economy, after controlling for (or isolating the effect of) engine size.
+
+To be able to do this, we will modify our model in section 2 as the following: 
+
+$$hwy_i =\beta_{0}+\beta_{1} \cdot displ_i +\beta_{2} \cdot \text vintage_i+\varepsilon_i$$
+
+Complete the following:
+
+1. Using the model specified above, use `lm()` to estimate $\hat\beta_0$, $\hat\beta_1$ and $\hat\beta_2$ using this sample of data. Use `summary(lm())` to print the regression results.
+
+2. Interpret your three coefficients, paying careful attention to units. 
+
+3. Does your model suggest anything about whether fuel efficiency has evolved over time after controlling for engine size? Why or why not? Why is this different from the results we found in simple linear regression above? 
+
+**Answers:**
+
+```{r}
+lm(hwy ~ displ + year, data = mpg) %>%
+  summary() %>%
+  xtable() %>%
+  kable()
+```
+
+- **Intercept:** The predicted highway miles per gallon for a car with an engine size of zero and a vintage of 1999 is 35.28 mpg.
+
+- **Coefficient on engine size:** Predicted highway miles per gallon decrease by 3.61 for every litre increase in engine displacement, holding fixed the year the car was made. 
+
+- **Coefficient on year:** Highway fuel efficiency is, on average, 1.40 miles per gallon higher in cars built in 2008, as compared to 1999,  holding fixed the engine size of the car. This coefficient is larger than in the simple linear regression, suggesting that engine size is correlated with both fuel efficiency and time. Here, it appears that in later years engine sizes were _larger_, which lowers fuel efficiency. Once we control for that effect, the role of time itself on the efficiency is much more substantial.
+
+**Step 3: Visualize your regression (parallel slopes)**
+
+This regression includes one "slope" coefficient (coefficient estimate on a numeric variable) and one "indicator" coefficient (coefficient estimate on a categorical variable). This kind of a model is often called "parallel slopes" because the indicator variable's coefficient shifts predictions up and down, while the numeric variable's slope is the same across both groups. We will see that visually here. 
+
+1. First, use the `geom_point()` function with the `color` argument set to `year` to make a scatter plot of miles per gallon ($y$-axis) against engine size ($x$-axis), in which scatter points are colored differently for each vintage.
+
+2. Second, add two regression lines to the plot, one that shows the predicted relationship between miles per gallon and engine size for the 1999 vintage, and a second that shows the same predicted relationship but for the 2008 vintage.^[Hint: The variable `.fitted` gives you the predicted (or "fit") values for all observations in the data.]
+
+Hint: Start by storing your regression results in a new way, using `augment()`, which stores fitted values for every observation in your data as a column in a dataframe:
+
+```{r, echo=FALSE, cache=T}
+mod <- lm(hwy ~ displ + year, data = mpg)
+augment(mod)
+```
+
+Now, use `geom_line()` and the predictions stored in `augment(mod)` to add the best fit OLS line to your scatter plots, again using `color = year` to color your regression lines by vintage. What can you say about the evolution of fuel efficiency over time after controlling for engine size?
+
+**Answers:**
+
+```{r}
+mpg %>% 
+  ggplot(aes(x = displ, y = hwy, color = year)) +
+  geom_point() +
+  labs(x = "Engine Displacement, in litres",
+       y = "Highway Miles per gallon") 
+
+```
+
+```{r}
+mpg %>% 
+  ggplot(aes(x = displ, y = hwy, color = year)) +
+  geom_point() +
+  geom_line(data = augment(mod), aes(y = .fitted, color = year)) + 
+  labs(x = "Engine Displacement, in litres",
+       y = "Highway Miles per gallon") +
+  scale_colour_discrete("Year")
+```
+
+This last graph shows us that on average fuel efficiency is higher for the 2008 vintage, since the blue line is above the pink line. Larger engine size lowers efficiency (negative slope in both lines), but once we control for engine size, we see a positive effect of the 2008 vintage (blue line is parallel but above pink line). 
+

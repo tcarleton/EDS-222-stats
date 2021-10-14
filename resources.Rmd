@@ -55,7 +55,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-- **Lab:** OLS in `R`, continued 
+- **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-three/week-4-lab-answers.html).
   
 - **Assignment:** Assignment 4 posted 10/15; due 10/22, 5pm
 
