@@ -45,7 +45,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Lab:** OLS in `R` [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
   
-- **Assignment:** Assignment 3 posted 10/8; due 10/15, 5pm
+- **Assignment:** Assignment 3 posted 10/8; due 10/18, 5pm [Note: deadline delayed from original 10/15]
 
 
 ### Week 4
@@ -57,7 +57,18 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-three/week-4-lab-answers.html).
   
-- **Assignment:** Assignment 4 posted 10/15; due 10/22, 5pm
+- **Assignment:** Assignment 4 DELAYED until after midterm
+
+### Week 5
+
+- **Slides 05**: Multiple linear regression [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
+
+- **Reading:** 
+  + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** Interaction models in `R`
+  
+- **No assignment** 
 
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)

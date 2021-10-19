@@ -20,7 +20,7 @@ From last week, you should already have done the following:
 2. Download `_common.R` and put it in the _Labs/_ folder.
 3. Install the following packages, if they are not already installed:^[Note: This will take a minute or two!]
 
-```{r setup, include=TRUE, echo = FALSE, eval = FALSE}
+```{r setup, include=FALSE, echo = FALSE, eval = FALSE}
 suppressMessages({
   install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
 })
