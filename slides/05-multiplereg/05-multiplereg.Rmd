@@ -354,7 +354,7 @@ scale_shape_manual(
 ---
 # Multiple regression
 
-Another way to think about it:
+This regression gives the "parallel slopes" model: 
 
 ```{R, multregplot5, dev = "svg", echo = F, fig.height = 6}
 ggplot(data = gen_df, aes(y = y, x = x1, color = x2, shape = x2)) +
@@ -394,7 +394,7 @@ More generally, how do we think about multiple explanatory variables?
 
 --
 
-Suppose $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i$
+Suppose $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i$ where $x_1$ and $x_2$ are both continuous numerical variables
 
 ```{R, gendata2, cache = T, include = F}
 n <- 1e2
