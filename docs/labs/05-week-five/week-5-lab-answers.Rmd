@@ -1,0 +1,163 @@
+---
+title: "EDS 222: Week 5: In-class Lab"
+author: "ANSWER KEY"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+# Section 0: Getting set up
+
+You should already have done the following:
+
+1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
+2. Download `_common.R` and put it in the _Labs/_ folder.
+3. Install the following packages:
+
+```{r setup, include=FALSE, echo = FALSE, eval = FALSE}
+suppressMessages({
+  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
+})
+```
+
+For today, load the following packages:
+
+```{r, echo = FALSE, eval = TRUE}
+# You probably already have these packages installed, so let's just load them
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(modelr)
+library(knitr)
+library(broom)
+
+options(scipen = 999) # disable scientific notation
+
+# For labs, we want to see all our code
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1: Interactions in OLS in `R`
+
+In this section we will focus on estimating an _interaction_ model in `R`. Recall from lecture that an interaction model is appropriate when you think the effect of some variable $x$ on your dependent variable $y$ depends on a third variable $z$. For example, Graff-Zivin and Neidell (2012) find that the productivity of female agricultural workers is less sensitive to air pollution than that of men's. This suggests that _gender_ influences the relationship between _productivity_ and _pollution_.
+
+To learn how to estimate interaction models, we will use an example from the automobile industry (from last week) which has data on fuel efficiency and automobile characteristics for cars of two vintages: 1999 cars, and 2008 cars. Last week we found that vintage influenced fuel efficiency: more recent cars have higher miles per gallon. We also found that our estimates were biased if we did not also control for engine size, as higher engine sizes lead to lower fuel efficiency, and they are also correlated with vintage. 
+
+## Parallel slopes model:
+
+The model we estimated last week was:
+
+$$hwy_i =\beta_{0}+\beta_{1} \cdot displ_i +\beta_{2} \cdot \text vintage_i+\varepsilon_i$$ 
+
+The results of this "parallel slopes" model from last week looked like this:
+
+```{r, echo=TRUE}
+mpg <- mpg %>% mutate(year = as.factor(year)) # Recall, we do this to ensure our year variable is treated as a categorical variable
+
+mod <- lm(hwy ~ displ + year, data = mpg)
+
+mpg %>% 
+  ggplot(aes(x = displ, y = hwy, color = year)) +
+  geom_point() +
+  geom_line(data = augment(mod), aes(y = .fitted, color = year)) + 
+  labs(x = "Engine Displacement, in litres",
+       y = "Highway Miles per gallon") +
+  scale_colour_discrete("Year")
+```
+
+These slopes being **parallel** comes from our regression equation having just one coefficient on engine size; regardless of your vintage, we estimate the same impact of engine size on fuel economy. 
+
+This may not be accurate. If technology is improving over time, the effect of engine size on fuel economy could decline over time -- having a larger engine lowers fuel economy, but maybe we are getting better at not sacrificing miles per gallon as we increase engine size. In this subsection, we want to see if this true or or not. We will use the `mpg` dataset and is pre-loaded in `R`. 
+
+## Interaction model
+
+We hypothesize that the relationship between miles per gallon and engine size may not actually be the same across the two vintages. That is, we want a model in which those "parallel slopes" above are allowed to differ by vintage.
+
+We use an interaction model to achieve this:
+$$hwy_i=\beta_{0}+\beta_{1} \cdot displ_i + \beta_{2} \cdot vintage_i + \beta_{3} \cdot displ_i \cdot vintage_i + \varepsilon_i$$
+The `lm` package makes estimating interactions easy. Just use a colon (`:`) between the two variables you want to interact; the colon tells `lm` to multiply the two variables by one another. 
+
+Complete the following:
+
+1. Using the model specified above, use `lm()` to estimate all three coefficients using the `mpg` data. Make sure you are treating `year` as a categorical variable! Use `summary(lm())` to print the regression results.
+
+```{r}
+mod_int <- lm(hwy ~ displ + year + displ:year, data = mpg) 
+summary(mod_int)
+```
+2. What does the intercept tell you, in words?  
+
+**Answer: We predict that average highway miles per gallon for a 1999 vehicle with an engine size of zero is 35.8 mpg (nonsensical).** 
+
+3. What does the coefficient on `displ` tell you, in words? 
+
+**Answer: Highway miles per gallon fall by 3.8 when engine size increases by one litre _for a 1999 vintage vehicle_. Note: This slope does _not_ apply to a 2008 vintage vehicle, since the interaction term would get "turned on" for that vintage!**
+
+4. What does the coefficient estimate on the 2008 vintage indicator variable (`year2008`) tell you, in words? 
+
+**Answer: On average, highway miles per gallon are 0.3 mpg higher for a 2008 vehicle relative to a 1999 vehicle _when the engine is size zero_ (also nonsensical). This is important -- with an interaction term, the effect of vintage now varies with engine size. So the coefficient on the vintage dummy tells us the effect of 2008 vintage only when `displ=0`.**
+
+
+5. What does the coefficient on `displ:year2008` tell you, in words?^[Hint: This is tricky. Start by writing down the relationship between miles per gallon and engine size when the car vintage is 2008. Then write the same thing for car vintage 1999. Can you see what role this coefficient plays?]
+
+**Answer: The impact of engine size on highway miles per gallon is 0.3 mpg higher in 2008 cars than it is in 1999 cars. This coefficient is telling us how the relationship between miles per gallon and engine size _varies_ with vintage. Because the reference group is the 1999 vintage, this coefficient tells us the slope of the relationship between miles per gallon and engine size for the 2008 vintage _minus_ the same slope for the 1999 vintage.**
+
+**You can see this by looking at 2008 and 1999 vintages one at a time. The slope of the relationship between `hwy` and `displ` in 2008 is $\beta_1 displ  + \beta_3 \cdot displ \cdot 1 = (\beta_1 + \beta_3)\cdot displ$. In contrast, the slope of the relationship between `hwy` and `displ` in 1999 is $\beta_1 displ + \beta_3 \cdot displ \cdot 0 = \beta_1 displ$, so the difference in slopes is $\beta_3$.**
+
+## Plotting an interaction model
+
+Interaction models are difficult to interpret. Writing out the algebra of what each independent variable and its associated coefficient mean is really valuable, but visualizing the data and resulting model can also help. Here, let's remake our scatter plot above, but overlay our regression results from the interaction model.
+
+**Intuition check before you dive in:** What do you expect to see in terms of intercepts and slopes of your vintage-specific regression lines? 
+
+As usual, `ggplot2` with `geom_smooth` plotting our regression line makes this easy for us. If we specify `color` as our grouping variable (i.e., car vintage year) in the first `ggplot()` command, and do not add aesthetics in `geom_point()`, or `geom_smooth()` later on, `geom_point` will _automatically_ color scatter points by vintage year, and `geom_smooth()` will estimate whatever regression you specify _separately by vintage year_. This gives a coefficient and slope for each vintage, as our regression model above does. 
+
+Let's give it a try:
+
+```{r}
+ggplot(mpg, aes(y = hwy, x = displ, color = year)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Note that you could also plot the same thing using `augment()` as we did above, in combination with `geom_line()`. This gives you a bit more control over what is going on, since it's not obvious in the prior approach what regression exactly `geom_smooth()` is running.
+
+```{r}
+mod_int <- lm(hwy ~ displ + year + displ:year, data = mpg)
+mpg %>% 
+  ggplot(aes(x = displ, y = hwy, color = year)) +
+  geom_point() +
+  geom_line(data = augment(mod_int), aes(y = .fitted, color = year)) 
+```
+
+## Adjusted R-squared
+
+We saw in the previous exercise that an interaction model resulted in different slopes for each group. However, is this more complex model actually "better"? We have explored using $R^2$ as a measure of model fit. It is a common one and you should be comfortable computing and interpreting it. Maybe it can help us answer the question of which model to use in this case.
+
+However, as we discussed in lecture, $R^2$ _mechanically_ increases as you add more independent variables to your regression. Adjusted $R^2$ is designed to "penalize" your measure of model fit for those additional independent variables. 
+
+These two measures are:
+$$R^{2}=1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}$$
+$$ \overline{R}^2 = 1 - \dfrac{\sum_i e_i^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
+**Did the added interaction term in our regression improve model fit?** 
+
+In this case, the interaction model added a new variable to our regression, so we should be comparing adjusted $R^2$ results from a model without the interaction to a model with it. You can see the adjusted $R^2$ in `summary(lm())`, but you can also access it by saving your `lm` object and calling `summary(mod)$adj.r.squared`.
+
+```{r}
+# no interaction
+mod <- lm(hwy ~ displ + year, data=mpg)
+AdjR2 <- summary(mod)$adj.r.squared
+print(AdjR2)
+
+# with the interaction
+AdjR2_int <- summary(mod_int)$adj.r.squared
+print(AdjR2_int)
+```
+Since the adjusted $R^2$ value declined slightly, we conclude that the interaction model did *not* meaningfully improve model fit. 
+

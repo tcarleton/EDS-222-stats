@@ -55,7 +55,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-- **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-three/week-4-lab-answers.html).
+- **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html).
   
 - **Assignment:** Assignment 4 DELAYED until after midterm
 
@@ -66,7 +66,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-- **Lab:** Interaction models in `R`
+- **Lab:** Interaction models in `R` [markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html).
   
 - **No assignment** 
 

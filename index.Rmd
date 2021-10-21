@@ -102,8 +102,8 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 2    | Summarizing and visualizing data | Summary stats in `R`  |
 | 3    |  Ordinary Least Squares        | OLS in `R`     |
 | 4    |  Multiple linear regression      | Regression in `R`, continued     |
-| 5    | Inference \& hypothesis testing         |   Hypothesis testing in `R`  |
-| 6    | Inference \& hypothesis testing        | Midterm Exam     |
+| 5    | Interaction models and model fit         |   Interactions in `R`  |
+| 6    | Review       | Midterm Exam     |
 | 7    | Time series analysis       | Temporal lag models, serial correlation     |
 | 8    | Point processes, clustering algorithms         | No class     |
 | 9    | Interpolation \& kriging         | Spatial weighting     |
