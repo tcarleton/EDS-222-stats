@@ -70,6 +70,21 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **No assignment** 
 
+### Week 6
+
+- Review \& Midterm Exam
+
+### Week 7
+
+- **Slides 06**: Statistical inference [html](slides/06-inference/06-inference.html) [pdf](slides/06-inference/06-inference.pdf)
+
+- **Reading:** 
+  + [Chapters 13, 19.2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** Hypothesis testing in `R` 
+  
+- **Assignment:** Assignment 4 [details TBD]
+
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
