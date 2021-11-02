@@ -63,6 +63,13 @@ theme_simple <- theme_bw() + theme(
 )
 ```
 
+```{css, echo = FALSE}
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```
 
 # Announcements/check-in
 

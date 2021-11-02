@@ -104,8 +104,8 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 4    |  Multiple linear regression      | Regression in `R`, continued     |
 | 5    | Interaction models and model fit         |   Interactions in `R`  |
 | 6    | Review       | Midterm Exam     |
-| 7    | Time series analysis       | Temporal lag models, serial correlation     |
-| 8    | Point processes, clustering algorithms         | No class     |
+| 7    | Statistical inference        | Hypothesis testing in `R`     |
+| 8    | Time series analysis         | No class     |
 | 9    | Interpolation \& kriging         | Spatial weighting     |
 | 10   | Regression in space, spatial autocorrelation         |   No class   |
 | 11   | TBD         | Final project presentations     |
