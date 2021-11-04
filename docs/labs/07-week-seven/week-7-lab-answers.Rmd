@@ -63,9 +63,9 @@ ncbirths_complete_habit <- ncbirths %>%
 
 Construct a null and an alternative hypothesis that will allow you to evaluate if the birth weight of babies born to smoking mothers is different from the birth weight of babies born to non-smoking mothers. 
 
-Answer: 
+**Answer:**
 
-We then can write the two hypotheses as:
+We can write the two hypotheses as:
 
 $$H_{0}: \mu_{nonsmoker} - \mu_{smoker} = 0$$
 $$H_{A}: \mu_{nonsmoker} - \mu_{smoker} \neq 0$$
@@ -85,7 +85,7 @@ mu_smoker = ncbirths_complete_habit %>%
 point_est = as.numeric(mu_nonsmoker - mu_smoker)
 print(point_est)
 ```
-This doesn't look like "no difference", and it's consistent with our prior that non-smoking mothers should have higher birthweight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.
+This doesn't look like "no difference", and it's consistent with our prior that non-smoking mothers should have higher birth weight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.
 
 ## Step 3:  Model the variability of the statistic
 

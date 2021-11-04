@@ -12,7 +12,7 @@
 
 <meta name="author" content="{ANSWER KEY}" />
 
-<meta name="date" content="2021-11-03" />
+<meta name="date" content="2021-11-04" />
 
 <title>EDS 222: Week 7: In-class Lab</title>
 
@@ -61,7 +61,7 @@ if (window.hljs) {
 
 <h1 class="title toc-ignore">EDS 222: Week 7: In-class Lab</h1>
 <h4 class="author">{ANSWER KEY}</h4>
-<h4 class="date">2021-11-03</h4>
+<h4 class="date">2021-11-04</h4>
 
 
 
@@ -74,18 +74,14 @@ if (window.hljs) {
 <li>Install the following packages:</li>
 </ol>
 <p>For today, load the following packages:</p>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 3.5.2</code></pre>
 <pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
 <pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.5     ✓ dplyr   1.0.7
+## ✓ tibble  3.1.4     ✓ dplyr   1.0.7
 ## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
-<pre><code>## Warning: package &#39;stringr&#39; was built under R version 3.5.2</code></pre>
-<pre><code>## Warning: package &#39;forcats&#39; was built under R version 3.5.2</code></pre>
+## ✓ readr   1.4.0     ✓ forcats 0.5.0</code></pre>
 <pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre><code>## Warning: package &#39;modelr&#39; was built under R version 3.5.2</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;broom&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:modelr&#39;:
@@ -116,8 +112,8 @@ if (window.hljs) {
 <div id="step-1-define-the-null-and-alternative-hypotheses" class="section level2">
 <h2>Step 1: Define the <strong>null</strong> and <strong>alternative</strong> hypotheses:</h2>
 <p>Construct a null and an alternative hypothesis that will allow you to evaluate if the birth weight of babies born to smoking mothers is different from the birth weight of babies born to non-smoking mothers.</p>
-<p>Answer:</p>
-<p>We then can write the two hypotheses as:</p>
+<p><strong>Answer:</strong></p>
+<p>We can write the two hypotheses as:</p>
 <p><span class="math display">\[H_{0}: \mu_{nonsmoker} - \mu_{smoker} = 0\]</span> <span class="math display">\[H_{A}: \mu_{nonsmoker} - \mu_{smoker} \neq 0\]</span> ## Step 2: Collect data and compute the point estimate.</p>
 <p>Use the complete version of the <code>ncbirths</code> data to estimate the “point estimate”, which in this case is a difference in means.</p>
 <pre class="r"><code>mu_nonsmoker = ncbirths_complete_habit %&gt;% 
@@ -131,7 +127,7 @@ mu_smoker = ncbirths_complete_habit %&gt;%
 point_est = as.numeric(mu_nonsmoker - mu_smoker)
 print(point_est)</code></pre>
 <pre><code>## [1] 0.3155425</code></pre>
-<p>This doesn’t look like “no difference”, and it’s consistent with our prior that non-smoking mothers should have higher birthweight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.</p>
+<p>This doesn’t look like “no difference”, and it’s consistent with our prior that non-smoking mothers should have higher birth weight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.</p>
 </div>
 <div id="step-3-model-the-variability-of-the-statistic" class="section level2">
 <h2>Step 3: Model the variability of the statistic</h2>
@@ -191,7 +187,7 @@ print(p_val)</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
-## data:  ncbirths_complete_habit$weight[ncbirths_complete_habit$habit ==  and ncbirths_complete_habit$weight[ncbirths_complete_habit$habit ==     &quot;nonsmoker&quot;] and     &quot;smoker&quot;]
+## data:  ncbirths_complete_habit$weight[ncbirths_complete_habit$habit == &quot;nonsmoker&quot;] and ncbirths_complete_habit$weight[ncbirths_complete_habit$habit == &quot;smoker&quot;]
 ## t = 2.359, df = 171.32, p-value = 0.01945
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
@@ -207,7 +203,7 @@ print(p_val)</code></pre>
 <pre><code>## 
 ##  One Sample t-test
 ## 
-## data:  ncbirths_complete_habit$weight[ncbirths_complete_habit$habit ==     &quot;nonsmoker&quot;] - ncbirths_complete_habit$weight[ncbirths_complete_habit$habit ==     &quot;smoker&quot;]
+## data:  ncbirths_complete_habit$weight[ncbirths_complete_habit$habit == &quot;nonsmoker&quot;] - ncbirths_complete_habit$weight[ncbirths_complete_habit$habit == &quot;smoker&quot;]
 ## t = 4.3656, df = 872, p-value = 0.0000142
 ## alternative hypothesis: true mean is not equal to 0
 ## 95 percent confidence interval:
