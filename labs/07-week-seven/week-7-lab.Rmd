@@ -1,0 +1,189 @@
+---
+title: "EDS 222: Week 7: In-class Lab"
+author: "{STUDENT NAME}"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+# Section 0: Getting set up
+
+You should already have done the following:
+
+1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
+2. Download `_common.R` and put it in the _Labs/_ folder.
+3. Install the following packages:
+
+```{r setup, include=FALSE, echo = FALSE, eval = FALSE}
+suppressMessages({
+  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
+})
+```
+
+For today, load the following packages:
+
+```{r, echo = FALSE, eval = TRUE}
+# You probably already have these packages installed, so let's just load them
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(modelr)
+library(knitr)
+library(broom)
+library(openintro)
+
+options(scipen = 999) # disable scientific notation
+
+# For labs, we want to see all our code
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Section 1: Hypothesis testing in `R`
+
+The state of North Carolina released to the public a large data set containing information on births recorded in this state. This data set has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children. `ncbirths` is a random sample of 1000 cases from this data set. We want to evaluate whether there is a difference between weights of babies born to smoker and non-smoker mothers.
+
+First, filter `ncbirths` for rows where habit is non-missing.
+
+Use the is.na() function to specify that you want values of habit that are not missing (where is.na() is FALSE).
+
+```{r}
+
+```
+
+## Step 1: Define the **null** and **alternative** hypotheses: 
+
+Construct a null and an alternative hypothesis that will allow you to evaluate if the birth weight of babies born to smoking mothers is different from the birth weight of babies born to non-smoking mothers. 
+
+Answer: 
+
+We then can write the two hypotheses as:
+
+$$H_{0}: \mu_{nonsmoker} - \mu_{smoker} = 0$$
+$$H_{A}: \mu_{nonsmoker} - \mu_{smoker} \neq 0$$
+## Step 2: Collect data and compute the point estimate.
+
+Use the complete version of the `ncbirths` data to estimate the "point estimate", which in this case is a difference in means.
+
+```{r}
+
+```
+This doesn't look like "no difference", and it's consistent with our prior that non-smoking mothers should have higher birthweight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.
+
+## Step 3:  Model the variability of the statistic
+
+Use the definition of the z-score as defined in class to construct a test statistic for this hypothesis **by hand**. Don't worry, we'll let `R` do it all for us in a minute. 
+
+Recall the definition of the z-score for hypothesis testing: 
+
+$$z_{score}=\frac{\text { point estimate }-\text { null value }}{S E}$$
+Recall how we compute a standard error of a difference in means:
+
+$$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s^2_2}{n_2}}$$
+First let's compute the SE by hand:
+
+```{r}
+
+```
+And now the test statistic:
+
+```{r}
+
+```
+Can you explain the z-score in words?
+
+**Answer: the observed difference in birth weights is 2.36 standard deviations above the null of zero difference.**
+
+## Step 4: Quantify the probability that your sample statistic differs from the null
+
+Use the z-score calculated in step 3 to compute the p-value which is is the probability of getting a point estimate at least as extreme as ours if the null hypothesis were true:
+$$p \text { - value }=\operatorname{Pr}(Z<-|z| \text { or } Z>|z|)=2 * \operatorname{Pr}(Z>|z|)$$
+Make use of the function `pnorm()` to access the normal distribution.^[Recall: `pnorm()` gives you the probability mass below a certain cutoff in a probability distribution with a mean and standard deviation you can control. You can use `lower.tail=FALSE` to get the mass above a given cutoff.]
+
+```{r}
+
+```
+
+## Step 5: Evaluate whether you can reject or fail to reject your null hypothesis 
+
+Use the p_value determined in step 4 to evaluate whether you can reject or fail to reject the null hypothesis at a 95% confidence level (i.e., $\alpha = .05$). State precisely the conclusion of your hypothesis test. 
+
+**Answer: Since $p-value = 0.018 < 0.05$ we reject the null that there is no difference in the birth weight of babies born to smoking versus non-smoking mothers. We can say there is a statistically significant difference (at the 5% significance level) in baby birth weight across smoking and non-smoking mothers.**
+
+# Using `t.test()` to implement a hypothesis test in `R`
+
+Let's repeat the above steps using the canned function in `R` that allows you to perform hypothesis tests for comparing one or two means. 
+
+Again, we want to know if there is a statistically significant difference in baby birth weight across smoking and non-smoking mothers. 
+
+First, take a look at `t.test()` documentation to see how the function works. 
+
+```{r}
+
+```
+
+We can implement our t-test in multiple ways using `t.test()`. First, let's use the `formula` object, as I think this is the nicest approach. To use this method, we first enter the variable we are interested in evaluating means of (i.e., `weight`), then use a tilde `~` like in regression analysis, followed by the variable indicating the groups for which we are testing for differences in means (`habit`).
+
+```{r}
+
+```
+Note that we obtain nearly the same p-value and test-statistic (shown as `t`) as we did above, although it's slightly different as this is using the t-distribution and we used the normal.^[By the time $n=1000$, the t-distribution and normal are very very similar.] 
+
+Another way to execute this test is to pass the two vectors of data into `t.test()` as the first two arguments. This works the same way, it's just uglier.
+
+```{r}
+
+```
+Finally, note that you **do not** want to enter the difference in the means directly into `t.test()`, since it will treat your second mean as a constant and not a random variable, giving you far too much confidence in your point estimate. 
+
+To see this, try entering $\mu_{nonsmoker} - \mu_{smoker}$ directly into the function:
+```{r}
+
+```
+Look how low your p-value is! And also note that `R` is telling you it's running a one-sample test, which we know we don't want because both variables are random (birth weight for nonsmoking mothers and birth weight for smoking moms).
+
+# Section 2: Confidence Intervals
+
+The above analysis revealed a statistically significant difference in birth weight between the two groups of mothers. Is this a meaningful difference? P-values tell us nothing about whether it's an effect size we should be concerned about or not! 
+
+Here, we'll build a confidence interval around our point estimate. Recall that a confidence interval gives us a range of values that is likely to contain the true population parameter.
+
+## Construct a 95% confidence interval by hand
+
+First, we'll do this by hand. Recall the formula for a confidence interval:
+
+$$ \text{point_estimate} \pm z_{\alpha/2}*SE$$
+What is $z_{\alpha/2}$? It is the z-score for which there is an $\alpha$ probability of observing a point estimate as extreme as yours. 
+
+We would like to construct a 95% confidence interval. This means we want a 5% probability of observing a point estimate as extreme as ours. What z-score gives us this 5%? 
+
+It must be close to 2, since we know the 68-95-99.7 rule is a close rule of thumb...to get the exact number, we can use the `qnorm()` function (or look it up in a z-table).
+
+`qnorm()` tells us the quantile of the normal distribution, which is what we're after. Note that we will pass `qnorm()` the 2.5% quantile, since we have a symmetric distribution and we want a 5% probability the z-score is at least as far from the null (in either direction) as our point estimate is.
+
+```{r}
+
+```
+
+Now we can construct the 95% confidence interval:
+
+```{r}
+
+
+```
+
+[If we have time, discuss effect sizes.]
+
+Note that you got this output for free from `t.test()` earlier. You can change the confidence level reported by `t.test()` by using the `conf.level` argument. 
+
+Use `t.test()` to compute the 90% confidence interval around your point estimate. Does the interval get wider or tighter? Why?
+
+```{r}
+
+```

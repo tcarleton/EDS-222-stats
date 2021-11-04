@@ -81,7 +81,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapters 13, 19.2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-- **Lab:** Hypothesis testing in `R` 
+- **Lab:** Hypothesis testing in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html).
   
 - **Assignment:** Assignment 4 [details TBD]
 
