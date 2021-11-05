@@ -88,11 +88,9 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 -   RStudio version 1.4.1103 (or higher)
 
-### Textbooks
+### Textbook
 
 -   _Introduction to Modern Statistics_, by Mine Çetinkaya-Rundel and Johanna Hardin ([link](https://openintro-ims.netlify.app/))
-
--   _Geographic Information Analysis_, by David O'Sullivan and David Unwin (optional) [link](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470549094)
 
 ## Weekly topics [subject to change] 
 
@@ -106,9 +104,9 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 6    | Review       | Midterm Exam     |
 | 7    | Statistical inference        | Hypothesis testing in `R`     |
 | 8    | Time series analysis         | No class     |
-| 9    | Interpolation \& kriging         | Spatial weighting     |
-| 10   | Regression in space, spatial autocorrelation         |   No class   |
-| 11   | TBD         | Final project presentations     |
+| 9    | Interpolation \& kriging         | Kriging in `R`     |
+| 10   | Point pattern analysis         |   No class   |
+| 11   | Regression in space, spatial autocorrelation          | Final project presentations     |
 | Finals week   | Final project presentations         | n/a     |
 
 **This webpage was designed following [a template](https://github.com/allisonhorst/meds-distill-template) by Dr. Allison Horst.**
