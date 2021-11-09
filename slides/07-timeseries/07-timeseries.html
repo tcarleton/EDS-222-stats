@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Time series analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tamma Carleton" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Time series analysis
+## EDS 222
+### Tamma Carleton
+### Fall 2021
+
+---
+
+
+
+&lt;style type="text/css"&gt;
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+
+# Announcements/check-in
+
+- Midterm graded (pass out at the end of class)
+
+--
+
+- Assignment 04 posted by Weds 11/10, due 11/24
+
+--
+
+- Note on depth in coming lectures
+
+--
+
+- **No class** 11/11; **remote class** 11/23, **no class** 11/25
+
+--
+
+- Final projects: due in 3.5 weeks! 
+  + Presentations: 11/2 9:30-10:45am (Bren Hall 1414); 11/7 8-10:30am (Bren Hall 14**2**4)
+
+---
+name: Overview
+
+# Today
+
+#### Midterm results
+
+--
+
+#### Pop "quiz" (not really) on hypothesis testing and OLS
+
+--
+
+#### What are time series data?
+
+--
+
+#### Decomposition
+
+
+--
+
+#### Autocorrelation
+
+--
+
+#### Time series and OLS
+
+
+---
+layout: false
+class: clear, middle, inverse
+# Midterm scores
+---
+# Midterm scores
+
+&lt;img src="grades.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+- 2 people got perfect scores! 💯
+
+- Biggest mistakes: quantiles, OLS assumptions and properties
+
+- Partial credit was given uniformly across exams based on question-specific criteria
+
+---
+layout: false
+class: clear, middle, inverse
+# Hypothesis testing and OLS
+
+---
+# Hypothesis testing in OLS
+
+### Example 1: Smoking and birth weight
+
+
+```r
+summary(lm(weight ~ habit, data=ncbirths %&gt;% filter(is.na(habit) == FALSE)))
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = weight ~ habit, data = ncbirths %&gt;% filter(is.na(habit) == 
+#&gt;     FALSE))
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt; -6.144 -0.704  0.166  0.916  4.606 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)   7.1443     0.0509   140.5   &lt;2e-16 ***
+#&gt; habitsmoker  -0.3155     0.1432    -2.2    0.028 *  
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 1.5 on 997 degrees of freedom
+#&gt; Multiple R-squared:  0.00485,	Adjusted R-squared:  0.00385 
+#&gt; F-statistic: 4.85 on 1 and 997 DF,  p-value: 0.0278
+```
+---
+# Hypothesis testing in OLS
+
+### Example 2: Temperature and ozone
+
+
+```r
+summary(lm(Ozone ~ Temp, data=airquality))
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Ozone ~ Temp, data = airquality)
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt; -40.73 -17.41  -0.59  11.31 118.27 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) -146.995     18.287   -8.04  9.4e-13 ***
+#&gt; Temp           2.429      0.233   10.42  &lt; 2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 23.7 on 114 degrees of freedom
+#&gt;   (37 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.488,	Adjusted R-squared:  0.483 
+#&gt; F-statistic:  109 on 1 and 114 DF,  p-value: &lt;2e-16
+```
+---
+layout: false
+class: clear, middle, inverse
+# What are time series data?
+
+---
+# What are time series data?
+
+Up to this point, we focused on .hi-slate[cross-sectional data].
+
+- Sampled *across* a population (_e.g._, people, counties, countries).
+- Sampled at *one moment* in time (_e.g._, Jan. 1, 2015).
+- We had `\(n\)` *individuals*, each indexed `\(i\)` in `\(\left\{1,\,\ldots,\, n \right\}\)`.
+
+--
+
+Today, we focus on a different type of data: .hi[time-series data].
+
+- Sampled within .pink[one unit/individual] (_e.g._, Oregon).
+- Observe .pink[multiple times] for the same unit (_e.g._, Oregon: 1990–2020).
+- We have `\(\color{#e64173}{T}\)` .pink[time periods], each indexed `\(t\)` in `\(\left\{1,\,\ldots,\, T \right\}\)`.
+---
+# Time series data: Example
+
+.hi[US monthly births, 1933–2015]: Classic time-series graph
+&lt;br&gt;
+&lt;img src="07-timeseries_files/figure-html/tsex births-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# Time series data: Example
+
+.hi[US monthly births, 1933–2015]: Newfangled time-series graph
+&lt;br&gt;
+&lt;img src="07-timeseries_files/figure-html/tsex2 births-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# Time series data: Example
+
+.hi[US monthly births per 30 days, 1933–2015]: Newfangled time-series graph
+&lt;br&gt;
+&lt;img src="07-timeseries_files/figure-html/tsex3 births-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# You already have (many of) the tools
+
+- Time series data open some **new questions and new challenges** for statistical analysis
+
+--
+ 
+- But you **already have many of the tools** you need!
+
+--
+
+- E.g., recall: `$$Ozone_t = \beta_0 + \beta_1 Temp_t + \varepsilon_t$$`
+
+--
+
+- Description of `airquality` data:
+
+&gt; Daily air quality measurements in New York, May to September 1973.
+
+--
+
+- These are **time series data** and we already ran an OLS regression with them!
+
+---
+# You already have (many of) the tools
+
+`$$Ozone_t = \beta_0 + \beta_1 Temp_t + \varepsilon_t$$`
+&lt;img src="07-timeseries_files/figure-html/nycfit-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# You already have (many of) the tools
+
+Let _date_ indicate the date, ranging from May, 1 to September 31, 1973. 
+
+--
+
+We can also estimate:
+
+`$$Ozone_t = \beta_0 + \beta_1 date_t + \varepsilon_t$$`
+--
+
+```r
+airqts = airquality %&gt;% mutate(date = make_datetime(Month,Day))
+head(airqts)
+#&gt;   Ozone Solar.R Wind Temp Month Day       date
+#&gt; 1    41     190  7.4   67     5   1 0005-01-01
+#&gt; 2    36     118  8.0   72     5   2 0005-02-01
+#&gt; 3    12     149 12.6   74     5   3 0005-03-01
+#&gt; 4    18     313 11.5   62     5   4 0005-04-01
+#&gt; 5    NA      NA 14.3   56     5   5 0005-05-01
+#&gt; 6    28      NA 14.9   66     5   6 0005-06-01
+```
+
+--
+
+- Regression of _Ozone_ on _date_ estimates a **linear trend** in ozone 
+- Tip: `make_datetime()` from the `lubridate` package (handy for dates and times)
+
+---
+# You already have (many of) the tools
+
+`$$Ozone_t = \beta_0 + \beta_1 date_t + \varepsilon_t$$`
+
+```r
+summary(lm(Ozone ~ date, data = airqts))
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = Ozone ~ date, data = airqts)
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt;  -42.3  -24.9   -7.3   19.3  121.3 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)
+#&gt; (Intercept) 5.63e+03   3.65e+03    1.54     0.13
+#&gt; date        9.03e-08   5.90e-08    1.53     0.13
+#&gt; 
+#&gt; Residual standard error: 32.8 on 114 degrees of freedom
+#&gt;   (37 observations deleted due to missingness)
+#&gt; Multiple R-squared:  0.0202,	Adjusted R-squared:  0.0116 
+#&gt; F-statistic: 2.34 on 1 and 114 DF,  p-value: 0.128
+```
+
+---
+# You already have (many of) the tools
+
+`$$Ozone_t = \beta_0 + \beta_1 date_t + \varepsilon_t$$`
+
+&lt;img src="07-timeseries_files/figure-html/nyctrend-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# You already have (many of) the tools
+
+- Many of the summary statistics, regression, and hypothesis testing tools apply to time series data without much adjustment
+
+--
+
+- But there are some new **features** we want to explore:
+  + Does my data have exhibit **trending behavior**? 
+  + Is there **seasonality**? 
+  + Is my data **cyclical**?
+  
+--
+
+- And some new **challenges** to overcome:
+  + Additional **assumptions** needed in OLS
+  + Threat to existing assumptions: Are our error terms **independent**? Is **exogeneity** harder now? 
+
+---
+layout: false
+class: clear, middle, inverse
+# Decomposition
+---
+# Time series components
+
+## Seasonality
+A repeated pattern over known and equal periods (e.g., month; quarter, decade)
+
+--
+
+## Cyclicality
+A broader cyclical trend with unknown and/or unequal periods (e.g., business cycle, ENSO)
+
+--
+
+## Trends
+Long-term increase or decrease in the data (not necessarily linear!)
+
+---
+# Time series components
+
+### Often, seasonality, cyclicality and trends occur all at the same time:
+
+&lt;img src="07-timeseries_files/figure-html/decomp1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Time series components
+
+For many time series,&lt;sup&gt;*&lt;/sup&gt; we can decompose the data into:
+
+`$$y_t = S_t + T_t + R_t$$`,
+
+where `\(S_t\)` is a **seasonal** component, `\(T_t\)` is the cycle _and_ trend components, and `\(R_t\)` is the remainder.
+
+--
+
+**Decomposition** allows us to isolate each component of the time series visually and quantitatively.
+
+.footnote[
+[*]: This decomposition is "additive", which works for many time series. See [Hyndman](https://otexts.com/fpp3/) for details on more complex "multiplicative" decomposition.
+]
+---
+# Decomposition: Moving averages
+
+A key tool in "decomposing" a time series into its component parts is computing a **moving average** 
+
+--
+
+A moving average of order _m_ is computed as: 
+
+$$ \hat T_t = \frac{1}{m}\sum_{j=-k}^{k}y_{t+j} $$
+
+where `\(m = 2k+1\)`.
+
+--
+
+The moving average gives you an estimate of the irregular trend-cycle component `\(T\)` at time _t_ by averaging values of the time series within _k_ periods of _t_ 
+
+---
+# Moving average example
+
+Computing an `\(m=5\)` moving average over the data plotted on the last slide:
+
+
+```r
+df = as.data.frame(cbind(x, y)) # these are the data we plotted above
+df = df %&gt;% mutate(ma = slider::slide_dbl(y, mean,
+                .before = 2, .after = 2, .complete = TRUE))
+```
+
+--
+
+- Helpful package: `slider` (there are others too!)
+
+---
+# Moving average example
+
+Computing an `\(m=5\)` moving average:
+
+&lt;img src="07-timeseries_files/figure-html/decomp2-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Moving average example
+
+Computing an `\(m=15\)` moving average:
+
+&lt;img src="07-timeseries_files/figure-html/decomp3-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# Classical decomposition
+
+### Step 1: estimate a moving average 
+Estimate an `\(m\)`-moving average to compute `\(\hat T_t\)`
+
+--
+
+### Step 2: calculate the de-trended series
+De-trended series `\(= y_t - \hat T_t\)`
+
+--
+
+### Step 3: calculate seasonality
+Simple average over de-trended series for each season `\(s\)`
+
+--
+
+### Step 4: remainder
+Whatever is left over
+
+---
+# Classical decomposition
+
+Consider a time series of monthly totals of accidental deaths in the USA:
+
+
+```r
+head(USAccDeaths)
+#&gt; [1]  9007  8106  8928  9137 10017 10826
+```
+
+&lt;img src="07-timeseries_files/figure-html/unnamed-chunk-9-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Classical decomposition
+
+### Let's decompose the accidental deaths time series.
+
+You can do this by hand, or...
+
+--
+
+
+```r
+decomp = as_tsibble(USAccDeaths) %&gt;%
+  model(
+    classical_decomposition(value, type = "additive")
+  ) %&gt;%
+  components() 
+head(decomp)
+#&gt; # A dable: 6 x 7 [1M]
+#&gt; # Key:     .model [1]
+#&gt; # :        value = trend + seasonal + random
+#&gt;   .model                         index value trend seasonal random season_adjust
+#&gt;   &lt;chr&gt;                          &lt;mth&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;
+#&gt; 1 "classical_decomposition(v… 1973 Jan  9007    NA    -806.     NA         9813.
+#&gt; 2 "classical_decomposition(v… 1973 Feb  8106    NA   -1523.     NA         9629.
+#&gt; 3 "classical_decomposition(v… 1973 Mar  8928    NA    -741.     NA         9669.
+#&gt; 4 "classical_decomposition(v… 1973 Apr  9137    NA    -515.     NA         9652.
+#&gt; 5 "classical_decomposition(v… 1973 May 10017    NA     340.     NA         9677.
+#&gt; 6 "classical_decomposition(v… 1973 Jun 10826    NA     745.     NA        10081.
+```
+---
+# Classical decomposition
+
+### You can do this by hand, or...
+
+
+```r
+as_tsibble(USAccDeaths) %&gt;%
+  model(
+    classical_decomposition(value, type = "additive")
+  ) %&gt;%
+  components() %&gt;%
+  autoplot() +
+  labs(title = "Classical additive decomposition of accidental deaths in the USA")
+```
+
+&lt;img src="07-timeseries_files/figure-html/unnamed-chunk-11-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Classical decomposition
+
+### You can do this by hand, or...
+
+&lt;img src="07-timeseries_files/figure-html/unnamed-chunk-12-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Decomposition
+
+- As outlined in Hyndman &amp; Athanasopoulos, **classical decomposition has some drawbacks**:
+  + Assumes the seasonal component is fixed over time
+  + Loses data at the start and end (due to moving average)
+  + Can be sensitive to outliers/short-run anomalous behavior
+
+--
+
+- **Seasonal and Trend Decomposition using Loess** (STL)
+  + Flexible and versatile method
+  + Seasonal compoenent can change over time
+  + Robust to outliers
+  + use `STL()` in place of `classical_decomposition()`
+  
+---
+# Decomposition
+
+## Why decompose a time series? 
+
+1. To **better understand** your data
+  + Do summers tend to have higher crime?
+  + Is there an positive trend in ocean temperatures? 
+  + Does deforestation follow business cycles? 
+
+--
+
+2. To aid in **forecasting**
+  + You can forecast using estimated seasonality and trend-cycles
+  + Details are not covered in this class, see Hyndman &amp; Athanasopoulos for details.
+
+---
+layout: false
+class: clear, middle, inverse
+# Autocorrelation
+
+---
+# Autocorrelation
+
+Many time series data are **autocorrelated**, meaning past values are correlated with future values (note: also called **serial correlation**)
+
+--
+
+That is, `\(y_t\)` may be correlated with `\(y_{t-1}\)`, `\(y_{t-2}\)`, `\(y_{t-12}\)`, etc.
+
+--
+
+This matters both for interpreting OLS output (in a few slides), and for understanding our data (helpful for identifying any seasonality).
+
+---
+# Autocorrelation
+
+For example:
+
+- Today's temperature is **positively** correlated with yesterday's temperature: `\(cor(y_t, y_{t-1})&gt;0\)`
+
+--
+  
+- Today's temperature is **negatively** correlated with temperatures 6 months ago: `\(cor(y_t, y_{t-182})&lt;0\)`
+  
+--
+  
+- Today's temperature may have **no correlation** with temperatures 7 days ago: `\(cor(y_t, y_{t-7})=0\)`
+
+---
+# Autocorrelation
+
+We can describe autocorrelation using an **autocorrelation function** or ACF.
+
+--
+
+Consider a **monthly** temperature time series for Nottingham Castle
+
+&lt;img src="07-timeseries_files/figure-html/unnamed-chunk-13-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Autocorrelation Function (ACF)
+
+
+```r
+acf(nottdf$temperature, lag.max=12)
+```
+
+&lt;img src="07-timeseries_files/figure-html/unnamed-chunk-14-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Autocorrelation Function (ACF)
+
+&gt; `acf()` plots an ACF for you!
+
+- The height of each line indicates the correlation between temperature today and temperature _l_ days ago
+
+- Confidence intervals are shown in blue by default -- indicate if `\(cor(y_t, y_{t-l})\)` is statistically distinguishable from zero (or not)
+
+- Helps to identify periodicity of seasonality
+
+--
+
+&gt; Definition: **white noise** is a random time series in which there is no correlation across time periods (rare in the real world!). Here, the ACF would look noisy and correlations would largely fall within the blue confidence interval.
+
+---
+
+layout: false
+class: clear, middle, inverse
+# Time series and OLS
+
+---
+# Intro to time series and OLS
+
+Our model now looks something like
+
+$$
+`\begin{align}
+ \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + u_t
+\end{align}`
+$$
+
+--
+or perhaps
+
+$$
+`\begin{align}
+  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_3 \color{#e64173}{\text{Income}_{t-1}} + u_t
+\end{align}`
+$$
+--
+maybe even
+
+$$
+`\begin{align}
+\text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \color{#e64173}{\beta_3 \text{Income}_{t-1}} + \beta_4 \color{#6A5ACD}{\text{Births}_{t-1}} + u_t
+\end{align}`
+$$
+
+--
+
+where `\(t-1\)` denotes the time period prior to `\(t\)` (*lagged* income or births).
+---
+# Time-series models
+## Assumptions
+
+1. .hi[New:] **Weakly persistent outcomes**—essentially, `\(x_{t+k}\)` in the distant period `\(t+k\)` is weakly correlated with period `\(x_t\)` (when `\(k\)` is "big").
+
+1. `\(y_t\)` is a **linear function** of its parameters and disturbance.
+
+1. There is **some variation** in our explanatory variables
+
+1.  .hi[Harder to satisfy:]The `\(u_t\)` have conditional mean of zero (**exogeneity**), `\(\mathop{\boldsymbol{E}}\left[ u_t \middle| X \right] = 0\)`.
+
+1.  .hi[Harder to satisfy:] The `\(u_t\)` are **normally distributed** and **homoskedastic** with **zero correlation** between `\(u_t\)` and `\(u_s\)`, _i.e._, `\(u_t\overset{\text{iid}}{\sim}\mathop{N}\left( 0,\,\sigma^2 \right)\)`, `\(\mathop{\text{Var}} \left( u_t | X \right) = \mathop{\text{Var}} \left( u_t \right) = \sigma^2\)`, and `\(\mathop{\text{Cor}} \left( u_t,\,u_s \middle| X \right) = 0\)`.
+
+---
+# Time-series models
+## Model options
+
+Time-series modeling boils down to two classes of models.
+
+1. .hi[Static models:] Do not allow for persistent effect.
+
+2. .hi-purple[Dynamic models:] Allow for persistent effects.
+
+--
+
+  - Models with .hi-purple[lagged explanatory] variables
+
+  - .hi-purple[Autoregressive, distributed-lag] (ADL) models
+
+---
+# Model options
+
+**Option 1:** .hi[Static models]
+
+.hi[Static models] assume the outcome depends upon .pink[only the current period].
+
+$$
+`\begin{align}
+ \text{Births}_{\color{#e64173}{t}} = \beta_0 + \beta_1 \text{Income}_{\color{#e64173}{t}} + u_{\color{#e64173}{t}}
+\end{align}`
+$$
+--
+Here, we must believe that income .hi[immediately] affects the number of births and does not affect on the numbers of births in the future.
+
+--
+
+We also need to believe current births do not depend upon previous births.
+
+--
+
+Can be a very restrictive way to consider time-series data.
+---
+# Model options
+
+**Option 2:** .hi-purple[Dynamic models]
+
+.hi-purple[Dynamic models] allow the outcome to depend upon .purple[other periods].
+
+---
+# Model options
+
+**Option 2a:** .hi-purple[Dynamic models] with .purple[lagged explanatory variables]
+
+These models allow the outcome to depend upon the .purple[explanatory variable(s) in other periods].
+
+$$
+`\begin{align}
+  \text{Births}_{\color{#e64173}{t}}
+  = &amp;\beta_0 + \beta_1 \text{Income}_{\color{#e64173}{t}} + \beta_2 \text{Income}_{\color{#6A5ACD}{t-1}} + \\
+  &amp;\beta_3 \text{Income}_{\color{#6A5ACD}{t-2}} + \beta_4 \text{Income}_{\color{#6A5ACD}{t-3}} + u_{\color{#e64173}{t}}
+\end{align}`
+$$
+--
+Here, income .hi[immediately] affects the number of births *and* affects .hi-purple[future] numbers of births.
+--
+ In other words: Births today depend today's income and *lags* of income—_e.g._, last month's income, last year's income, ...
+
+--
+
+Estimate *total* effects by summing lags' coefficients, _e.g._, `\(\beta_1 + \beta_2 + \beta_3 + \beta_4\)`.
+
+--
+
+*Note:* We still assume current births don't affect future births.
+---
+# Model options
+
+**Option 2b:** .hi-purple[Autoregressive distributed-lag (ADL) models]
+
+These models allow the outcome to depend upon the .purple[explanatory variable(s) and/or the outcome variable in prior periods].
+
+$$
+`\begin{align}
+  \text{Births}_{\color{#e64173}{t}} = \beta_0 + \beta_1 \text{Income}_{\color{#e64173}{t}} + \beta_2 \text{Income}_{\color{#6A5ACD}{t-1}} + \beta_3 \text{Births}_{\color{#6A5ACD}{t-1}} + u_{\color{#e64173}{t}}
+\end{align}`
+$$
+--
+Here, current income affects affects .hi[current] births and .hi-purple[future] births.
+
+--
+
+In addition, .purple[current births affect future births]—we're allowing lags of the outcome variable.
+
+---
+# Autoregressive distributed-lag models
+## Numbers of lags
+
+ADL models are often specified as `\(\text{ADL}(\color{#FFA500}{p},\,\color{#e64173}{q})\)`, where
+
+- `\(\color{#FFA500}{p}\)` is the (maximum) number of **lags** for .orange[the outcome variable.]
+
+- `\(\color{#e64173}{q}\)` is the (maximum) number of **lags** for .pink[explanatory variables.]
+
+--
+
+*Example:* `\(\text{ADL}(\color{#FFA500}{1},\,\color{#e64173}{0})\)`
+
+--
+
+$$
+`\begin{aligned}
+ \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{\color{#FFA500}{t-1}} + u_t
+\end{aligned}`
+$$
+
+--
+
+*Example:* `\(\text{ADL}(\color{#FFA500}{2},\,\color{#e64173}{2})\)`
+
+--
+
+$$
+`\begin{aligned}
+ \text{Births}_t =
+ &amp;\beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Income}_{\color{#e64173}{t-1}} + \beta_3 \text{Income}_{\color{#e64173}{t-2}} \\
+ &amp; + \beta_4 \text{Births}_{\color{#FFA500}{t-1}} + \beta_5 \text{Births}_{\color{#FFA500}{t-2}} + u_t
+\end{aligned}`
+$$
+---
+# Autoregressive distributed-lag models
+## Complexity
+
+Due to their lags, ADL models actually estimate even more complex relationships than you might first guess.
+
+--
+
+Consider ADL(1, 0): `\(\text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t\)`
+
+--
+
+Write out the model for period `\(t-1\)`:
+
+$$
+`\begin{align}
+  \text{Births}_{t-1} = \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1}
+\end{align}`
+$$
+
+--
+
+which we can substitute in for `\(\text{Births}_{t-1}\)` in the first equation, _i.e._,
+
+$$
+`\begin{align}
+ \text{Births}_t = &amp;\beta_0 + \beta_1 \text{Income}_t + \\
+ &amp;\beta_2 \underbrace{\left( \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1} \right)}_{\text{Births}_{t-1}} + u_t
+\end{align}`
+$$
+---
+# Complexity
+Continuing...
+
+$$
+`\begin{align}
+ \text{Births}_t = &amp;\beta_0 + \beta_1 \text{Income}_t + \\
+ &amp;\beta_2 \underbrace{\left( \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1} \right)}_{\text{Births}_{t-1}} + u_t \\
+ =&amp; \beta_0 \left(1 + \beta_2 \right) + \beta_1 \text{Income}_t + \beta_1 \beta_2 \text{Income}_{t-1} + \\
+ &amp;\beta_2^2 \text{Births}_{t-2} + u_{t} + \beta_2 u_{t-1}
+\end{align}`
+$$
+
+--
+
+We could then substitute in the equation for `\(\text{Births}_{t-2}\)`, `\(\text{Births}_{t-3}\)`, ...
+---
+# Complexity
+Eventually we arrive at
+
+$$
+`\begin{align}
+  \text{Births}_t =
+  &amp;\beta_0 \left( 1 + \beta_2 + \beta_2^2 + \beta_2^3 + \cdots \right) + \\
+  &amp;\beta_1 \left( \text{Income}_t + \beta_2 \text{Income}_{t-1} + \beta_2^2 \text{Income}_{t-2} + \cdots \right) +\\
+  &amp; u_t + \beta_2 u_{t-1} + \beta_2^2 u_{t-2} + \cdots
+\end{align}`
+$$
+
+--
+
+**The point?**
+
+--
+
+By including just **one lag of the dependent variable**—as in a ADL(1, 0)—we implicitly include for *many lags* of the explanatory variables and disturbances.&lt;sup&gt;.pink[†]&lt;/sup&gt;
+
+.footnote[.pink[†] These lags enter into the equation in a very specific way—not the most flexible specification.]
+
+---
+# Unbiased coefficients
+
+
+As before, the unbiased-ness of OLS is going to depend upon our exogeneity assumption, _i.e._, `\(\mathop{\boldsymbol{E}}\left[ u_t \middle| X \right] = 0\)`.
+
+--
+
+We can split this assumption into two parts.
+
+--
+
+1. The disturbance `\(u_t\)` is independent of the explanatory variables in the **same period** (_i.e._, `\(X_t\)`).
+
+--
+
+1. The disturbance `\(u_t\)` is independent of the explanatory variables in the **other periods** (_i.e._, `\(X_s\)` for `\(s\neq t\)`).
+
+--
+
+We need both of these parts to be true for OLS to be unbiased.
+---
+# Unbiased coefficients
+We need both parts of our exogeneity assumption for OLS to be unbiased:
+
+_I.e._, to guarantee the numerator equals zero, we need `\(\mathop{\boldsymbol{E}}\left[ u_t | X \right] = 0\)`—for both `\(\mathop{\boldsymbol{E}}\left[ u_t | X_t \right] = 0\)` *and* `\(\mathop{\boldsymbol{E}}\left[ u_t | X_{s} \right] = 0\)` `\((s\neq t)\)`.
+
+--
+
+.pink[The second part of our exogeneity assumption]—requiring that `\(u_t\)` is independent of all regressors in other periods—.pink[fails with dynamic models with lagged outcome variables].
+
+--
+
+Thus, .hi[OLS is biased for dynamic models with lagged outcome variables].
+
+---
+# Unbiased coefficients
+To see why dynamic models with lagged outcome variables violate our exogeneity assumption, consider two periods of our simple ADL(1, 0) model.
+
+$$
+`\begin{align}
+  \color{#e64173}{\text{Births}_t} &amp;= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + \color{#e64173}{u_t} \tag{1}\\[0.3em]
+  \text{Births}_{t+1} &amp;= \beta_0 + \beta_1 \text{Income}_{t+1} + \beta_2 \color{#e64173}{\text{Births}_t} + u_{t+1} \tag{2}
+\end{align}`
+$$
+
+--
+
+In `\((1)\)`, `\(\color{#e64173}{u_t}\)` clearly correlates with `\(\color{#e64173}{\text{Births}_t}\)`.
+
+--
+
+However, `\(\color{#e64173}{\text{Births}_t}\)` is a regressor in `\((2)\)` (lagged dependent variable).
+
+--
+
+∴ The disturbance in `\(t\)` `\(\left(\color{#e64173}{u_t}\right)\)` correlates with a regressor in `\(t+1\)` `\(\left(\color{#e64173}{\text{Births}_t}\right)\)`.
+
+--
+
+This correlation violates the second part of our exogeneity requirement.
+---
+# Unbiased coefficients
+
+All is not lost.
+
+--
+
+If we have .hi[contemporaneous exogeneity], OLS is what we call **consistent**: as `\(T\rightarrow\infty\)`, `\(\hat\beta\rightarrow\beta\)` (you need a lot of data!)
+
+.hi[Contemporaneous exogeneity:] each disturbance is uncorrelated with the explanatory variables .pink[in the same period], _i.e._,
+
+$$
+`\begin{align}
+  \mathop{\boldsymbol{E}}\left[ u_t \middle| X_t \right] = 0
+\end{align}`
+$$
+
+--
+
+With contemporaneous exogeneity, OLS estimates for the coefficients in a time series model are **consistent** (whew)
+
+---
+# Autocorrelation in the error term
+
+The time series version of our assumption about OLS errors includes the following:
+
+&gt; There must be **zero correlation** between `\(u_t\)` and `\(u_s\)`, _i.e._, `\(\mathop{\text{Cor}} \left( u_t,\,u_s \middle| X \right) = 0\)`.
+
+--
+
+#### When might this fail?
+
+- Anytime you have unobserved variables that correlate over time and influence the outcome
+
+--
+
+#### Are we worried? In a static model with lagged explanatory variables:
+
+- OLS is .pink[**inefficient**], i.e., no longer the lowest variance unbiased estimator
+- That is, your standard errors are no longer correct
+- However, violating this assumption does not introduce bias (whew!) 
+
+---
+
+# Autocorrelation
+## OLS and lagged outcome variables
+
+Consider a model with one lag of the outcome variable—ADL(1, 0)—model with AR(1) disturbances
+
+$$
+`\begin{align}
+  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t
+\end{align}`
+$$
+where
+$$
+`\begin{align}
+  u_t = \rho u_{t-1} + \varepsilon_t
+\end{align}`
+$$
+
+--
+
+**Problem:**
+--
+ Both `\(\text{Births}_{t-1}\)` (a regressor in the model for time `\(t\)`) and `\(u_{t}\)` (the disturbance for time `\(t\)`) depend upon `\(u_{t-1}\)`. *I.e.*, a regressor is correlated with its contemporaneous disturbance.
+
+--
+
+**Q:** Why is this a problem?
+--
+&lt;br&gt;
+**A:** It violates .pink[contemporaneous exogeneity]
+--
+, *i.e.*, `\(\mathop{\text{Cov}} \left( x_t,\,u_t \right) \neq 0\)`.
+
+---
+# Testing for serial/autocorrelation
+
+- Fortunately, it's **easy to test for autocorrelation** to evaluate whether your model is biased (lagged dependent variable) and/or inefficient (lagged explanatory variables)
+
+--
+
+- Basic idea:
+  + Run OLS using your preferred specification
+  + Recover residuals `\(e_t = y_t - \hat y_t\)`
+  + Test whether `\(\hat\theta\)` is statistically distinguishable from zero in 
+  `$$e_t = \theta_1 e_{t-1} + \theta_2 e_{t-2} +...$$`
+  + Implement in `R` with: `dwtest()`, `bgtest()`
+
+--
+
+- Autocorrelation may arise because your model is **misspecified**. Consider adding additional lags and/or explanatory variables if errors are correlated
+
+---
+# Summary: Time series and OLS
+
+- Our model now has `\(\color{#e64173}{t}\)` subscripts for .hi[time periods].
+
+- .hi[Dynamic models] allow .hi[lags] of explanatory and/or outcome variables.
+
+- We changed our **exogeneity** assumption to .hi[contemporaneous exogeneity], _i.e._, `\(\mathop{\boldsymbol{E}}\left[ u_t \middle| X_t \right] = 0\)` 
+
+- Including .hi-orange[lags of outcome variables] can lead to .hi[biased coefficient estimates] from OLS (but fortunately they are still **consistent**)
+
+- .hi-orange[Lagged explanatory variables] make .hi[OLS inefficient] (i.e., mess up our standard errors)
+
+- .hi-orange[Autocorrelation in the error + lagged dependent variables] make .hi[OLS biased]. Watch out! Test for serial/autocorrelation, check for misspecification of your model.
+
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+Some slide components were borrowed from [Ed Rubin](https://github.com/edrubin/EC421S20) and Allison Horst.
+
+---
+exclude: true
+
+
+
+
+&lt;!-- 
+Definition, seasonality, trends
+
+1. Ed's graphs on what are time series graphs
+
+2. you already have some of the tools you need (e.g. OLS to estimate a trend), but there are some important considerations before we run with OLS: 
+
+3. DESCRIBING YOUR DATA: seasonality (REARRANGE YOUR PLOT - USE ED and another ex) /cyclicality
+  - moving average: simple way of removing short-run cyclicality or seasonality by averaging over it, using `slider::slide_dbl()`. Note that you can weight the MA. 
+  - decomposition (trend, seasonality, cyclicality). First make sure to adjsute for standard temporal changes -- days in month, population over time, inflation. STL in R, easy and easy to plot -- think of it as taking various, flexible moving averages
+  - seasonal adjustment
+
+4. Autocorrelation: can use `ACF()` directly in `R` (plus `autoplot()`)
+
+- Dynamic and static models, ADL models
+
+4. exogeneity in time series: OK if no dep var lag, more complicated if dep var lag (consistent if contemp exog is true)
+
+5. Working with time series data in R: problem set, online text book, `tsibble`, `yearmonth()`, general help [here](https://r4ds.had.co.nz/dates-and-times.html), forecastingin hte online text book
+--&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
