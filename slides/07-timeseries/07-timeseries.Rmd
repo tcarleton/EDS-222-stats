@@ -817,6 +817,23 @@ Estimate *total* effects by summing lags' coefficients, _e.g._, $\beta_1 + \beta
 --
 
 *Note:* We still assume current births don't affect future births.
+
+---
+# Model options
+
+Lagged explanatory variables in empirical research:
+
+```{R, v_vs_r, out.width = "95%", echo = F}
+include_graphics("lagged_indep_var.png")
+```
+
+- **Left:** coefficients on lagged temperature variables
+- **Right:** sum of coefficients (cumulative effect) on cyclone intensity
+
+--
+
+> Q: Can you think of other examples of lagged effects?
+
 ---
 # Model options
 
@@ -835,6 +852,15 @@ Here, current income affects affects .hi[current] births and .hi-purple[future] 
 --
 
 In addition, .purple[current births affect future births]—we're allowing lags of the outcome variable.
+
+---
+# Do you need an ADL?
+
+## Hint: Autocorrelation Function (ACF)
+
+```{r, echo=F, fig.height=1}
+acf(nottdf$temperature, lag.max=12)
+```
 
 ---
 # Autoregressive distributed-lag models
@@ -939,6 +965,20 @@ $$
 By including just **one lag of the dependent variable**—as in a ADL(1, 0)—we implicitly include for *many lags* of the explanatory variables and disturbances.<sup>.pink[†]</sup>
 
 .footnote[.pink[†] These lags enter into the equation in a very specific way—not the most flexible specification.]
+
+---
+# Time-series models
+## Assumptions
+
+1. .hi[New:] **Weakly persistent outcomes**—essentially, $x_{t+k}$ in the distant period $t+k$ is weakly correlated with period $x_t$ (when $k$ is "big").
+
+1. $y_t$ is a **linear function** of its parameters and disturbance.
+
+1. There is **some variation** in our explanatory variables
+
+1.  .hi[Harder to satisfy:] The $u_t$ have conditional mean of zero (**exogeneity**), $\mathop{\boldsymbol{E}}\left[ u_t \middle| X \right] = 0$.
+
+1.  .hi[Harder to satisfy:] The $u_t$ are **normally distributed** and **homoskedastic** with **zero correlation** between $u_t$ and $u_s$, _i.e._, $u_t\overset{\text{iid}}{\sim}\mathop{N}\left( 0,\,\sigma^2 \right)$, $\mathop{\text{Var}} \left( u_t | X \right) = \mathop{\text{Var}} \left( u_t \right) = \sigma^2$, and $\mathop{\text{Cor}} \left( u_t,\,u_s \middle| X \right) = 0$.
 
 ---
 # Unbiased coefficients

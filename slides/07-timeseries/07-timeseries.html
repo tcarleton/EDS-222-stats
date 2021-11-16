@@ -702,6 +702,21 @@ Estimate *total* effects by summing lags' coefficients, _e.g._, `\(\beta_1 + \be
 --
 
 *Note:* We still assume current births don't affect future births.
+
+---
+# Model options
+
+Lagged explanatory variables in empirical research:
+
+&lt;img src="lagged_indep_var.png" width="95%" style="display: block; margin: auto;" /&gt;
+
+- **Left:** coefficients on lagged temperature variables
+- **Right:** sum of coefficients (cumulative effect) on cyclone intensity
+
+--
+
+&gt; Q: Can you think of other examples of lagged effects?
+
 ---
 # Model options
 
@@ -720,6 +735,13 @@ Here, current income affects affects .hi[current] births and .hi-purple[future] 
 --
 
 In addition, .purple[current births affect future births]—we're allowing lags of the outcome variable.
+
+---
+# Do you need an ADL?
+
+## Hint: Autocorrelation Function (ACF)
+
+&lt;img src="07-timeseries_files/figure-html/unnamed-chunk-14-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Autoregressive distributed-lag models
@@ -824,6 +846,20 @@ $$
 By including just **one lag of the dependent variable**—as in a ADL(1, 0)—we implicitly include for *many lags* of the explanatory variables and disturbances.&lt;sup&gt;.pink[†]&lt;/sup&gt;
 
 .footnote[.pink[†] These lags enter into the equation in a very specific way—not the most flexible specification.]
+
+---
+# Time-series models
+## Assumptions
+
+1. .hi[New:] **Weakly persistent outcomes**—essentially, `\(x_{t+k}\)` in the distant period `\(t+k\)` is weakly correlated with period `\(x_t\)` (when `\(k\)` is "big").
+
+1. `\(y_t\)` is a **linear function** of its parameters and disturbance.
+
+1. There is **some variation** in our explanatory variables
+
+1.  .hi[Harder to satisfy:] The `\(u_t\)` have conditional mean of zero (**exogeneity**), `\(\mathop{\boldsymbol{E}}\left[ u_t \middle| X \right] = 0\)`.
+
+1.  .hi[Harder to satisfy:] The `\(u_t\)` are **normally distributed** and **homoskedastic** with **zero correlation** between `\(u_t\)` and `\(u_s\)`, _i.e._, `\(u_t\overset{\text{iid}}{\sim}\mathop{N}\left( 0,\,\sigma^2 \right)\)`, `\(\mathop{\text{Var}} \left( u_t | X \right) = \mathop{\text{Var}} \left( u_t \right) = \sigma^2\)`, and `\(\mathop{\text{Cor}} \left( u_t,\,u_s \middle| X \right) = 0\)`.
 
 ---
 # Unbiased coefficients

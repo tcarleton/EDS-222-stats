@@ -236,6 +236,13 @@ where $\lambda_i$ are weights applied to each sampled location.
 
 - All spatial interpolation methods assume or derive a set of $\lambda$'s to compute $\hat Z$'s
 
+---
+# Interpolation in pictures
+
+```{R, interpvisual, out.width = "80%", echo = F}
+include_graphics("spatialinterp_picture.png")
+```
+
 
 ---
 # Interpolation in one dimension
@@ -388,7 +395,7 @@ include_graphics("theissen.png")
 
 #### Implementation in `R`
 
-- Easy with the `voroni()` function from the `dismo` package:
+- Easy with the `voronoi()` function from the `dismo` package:
 
 ```{r,echo=TRUE,eval=FALSE}
 library(dismo)
