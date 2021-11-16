@@ -96,6 +96,16 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (at least 2 weeks to complete)
 
+### Week 9
+
+- **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
+
+- **Slides 08**: Spatial interpolation [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf)
+
+- **Lab:** Kriging in `R`
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
+
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
