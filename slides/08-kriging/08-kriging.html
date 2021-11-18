@@ -33,20 +33,12 @@ class: center, middle, inverse, title-slide
 
 # Announcements/check-in
 
-- Final projects guidelines 
-
---
-
 - **Change in office hours** today 1:30pm-2:30pm (by appointment) in Bren Hall 4327
 
 --
 
-- ***Remote class** 11/23 (recorded), **no class** 11/25
+- **Remote class** 11/23 (recorded), **no class** 11/25
 
---
-
-- Final project presentations: 12/2 9:30-10:45am (Bren Hall 1414); 12/7 8-10:30am (Bren Hall 14**2**4)
-  + You will _randomly_ be assigned a slot (slots announced 11/24)
 
 ---
 name: Overview
@@ -54,12 +46,12 @@ name: Overview
 # Today
 
 #### Refresher: types of spatial data
-Points, vector, raster/field, dynamic raster/field
+Vectors/objects, rasters/fields
 
 --
 
 #### A common challenge: spatial interpolation
-Points to fields, interpolation
+Sample vs. population, points to fields
 
 --
 
@@ -169,6 +161,7 @@ For example:
   + Predicting "gold grades" across South Africa using a few borehole samples (the problem of Daniel _Krige_!)
   + Predicting depth to groundwater across California using monitoring wells
   + Predicting air pollution across China using monitoring stations
+  + ??
 
 ---
 # Spatial interpolation in math
@@ -227,7 +220,7 @@ Often we have data for an outcome `\(z\)` observed in 2-D space: `\(z(x, y)\)`
 - In one-dimensional space:
 
 $$ \hat Z(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + ... + \hat\beta^px_0^p $$
-- In two-dimensional space with `\((x_{0},y_0)\)` the unknown value: 
+- In two-dimensional space with `\((x_{0},y_0)\)` the unknown location: 
 
 $$ \hat Z(x_0,y_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2y_0 + \hat\beta_3x_0y_0 + \hat\beta_4x_0^2 + \hat\beta_5y_0^2 + ... $$
 
@@ -429,9 +422,9 @@ The Witwatersrand ("Rand") in South Africa is known for its gold content. Mining
 ]
 
 .pull-right[
-- Blue = low value; Red = high value
+- Blue = low gold content; Red = high gold content
 - **Zero** correlation between values in nearby locations
-- Can you predict the value in location A based on this sample? 
+- Can you predict the gold content in location A based on this sample? 
 ]
 
 ---
@@ -444,9 +437,10 @@ The Witwatersrand ("Rand") in South Africa is known for its gold content. Mining
 ]
 
 .pull-right[
-- Blue = low value; Red = high value
+- Blue = low gold content; Red = high gold content
 - **Positive** correlation between values in nearby locations
-- Can you predict the value in location A based on _this_ sample? 
+- Now can you predict the gold content in location A based on _this_ sample? 
+- _Why?_
 ]
 ---
 # Variogram
@@ -459,7 +453,7 @@ A **variogram** describes spatial dependence:
 
 --
 
-&gt; A **variogram** shows the variance of values within groups of observation as a function of the _distance_ between them
+&gt; A **variogram** shows the variance of values within groups of observations as a function of the _distance_ between them
 
 --
 
@@ -667,11 +661,7 @@ _Source: Lebrenz and Bardossy (2019)_
 #### Cons:
 - Nonlinear methods may perform better (e.g., [ML methods](https://doi.org/10.1016/j.envsoft.2013.12.008))
 - Variogram has to be approximated/estimated
-- Complex
-
---
-
-&gt; Unlike other interpolation methods, kriging allows the data to directly inform the weights (e.g., compare to inverse distance weighting!)
+- Complex/computationally intensive
 
 ---
 # A note of caution on interpolation
