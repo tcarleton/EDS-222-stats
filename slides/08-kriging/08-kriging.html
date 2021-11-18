@@ -37,11 +37,11 @@ class: center, middle, inverse, title-slide
 
 --
 
-- **Change in office hours** for week of 11/15 to Thursday 11/18 1:30pm-2:30pm
+- **Change in office hours** today 1:30pm-2:30pm (by appointment) in Bren Hall 4327
 
 --
 
-- **No class** 11/11; **remote class** 11/23, **no class** 11/25
+- ***Remote class** 11/23 (recorded), **no class** 11/25
 
 --
 
@@ -214,8 +214,6 @@ Consider one-dimensional space where values `\(z\)` depend on location `\(x\)`
 
 Often we have data for an outcome `\(z\)` observed in 2-D space: `\(z(x, y)\)`
 
-[Draw it!]
-
 --
 
 &lt;img src="raster_vs_sample.png" width="100%" style="display: block; margin: auto;" /&gt;
@@ -225,18 +223,13 @@ Often we have data for an outcome `\(z\)` observed in 2-D space: `\(z(x, y)\)`
 
 ## Polynomial regression
 
-.pull-left[
-&lt;img src="08-kriging_files/figure-html/unnamed-chunk-5-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
-]
 
-.pull-right[
 - In one-dimensional space:
 
 $$ \hat Z(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + ... + \hat\beta^px_0^p $$
 - In two-dimensional space with `\((x_{0},y_0)\)` the unknown value: 
 
-$$ \hat Z(x_0,y_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2y_0 + \hat\beta_3x_0y_0 + \hat\beta_4x_0^2 + ... $$
-]
+$$ \hat Z(x_0,y_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2y_0 + \hat\beta_3x_0y_0 + \hat\beta_4x_0^2 + \hat\beta_5y_0^2 + ... $$
 
 --
 
@@ -254,14 +247,15 @@ $$ \hat Z(x_0,y_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2y_0 + \hat\beta_3
 ---
 # Polynomial regression interpolation 
 
-This is just **multiple linear regression** using spatial information as the independent variable
+This is just **multiple linear regression** using spatial information as the independent variables
 
 
 ```r
 mod = lm(z~poly(x,8))
 predictions = augment(mod)$.fitted
 ```
-&lt;img src="08-kriging_files/figure-html/unnamed-chunk-7-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="08-kriging_files/figure-html/unnamed-chunk-6-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Interpolation methods
@@ -318,6 +312,8 @@ plot(v)
 
 Basic idea: weights are a decreasing function of distance from `\(x_0\)` to `\(x_i\)` 
 
+--
+
 `$$\hat Z(x_0) = \sum_{i=1}^m \frac{Z(x_i)Dist(x_i,x_0)^{-p}}{\sum_{i=1}^m Dist(x_i,x_0)^{-p}}$$`
 
 Equivalently:
@@ -332,9 +328,16 @@ where `\(p\)` is the "power parameter" determining how fast the weight declines 
 ## Inverse distance weighting
 
 - **Pros:** Smooth, exact
-- **Cons:** Difficult/computationally intensive (you need to compute distances for _all_ pairs of points in the region!), all sampled observations influence `\(\hat Z(x_0)\)`, have to choose `\(p\)` somehow
+- **Cons:** Difficult/computationally intensive (you need to compute distances for _all_ pairs of points in the region!), all sampled observations influence `\(\hat Z(x_0)\)`, have to choose `\(p\)` somehow, result can be "clumpy"
 
 --
+
+&lt;img src="idw.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# Interpolation methods 
+
+## Inverse distance weighting
 
 #### Implementation in `R` 
 
@@ -380,9 +383,318 @@ idw(values, coords, grid, method = "Shepard", p = 2, R = 2, N = 15,
 - Under certain assumptions it is the "best linear unbiased estimate" (sound like OLS yet??)
 - You can recover an estimate _and_ a standard error (i.e., it is _stochastic_)
 
+#### Next up: Kriging details!
+
+---
+layout: false
+class: clear, middle, inverse
+# Kriging
+
+---
+# Kriging: an origin story
+
+The Witwatersrand ("Rand") in South Africa is known for its gold content. Mining engineers wanted to know where in the Rand was most likely to have a high gold content per block of ore. 
+
+.pull-left[
+&lt;img src="samap.jpeg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="randwaterfall.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+]
+---
+# Kriging: an origin story
+
+- Many individual ore samples have been taken (**vector** data -- points)
+- Underlying data is the content of the rock (**raster** data -- field)
+
 --
 
-We will study **kriging** and its implementation in `R` in the next lecture and lab
+**Spatial interpolation** is highly valuable!
+
+--
+
+- **Danie Krige's solution:** [in his master's thesis!]
+  + Use an estimator that minimizes the **mean squared prediction error** (very similar to OLS)
+  + Show that it has a bunch of nice properties relative to other forms of spatial interpolation
+
+&lt;img src="krige.png" width="60%" style="display: block; margin: auto;" /&gt;
+---
+# Correlations in space
+
+.hi[Q:] If there is **no correlation** between values in nearby locations, can we predict new values based on our sample? 
+
+.pull-left[
+&lt;img src="zerocorr.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+- Blue = low value; Red = high value
+- **Zero** correlation between values in nearby locations
+- Can you predict the value in location A based on this sample? 
+]
+
+---
+# Correlations in space
+
+.hi[Q:] If there is **no correlation** between values in nearby locations, can we predict new values based on our sample? 
+
+.pull-left[
+&lt;img src="poscorr.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+- Blue = low value; Red = high value
+- **Positive** correlation between values in nearby locations
+- Can you predict the value in location A based on _this_ sample? 
+]
+---
+# Variogram
+
+#### Key takeaway: quantifying spatial dependence is key to spatial interpolation
+
+--
+
+A **variogram** describes spatial dependence:
+
+--
+
+&gt; A **variogram** shows the variance of values within groups of observation as a function of the _distance_ between them
+
+--
+
+**Key concept:** Variograms give us a way of understanding how correlated spatial observations are to those around them, and how that correlation “decays” as points get further apart 
+
+--
+
+**Mining example:** Variogram gives a measure of how much two samples taken from the mining area will vary in gold percentage depending on the distance between the samples. Samples farther apart will vary more than those taken close together.
+
+---
+# Variogram
+
+Let `\(Z(x)\)` be the value at location x, and `\(Z(x+h)\)` be the value at a location `\(h\)` units away from `\(x\)`. 
+
+--
+
+**Variogram:**
+`$$2\gamma(x+h,x)=var(Z(x+h)-Z(x))$$`
+--
+
+We often discuss the **semi-variogram**, which is:
+
+`$$\gamma(x+h,x) = \frac{1}{2}var(Z(x+h)-Z(x))$$` 
+
+--
+
+Why? Recall:
+
+`$$var(a-b) = var(a) + var(b) - 2cov(a,b)$$`
+So, for a "stationary" variogram, we have `\(\gamma(x+h,x) = var(Z(x))-cov(Z(x),Z(x+h))\)`
+
+
+---
+# Variogram: in pictures
+
+&lt;img src="basic_variogram.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+- **Nugget:** At `\(h=0\)`, residual variance is from microscale effects or measurement error
+- **Sill:** The stationary maximum variance -- no more covariance 
+- **Range:** Separation distance beyond which there is no covariance 
+
+---
+# Estimating a (semi)variogram
+
+### Empirical semivariogram
+
+`$$\hat\gamma(h \pm \delta) = \frac{1}{2N(h\pm\delta)} \sum_{(i,j)\in N(h\pm\delta)} |z_i - z_j|^2$$` 
+--
+
+Why? 
+- You probably don't have many samples _exactly_ `\(h\)` units apart
+
+--
+
+How? 
+
+- Draw "donuts" of width `\(\delta\)` and average distance `\(h\)` around each point
+- Compute differences in values for each pair of points, square them
+- Take an average! 
+
+---
+# Empirical variogram example
+
+- Bohling's _Introduction to Geostatistics and Variogram Analysis_
+- Porosity values in a bean field
+- 85 wells sampled
+
+&lt;img src="porosity.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+# Empirical variogram example
+
+For various values of `\(h\)` and a fixed `\(\delta\)`, compute semivariance:
+
+&lt;img src="semivariances.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Empirical variogram example
+
+**Plot** your semivariances:
+
+&lt;img src="empiricalvariogram.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+# Empirical variogram example
+
+Then choose (or optimize) a **variogram model** to fit through the semivariance points:
+  + Exponential
+  + Spherical
+  + Gaussian
+  + ...
+  
+--
+
+**Many more details** on variograms [here](https://www.sciencedirect.com/topics/mathematics/variogram) or in any geostatistics textbook (e.g., Cressie and Wikle, 2011)
+
+---
+# Back to kriging
+
+Recall that our goal is a prediction of a value `\(\hat Z(x_0)\)` based on observations in all sampled locations: 
+
+`$$\hat Z(x_0)=\sum_i^m \lambda_iZ(x_i)$$`
+
+
+--
+
+In **kriging** (and many spatial interpolation methods), the `\(\lambda_i\)` weights **decay** as distance between `\(x_0\)` and `\(x_i\)` grows larger
+
+-- 
+
+&gt; How do we find the weights in kriging?
+
+---
+# Kriging weights
+
+&gt; How do we find the weights in kriging?
+
+--
+
+### Hint:
+
+&lt;img src="basic_variogram.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+The **variogram** tells us how correlated values are with other values near them, and how this correlation falls as distance grows. It is a **key input** into the kriging solution.
+
+---
+# Deriving the kriging solution
+
+Note: full derivation in Cressie and Wikle (2011) [this is a very shorthand version]
+
+#### Goal: minimize mean squared prediction error
+
+`$$min_\lambda \hskip2mm E[ (Z(x_0)-\sum_i^m \lambda_i Z(x_i))^2 ]\hskip2mm \text{subject to}\hskip2mm \sum_i^m \lambda_i = 1$$`
+--
+
+To solve: 
+
+1. Take derivatives with respect to each `\(\lambda_i\)`
+2. Set each first order condition = 0
+3. Solve system of equations for `\(\lambda_i^*\)` values that minimize mean squared error
+
+---
+# Deriving the kriging solution
+
+### Result:
+
+`$$\hat Z(x_0) = \underbrace{\{\mathbf{\tilde\gamma}(x_0) + \mathbf{1}(1-\mathbf{1}'\mathbf{\Gamma}_Z^{-1}\mathbf{\tilde\gamma}(x_0))/(\mathbf{1}'\mathbf{\Gamma}_Z^{-1}\mathbf{1})\}'\mathbf{\Gamma}_Z^{-1}}_{\hat\lambda}Z$$`
+- where `\(\mathbf{\tilde\gamma}(x_0)\)` is the vector containing the semivariogram evaluated between `\(x_0\)` and every other point, and 
+
+- `\(\mathbf{\Gamma}_Z\)` is the `\(m\times m\)` matrix containing all semivariogram evaluations for all sampled point pairs.
+
+--
+
+- See Cressie and Wikle (2011) for similar derivation for `\(\sigma^2(x_0)\)`, an estimate of the prediction error
+
+--
+
+Other helpful resources [here](https://www.publichealth.columbia.edu/research/population-health-methods/kriging-interpolation)
+
+---
+# Forms of kriging
+
+There are **three** main forms of kriging:
+
+--
+
+1. **Simple:** The mean of the entire field is **constant** and **known** [restrictive, not usually realistic]
+
+--
+
+2. **Ordinary:** The mean of the entire field is **constant** but **unknown** [derivation shown above; most common]
+
+--
+
+3. **Universal:** The mean of the field varies over space and can be estimated using measured variables [requires knowledge of and reason for trend in mean]
+
+--
+
+- There are also other forms! E.g., quantile kriging, log-normal kriging, IRFk-kriging, etc.
+
+--
+
+- We will work on implementation in `R` in the next lab.
+
+---
+# Forms of kriging
+
+&lt;img src="hess-23-1633-2019-f07-thumb.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+_Source: Lebrenz and Bardossy (2019)_
+
+---
+# Kriging summary
+
+#### Pros:
+- Under each set of assumptions specific to the kriging form, kriging is the best linear unbiased predictor ("BLUP")
+- Weights are determined almost entirely by the data, instead of a-priori assumptions 
+- Exact
+- Provides a measure of precision: `\(\sigma^2(x_0)\)`
+
+--
+
+#### Cons:
+- Nonlinear methods may perform better (e.g., [ML methods](https://doi.org/10.1016/j.envsoft.2013.12.008))
+- Variogram has to be approximated/estimated
+- Complex
+
+--
+
+&gt; Unlike other interpolation methods, kriging allows the data to directly inform the weights (e.g., compare to inverse distance weighting!)
+
+---
+# A note of caution on interpolation
+
+#### All spatial interpolation approaches work best if:
+
+- The observed data are relatively **dense and well distributed** throughout the region of interest
+
+--
+
+- You have a lot of observations
+
+--
+
+#### All spatial interpolation approaches should be used cautiously, especially if: 
+
+--
+
+- You have **highly clustered** data with a lot of open space between them
+
+--
+
+- You don’t have very many observations
 
 ---
 

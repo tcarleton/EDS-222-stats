@@ -104,8 +104,8 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 6    | Review       | Midterm Exam     |
 | 7    | Statistical inference        | Hypothesis testing in `R`     |
 | 8    | Time series analysis         | No class     |
-| 9    | Interpolation \& kriging         | Kriging in `R`     |
-| 10   | Point pattern analysis         |   No class   |
+| 9    | Time series in OLS       |  Spatial interpolation & Kriging    |
+| 10   | Kriging in `R`         |   No class   |
 | 11   | Regression in space, spatial autocorrelation          | Final project presentations     |
 | Finals week   | Final project presentations         | n/a     |
 

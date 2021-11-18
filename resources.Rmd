@@ -102,7 +102,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Slides 08**: Spatial interpolation [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf)
 
-- **Lab:** Kriging in `R`
+- **Lab:** Kriging in `R` [**delayed** to Week 10]
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
 
