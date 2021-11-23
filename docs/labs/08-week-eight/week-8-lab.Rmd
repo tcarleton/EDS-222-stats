@@ -1,0 +1,169 @@
+---
+title: "EDS 222: Week 8: In-class Lab"
+author: "{STUDENT NAME}"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+**Note:** This lab is built from the exercise provided by Soren Wilke, posted [here](https://swilke-geoscience.net/post/2020-09-10-kriging_with_r/kriging/). Additional details and analyses are included in the original post.
+
+# Section 0: Getting set up
+
+1. Store this file in a _Labs/_ folder where you store all your lab materials for EDS 222. 
+2. Install the following new (new to EDS 222) packages:^[Hint: for `gstat` you do *not* want to install from source.]
+
+```{r setup, include=FALSE, echo = TRUE, eval = FALSE}
+suppressMessages({
+  install.packages( "sf", "sp", "raster", "gstat", "automap", "patchwork", "viridis")
+})
+```
+
+3. Load the following packages:
+
+```{r, echo = TRUE, eval = TRUE}
+library(tidyverse)
+library(sf)
+library(sp)
+library(raster)
+library(gstat)
+library(automap)
+library(patchwork)
+library(viridis)
+
+
+options(scipen = 999) # disable scientific notation
+
+# For labs, we want to see all our code
+knitr::opts_chunk$set(echo = TRUE)
+```
+4. Set your working directory
+
+```{r}
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
+```
+
+5. Generate this function. We will use it for plotting later -- it is not necessary at all, it will just make things look pretty.
+
+```{r}
+plot_my_gstat_output <- function(raster_object, object_name){
+  
+  df <- rasterToPoints(raster_object) %>% as_tibble()
+  colnames(df) <- c("X", "Y", "Z")
+  
+  ggplot(df, aes(x = X, y = Y, fill = Z)) +
+    geom_raster() +
+    ggtitle(label = object_name) +
+    scale_fill_viridis(option = "B", limits = c(48, 101)) +
+    theme_void() +
+    theme(
+      plot.title = element_text(hjust = 0.5)
+    )
+}
+```
+
+# Section 1: Spatial point data
+
+The data for this tutorial is a xyz-file giving us the height of the groundwater table in a part of the German state of North Rhine-Westphalia in 1988. 
+
+We have measures of the groundwater level in 1988 at a limited number of monitoring wells, but our goal is ultimately to estimate the groundwater level throughout the surrounding region. This is often the case when studying groundwater, which is generally measured with a small set of monitoring wells.
+
+Here let's just take a look at our input data:
+
+1. Load the `week-eight-data.RDS` file into R using `readRDS`.
+
+2. Take a look -- what is the format? How many dimensions? Why? 
+
+```{r}
+
+```
+
+3. Use `ggplot` to plot the locations of the monitoring wells as points, with color indicating depth of the well. I'm going to use `viridis` because it's aesthetically nice and `theme_classic()` to clean up the plot a bit.
+
+```{r}
+
+```
+
+4. What do you notice about the spatial correlation in this plot? Does it seem reasonable to attempt spatial interpolation in this setting?
+
+# Section 2: Creating a Variogram
+
+As we discussed in class, Kriging relies on an estimated or prescribed variogram, which is essentially a function describing the relationship between distance and covariance in "Z" in your point data. Here we are going to create an empirical variogram, which gives us the distribution of spatial dependencies observed in the data.
+
+1. First, we need to convert the data from a `data.frame` to and `sf` object, because that is usually the best way to easiest way to save and work with spatial data. Use the `st_as_sf` function to do this, noting that the [raw data](http://www.govdata.de/dl-de/by-2-0) come in the EPSG 25832 projection.
+
+When you do this, make sure to save the coordinates "X" and "Y" in the resulting `sf` object so that you can use them later if needed (some forms of Kriging rely on them directly).
+
+```{r}
+
+```
+
+2. Use the function `variogram` from the `gstat` package to generate an empirical variogram. These are just the points describing how the semivariance (recall: variance in the difference in "Z" between two points _h_ distance apart). We will fit a curve to that variogram next. 
+
+Annoyingly, `gstat` only plays nicely with `sp` objects instead of `sf` objects, so we'll have to transform our `sf` into an `sp` for this operation.
+
+The first argument of `variogram` is the variogram formula defining the response variable we're interested in and any possible regressors which determine the mean. Here, we will assume we are only using our monitoring wells to interpolate, so we have no other regressors to include in our estimate of the mean. Therefore, use `Z~1` as the formula.
+
+```{r}
+
+```
+
+3. Now we have to move to estimating a variogram model through these points, to be able to interpolate to all points in the region of interest. Here we will use the function `autofitVariogram` from the `automap` package do the work for us. 
+
+Recall that you can choose the type of variogram model you want to fit, such as spherical or Gaussian. However, here we will let `autofitVariogram` choose the model that best fits the data for us.
+
+Save the column `var_model` from the output; lots of other things are also stored that we don't want to worry about.
+
+```{r}
+
+```
+
+4. Plot this variogram model on top of your empirical variogram using `plot()` and passing the full model as an argument. Does it seem to fit the data well? 
+
+```{r}
+
+```
+
+# Section 3: Define a target grid
+
+In order to interpolate we need a target grid with a target set of coordinates (“X”, “Y”) for which the modeled variable (“Z”) to be interpolated. This means we come up with an empty grid or raster. This holds true for Kriging with `gstat`, too, except everything is a little bit more complicated, because we need to do it in `sp`.
+
+1. Define a grid based on the bounding box of our observations. Use a 100 unit pixel size and set `what = "centers"` to center the X-Y coordinates on the middle of each grid cell.
+
+```{r}
+
+```
+
+2. Make the grid work for gstat by converting it to `sp`, telling `R` and `sp` that this object _is_ gridded, then finally convert to `SpatialPixels`. Yes, this is annoying. No, I don't know a better way than `gstat` to do Kriging!
+
+```{r}
+
+```
+
+# Section 4: Ordinary Kriging
+
+Kriging comes in several flavors, as discussed in class. We will here only focus on Ordinary Kriging -- please see [here](https://swilke-geoscience.net/post/2020-09-10-kriging_with_r/kriging/) for more tutorial details on other types of Kriging. 
+
+Ordinary Kriging assumes that the mean in your target grid is constant and but not known to you. 
+
+In `gstat`, the main way to differentiate between different kinds of Kriging (or any of the implemented algorithms) is controlled by the formula supplied. We have already seen that syntax when fitting the variogram -- we use `Z~1` to indicate Ordinary Kriging. 
+
+1. Use the `krige()` function from `gstat` to generate a full set of predictions of groundwater levels at all locations across the region.
+
+```{r}
+
+```
+
+2. Take a look at your predictions (_always_ a good idea) by plotting the raw monitoring data next to a raster of your Kriging-based predictions. For the kriging output, use the `plot_my_gstat_output()` function you generated earlier. Pass `OK` into this function as a raster.
+
+```{r}
+
+```
+
+Based on this visual, how well do you think ordinary kriging worked? What other methods would you try next?

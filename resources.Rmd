@@ -106,6 +106,12 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
 
+### Week 10
+
+- **Lab:** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-eight-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html).
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
+
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
