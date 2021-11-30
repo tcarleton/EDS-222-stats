@@ -112,6 +112,14 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
 
+### Week 11
+
+- **Slides 09**: Applying environmental data science to climate change [pdf](https://www.dropbox.com/s/25aodsxxgugo42g/EDS222_SCC_overview.pdf?dl=0)
+
+- **Optional reading**: Jean Chemnick (2021) [link](https://www.scientificamerican.com/article/cost-of-carbon-pollution-pegged-at-51-a-ton/); Rode et al. (2021) [link](https://idp.nature.com/authorize/casa?redirect_uri=https://www.nature.com/articles/s41586-021-03883-8&casa_token=iyfRYlaeb_MAAAAA:OI0PTWOM1wuotlIDi0DcUDgEvtKLiEHbpJUBBxFaGbIXwyyAM27T7M2OK3IpzssDNcAQCMuhj502e-WRCQ4); Carleton et al. (2021) [link](https://www.nber.org/papers/w27599)
+
+- **Final projects!** Presentations: 12/2 and 12/7; Blogs: 12/2
+
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)

@@ -106,7 +106,7 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 8    | Time series analysis         | No class     |
 | 9    | Time series in OLS       |  Spatial interpolation & Kriging    |
 | 10   | Kriging in `R`         |   No class   |
-| 11   | Regression in space, spatial autocorrelation          | Final project presentations     |
+| 11   | Statistics in climate change research          | Final project presentations     |
 | Finals week   | Final project presentations         | n/a     |
 
 **This webpage was designed following [a template](https://github.com/allisonhorst/meds-distill-template) by Dr. Allison Horst.**
