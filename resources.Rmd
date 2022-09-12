@@ -17,7 +17,10 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Preface, Chapters 1.1-1.3](https://openintro-ims.netlify.app/preface.html), _Introduction to Modern Statistics_
 
-- **Lab:** EDS 222 Lab setup [setup script](https://www.dropbox.com/s/2pwolalmlai8n5m/_common.R?dl=0) and Github Classrooms demo (taught by TA, Sandy Sum)
+- **Lab:** EDS 222 Lab setup and Github Classrooms demo (taught by TA, Sandy Sum)
+  + [Lab markdown](labs/01-week-one/week-1-lab.Rmd)
+  + [Lab html](labs/01-week-one/week-1-lab.html)
+  + [`_common.R` setup script](labs/_common.R) 
   
 - **Assignment:** Assignment 1 posted 9/22; due 10/04, 9am
 

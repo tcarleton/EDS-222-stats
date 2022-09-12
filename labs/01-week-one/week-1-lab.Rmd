@@ -1,0 +1,93 @@
+---
+title: "EDS 222: Week 1: In-class Lab"
+author: "{Student name}"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+
+# Getting set up for Labs in EDS 222
+
+In Thursday lab, we will often be working with exercises based on Introduction to Modern Statistics (Çetinkaya-Rundel and Hardin, 2021). To be able to access the data and custom packages these exercises sometimes rely on, we need to do a bit of setup. This will get you all set for all future labs; you won't need to do it each time.
+
+## Step 1: Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
+
+## Step 2: Download `_common.R` from our course website and put it in the _Labs/_ folder.
+
+## Step 3: Install the following packages, if they are not already installed:^[Note: This will take a minute or two!]
+
+```{r setup, include=TRUE, echo=TRUE, eval=FALSE}
+suppressMessages({
+  install.packages(
+    "tidymodels",
+    "gghighlight",
+    "glue",
+    "ggmosaic",
+    "ggridges",
+    "gridExtra",
+    "infer",
+    "janitor",
+    "knitr",
+    "kableExtra",
+    "maps",
+    "openintro",
+    "patchwork",
+    "quantreg",
+    "tidyverse",
+    "scales",
+    "skimr",
+    "caret",
+    "palmerpenguins",
+    "survival",
+    "waffle",
+    "ggrepel",
+    "ggpubr",
+    "openintro"
+  )
+})
+```
+
+## Step 4: Load all the packages you need, plus the `_common.R` source file.^[Note: If you get a `namespace load` error for `tidyverse`, you want to remove the problem package, reinstall it, and then load `tidyverse` again.]
+
+```{r, include=TRUE}
+
+# You probably already have these packages installed, so let's just load them
+library(tidyverse)
+library(readr)
+library(gt)
+library(openintro)
+
+# Where is the root directory where all your labs live? Change this filepath to work on your computer.
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data/")
+```
+
+Take a look at the help files for `source()` and `file.path()` functions. We will use these a lot in Labs and homework assignments.
+```{r,include=TRUE}
+# `source()` is a helpful function for calling and running other R scripts.
+?source
+
+# `file.path()` is a helpful function for creating file paths from directory and file names
+?file.path
+```
+
+Now, use `source` to run the script `_common.R`, which loads all the packages we'll need for our labs and does some extra stuff we won't use today. You'll `source()` this setup script before running all your labs.
+
+```{r,include=TRUE}
+source(file.path(rootdir,"labs","_common.R"))
+```
+
+For labs, we want to see all our code. Set your `knitr` options to `echo=TRUE` so you see all your code and output.
+
+```{r,include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Done! First real lab next week :) 
+
