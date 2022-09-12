@@ -34,9 +34,9 @@ Statistics is the science of collecting, manipulating, and analyzing empirical d
 
 - Hypothesis testing and inference
 
-- Spatial weighting, spatial clustering, spatial optimization
+- Spatial weighting, spatial clustering
 
-- Time series analysis, point-wise regression
+- Time series analysis, forecasting
 
 <!-- - Moving window regression, spatial lag models, spatial auto-correlation -->
 

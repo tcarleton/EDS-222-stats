@@ -50,17 +50,16 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { color: #00769e; background-color: #f1f3f5; }
+  {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { color: #657422; } /* Attribute */
+code span.at { color: #20794d; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #00769e; } /* ControlFlow */
+code span.cf { color: #007ba5; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -74,18 +73,17 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #00769e; } /* Keyword */
+code span.kw { color: #007ba5; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #00769e; } /* Other */
+code span.ot { color: #007ba5; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
-code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.sc { color: #20794d; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
 code span.st { color: #20794d; } /* String */
 code span.va { color: #111111; } /* Variable */
 code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
-
 
   <!--radix_placeholder_meta_tags-->
   <title>EDS 222: Course resources</title>
@@ -785,7 +783,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
-    font-size: 100%;
   }
 
   .html-widget {
@@ -1027,6 +1024,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
   }
 
   .figure .caption {
@@ -1858,22 +1859,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        const citeChild = $(this).children()[0]
-        // Do not process if @xyz has been used without escaping and without bibliography activated
-        // https://github.com/rstudio/distill/issues/466
-        if (citeChild === undefined) return true
-
-        if (citeChild.nodeName == "D-FOOTNOTE") {
-          var fn = citeChild
-          $(this).html(fn.shadowRoot.querySelector("sup"))
-          $(this).id = fn.id
-          fn.remove()
-        }
-        var refs = $(this).attr('data-cites').split(" ");
-        var refHtml = refs.map(function(ref) {
-          // Could use CSS.escape too here, we insure backward compatibility in navigator
-          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
-        }).join("\n");
+        var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
         window.tippy(this, {
           allowHTML: true,
           content: refHtml,
@@ -1884,31 +1870,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
-
-      // fix footnotes in tables (#411)
-      // replacing broken distill.pub feature
-      $('table d-footnote').each(function() {
-        // we replace internal showAtNode methode which is triggered when hovering a footnote
-        this.hoverBox.showAtNode = function(node) {
-          // ported from https://github.com/distillpub/template/pull/105/files
-          calcOffset = function(elem) {
-              let x = elem.offsetLeft;
-              let y = elem.offsetTop;
-              // Traverse upwards until an `absolute` element is found or `elem`
-              // becomes null.
-              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
-                  x += elem.offsetLeft;
-                  y += elem.offsetTop;
-              }
-
-              return { left: x, top: y };
-          }
-          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
-          const bbox = node.getBoundingClientRect();
-          const offset = calcOffset(node);
-          this.show([offset.left + bbox.width, offset.top + bbox.height]);
-        }
-      })
 
       // clear polling timer
       clearInterval(tid);
@@ -2008,8 +1969,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
-      // ignore leaflet img layers (#106)
-      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2032,7 +1991,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
       });
     }
 
@@ -2480,7 +2439,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2538,121 +2497,141 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h3>Contents</h3>
 <ul>
 <li><a href="#week-1" id="toc-week-1">Week 1</a></li>
-<li><a href="#week-2" id="toc-week-2">Week 2</a></li>
-<li><a href="#week-3" id="toc-week-3">Week 3</a></li>
-<li><a href="#week-4" id="toc-week-4">Week 4</a></li>
-<li><a href="#week-5" id="toc-week-5">Week 5</a></li>
-<li><a href="#week-6" id="toc-week-6">Week 6</a></li>
-<li><a href="#week-7" id="toc-week-7">Week 7</a></li>
-<li><a href="#week-8" id="toc-week-8">Week 8</a></li>
-<li><a href="#week-9" id="toc-week-9">Week 9</a></li>
-<li><a href="#week-10" id="toc-week-10">Week 10</a></li>
-<li><a href="#week-11" id="toc-week-11">Week 11</a></li>
 </ul>
 </nav>
 </div>
 <!-- <p style="color: #ba5e00"><b>TO UPDATE THIS PAGE:</b> Open and edit the <b>resources.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!</p> -->
-<p>All lecture slides, readings, and labs will be posted here each week. Assignments will be mentioned here, but all assignments will be posted, submitted, and graded through Github Classrooms.</p>
+<p>All lecture slides, readings, and labs will be posted here each week.
+Assignments will be mentioned here, but all assignments will be posted,
+submitted, and graded through Github Classrooms.</p>
 <h3 id="week-1">Week 1</h3>
 <ul>
-<li><p><strong>Slides 01</strong>: Course intro <a href="slides/01-intro/01-intro.html">html</a> <a href="slides/01-intro/01-intro.pdf">pdf</a></p></li>
+<li><p><strong>Slides 01</strong>: No class on Tuesday 9/20</p></li>
 <li><p><strong>Reading:</strong></p>
 <ul>
-<li><a href="https://openintro-ims.netlify.app/data-design.html">Chapter 2</a>, <em>Introduction to Modern Statistics</em></li>
-<li>Optional reading: Rolf et al. (2021) <a href="https://arxiv.org/abs/2103.03399">“Representation matters”</a></li>
-<li>Optional reading/watching: <a href="http://gendershades.org/">“Gender shades”</a></li>
-<li>Optional watching: Esther Duflo on <a href="https://www.youtube.com/watch?v=0zvrGiPkVcs">Randomized Control Trials</a></li>
+<li><a href="https://openintro-ims.netlify.app/preface.html">Preface,
+Chapters 1.1-1.3</a>, <em>Introduction to Modern Statistics</em></li>
 </ul></li>
-<li><p><strong>Lab:</strong> No lab this week</p></li>
-<li><p><strong>Assignment:</strong> Assignment 1 posted 9/23; due 9/30, 5pm</p></li>
+<li><p><strong>Lab:</strong> EDS 222 Lab setup <a
+href="https://www.dropbox.com/s/2pwolalmlai8n5m/_common.R?dl=0">setup
+script</a> and Github Classrooms demo (taught by TA, Sandy Sum)</p></li>
+<li><p><strong>Assignment:</strong> Assignment 1 posted 9/22; due 10/04,
+9am</p></li>
 </ul>
-<h3 id="week-2">Week 2</h3>
-<ul>
-<li><p><strong>Slides 02</strong>: Summary statistics <a href="slides/02-summstats/02-summstats.html">html</a> <a href="slides/02-summstats/02-summstats.pdf">pdf</a></p></li>
-<li><p><strong>Reading:</strong></p>
-<ul>
-<li><a href="https://openintro-ims.netlify.app/data-design.html">Chapters 4-6</a>, <em>Introduction to Modern Statistics</em></li>
-</ul></li>
-<li><p><strong>Lab:</strong> <a href="https://www.dropbox.com/s/2pwolalmlai8n5m/_common.R?dl=0">setup script</a>, <a href="labs/02-week-two/week-2-lab.Rmd">markdown</a>, <a href="labs/02-week-two/week-2-lab-answers.Rmd">answers</a>, <a href="labs/02-week-two/week-2-lab-answers.html">answers in html</a>. Note: all files also on Github <a href="https://github.com/tcarleton/EDS-222-stats">here</a></p></li>
-<li><p><strong>Assignment:</strong> Assignment 2 posted 9/30; due 10/7, 5pm</p></li>
-</ul>
-<h3 id="week-3">Week 3</h3>
-<ul>
-<li><p><strong>Slides 03</strong>: Ordinary Least Squares <a href="slides/03-ols/03-ols.html">html</a> <a href="slides/03-ols/03-ols.pdf">pdf</a></p></li>
-<li><p><strong>Reading:</strong></p>
-<ul>
-<li><a href="https://openintro-ims.netlify.app/data-design.html">Chapter 7</a>, <em>Introduction to Modern Statistics</em></li>
-</ul></li>
-<li><p><strong>Lab:</strong> OLS in <code>R</code> <a href="labs/03-week-three/week-3-lab.Rmd">markdown</a>, <a href="labs/03-week-three/week-3-lab-answers.Rmd">answers</a>, <a href="labs/03-week-three/week-3-lab-answers.html">answers in html</a>. Note: all files also on Github <a href="https://github.com/tcarleton/EDS-222-stats">here</a></p></li>
-<li><p><strong>Assignment:</strong> Assignment 3 posted 10/8; due 10/18, 5pm [Note: deadline delayed from original 10/15]</p></li>
-</ul>
-<h3 id="week-4">Week 4</h3>
-<ul>
-<li><p><strong>Slides 04</strong>: Ordinary Least Squares, continued <a href="slides/04-ols-contd/04-ols-contd.html">html</a> <a href="slides/04-ols-contd/04-ols-contd.pdf">pdf</a></p></li>
-<li><p><strong>Reading:</strong></p>
-<ul>
-<li><a href="https://openintro-ims.netlify.app/data-design.html">Chapter 8</a>, <em>Introduction to Modern Statistics</em></li>
-</ul></li>
-<li><p><strong>Lab:</strong> OLS in <code>R</code>, continued <a href="labs/04-week-four/week-4-lab.Rmd">markdown</a>, <a href="labs/04-week-four/week-4-lab-answers.Rmd">answers</a>, <a href="labs/04-week-four/week-4-lab-answers.html">answers in html</a>.</p></li>
-<li><p><strong>Assignment:</strong> Assignment 4 DELAYED until after midterm</p></li>
-</ul>
-<h3 id="week-5">Week 5</h3>
-<ul>
-<li><p><strong>Slides 05</strong>: Multiple linear regression <a href="slides/05-multiplereg/05-multiplereg.html">html</a> <a href="slides/05-multiplereg/05-multiplereg.pdf">pdf</a></p></li>
-<li><p><strong>Reading:</strong></p>
-<ul>
-<li><a href="https://openintro-ims.netlify.app/data-design.html">Chapter 8</a>, <em>Introduction to Modern Statistics</em></li>
-</ul></li>
-<li><p><strong>Lab:</strong> Interaction models in <code>R</code> <a href="labs/05-week-five/week-5-lab.Rmd">markdown</a>, <a href="labs/05-week-five/week-5-lab-answers.Rmd">answers</a>, <a href="labs/05-week-five/week-5-lab-answers.html">answers in html</a>.</p></li>
-<li><p><strong>No assignment</strong></p></li>
-</ul>
-<h3 id="week-6">Week 6</h3>
-<ul>
-<li>Review &amp; Midterm Exam</li>
-</ul>
-<h3 id="week-7">Week 7</h3>
-<ul>
-<li><p><strong>Slides 06</strong>: Statistical inference <a href="slides/06-inference/06-inference.html">html</a> <a href="slides/06-inference/06-inference.pdf">pdf</a></p></li>
-<li><p><strong>Reading:</strong></p>
-<ul>
-<li><a href="https://openintro-ims.netlify.app/data-design.html">Chapters 13, 19.2</a>, <em>Introduction to Modern Statistics</em></li>
-</ul></li>
-<li><p><strong>Lab:</strong> Hypothesis testing in <code>R</code> <a href="labs/07-week-seven/week-7-lab.Rmd">markdown</a>, <a href="labs/07-week-seven/week-7-lab-answers.Rmd">answers</a>, <a href="labs/07-week-seven/week-7-lab-answers.html">answers in html</a>.</p></li>
-<li><p><strong>Assignment:</strong> Assignment 4 released in Week 8</p></li>
-</ul>
-<h3 id="week-8">Week 8</h3>
-<ul>
-<li><p><strong>Slides 07</strong>: Time series analysis <a href="slides/07-timeseries/07-timeseries.html">html</a> <a href="slides/07-timeseries/07-timeseries.pdf">pdf</a></p></li>
-<li><p><strong>Reading:</strong></p>
-<ul>
-<li><a href="https://otexts.com/fpp3/">Chapters 2, 3</a>, <em>Forecasting: Principles and Practice</em></li>
-</ul></li>
-<li><p><strong>Lab:</strong> NO CLASS.</p></li>
-<li><p><strong>Assignment:</strong> Assignment 4: Hypothesis testing and time series analysis (at least 2 weeks to complete)</p></li>
-</ul>
-<h3 id="week-9">Week 9</h3>
-<ul>
-<li><p><strong>Slides 07</strong>: Time series analysis <a href="slides/07-timeseries/07-timeseries.html">html</a> <a href="slides/07-timeseries/07-timeseries.pdf">pdf</a></p></li>
-<li><p><strong>Slides 08</strong>: Spatial interpolation <a href="slides/08-kriging/08-kriging.html">html</a> <a href="slides/08-kriging/08-kriging.pdf">pdf</a></p></li>
-<li><p><strong>Lab:</strong> Kriging in <code>R</code> [<strong>delayed</strong> to Week 10]</p></li>
-<li><p><strong>Assignment:</strong> Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)</p></li>
-</ul>
-<h3 id="week-10">Week 10</h3>
-<ul>
-<li><p><strong>Lab:</strong> Kriging in <code>R</code> <a href="https://www.dropbox.com/s/ganv3ofxjjobgds/week-eight-data.RDS?dl=0">data</a> <a href="labs/08-week-eight/week-8-lab.Rmd">markdown</a>, <a href="labs/08-week-eight/week-8-lab-answers.Rmd">answers</a>, <a href="labs/08-week-eight/week-8-lab-answers.html">answers in html</a>.</p></li>
-<li><p><strong>Assignment:</strong> Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)</p></li>
-</ul>
-<h3 id="week-11">Week 11</h3>
-<ul>
-<li><p><strong>Slides 09</strong>: Applying environmental data science to climate change <a href="https://www.dropbox.com/s/25aodsxxgugo42g/EDS222_SCC_overview.pdf?dl=0">pdf</a></p></li>
-<li><p><strong>Optional reading</strong>: Jean Chemnick (2021) <a href="https://www.scientificamerican.com/article/cost-of-carbon-pollution-pegged-at-51-a-ton/">link</a>; Rode et al. (2021) <a href="https://idp.nature.com/authorize/casa?redirect_uri=https://www.nature.com/articles/s41586-021-03883-8&amp;casa_token=iyfRYlaeb_MAAAAA:OI0PTWOM1wuotlIDi0DcUDgEvtKLiEHbpJUBBxFaGbIXwyyAM27T7M2OK3IpzssDNcAQCMuhj502e-WRCQ4">link</a>; Carleton et al. (2021) <a href="https://www.nber.org/papers/w27599">link</a></p></li>
-<li><p><strong>Final projects!</strong> Presentations: 12/2 and 12/7; Blogs: 12/2</p></li>
-</ul>
+<!--
+### Week 2
+
+- **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
+
+- **Reading:** 
+  + [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + Optional reading: Rolf et al. (2021) ["Representation matters"](https://arxiv.org/abs/2103.03399)
+  + Optional reading/watching: ["Gender shades"](http://gendershades.org/)
+  + Optional watching: Esther Duflo on [Randomized Control Trials](https://www.youtube.com/watch?v=0zvrGiPkVcs)
+
+- **Lab:** No lab this week
+  
+- **Assignment:** Assignment 1 posted 9/23; due 9/30, 5pm
+
+- **Slides 02**: Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf)
+
+- **Reading:** 
+  + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** [setup script](https://www.dropbox.com/s/2pwolalmlai8n5m/_common.R?dl=0), [markdown](labs/02-week-two/week-2-lab.Rmd), [answers](labs/02-week-two/week-2-lab-answers.Rmd), [answers in html](labs/02-week-two/week-2-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
+  
+- **Assignment:** Assignment 2 posted 9/30; due 10/7, 5pm
+
+### Week 3
+
+- **Slides 03**: Ordinary Least Squares [html](slides/03-ols/03-ols.html) [pdf](slides/03-ols/03-ols.pdf)
+
+- **Reading:** 
+  + [Chapter 7](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** OLS in `R` [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
+  
+- **Assignment:** Assignment 3 posted 10/8; due 10/18, 5pm [Note: deadline delayed from original 10/15]
+
+
+### Week 4
+
+- **Slides 04**: Ordinary Least Squares, continued [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf)
+
+- **Reading:** 
+  + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html).
+  
+- **Assignment:** Assignment 4 DELAYED until after midterm
+
+### Week 5
+
+- **Slides 05**: Multiple linear regression [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
+
+- **Reading:** 
+  + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** Interaction models in `R` [markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html).
+  
+- **No assignment** 
+
+### Week 6
+
+- Review \& Midterm Exam
+
+### Week 7
+
+- **Slides 06**: Statistical inference [html](slides/06-inference/06-inference.html) [pdf](slides/06-inference/06-inference.pdf)
+
+- **Reading:** 
+  + [Chapters 13, 19.2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Lab:** Hypothesis testing in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html).
+  
+- **Assignment:** Assignment 4 released in Week 8
+
+### Week 8
+
+- **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
+
+- **Reading:** 
+  + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_
+
+- **Lab:** NO CLASS. 
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (at least 2 weeks to complete)
+
+### Week 9
+
+- **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
+
+- **Slides 08**: Spatial interpolation [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf)
+
+- **Lab:** Kriging in `R` [**delayed** to Week 10]
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
+
+### Week 10
+
+- **Lab:** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-eight-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html).
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
+
+### Week 11
+
+- **Slides 09**: Applying environmental data science to climate change [pdf](https://www.dropbox.com/s/25aodsxxgugo42g/EDS222_SCC_overview.pdf?dl=0)
+
+- **Optional reading**: Jean Chemnick (2021) [link](https://www.scientificamerican.com/article/cost-of-carbon-pollution-pegged-at-51-a-ton/); Rode et al. (2021) [link](https://idp.nature.com/authorize/casa?redirect_uri=https://www.nature.com/articles/s41586-021-03883-8&casa_token=iyfRYlaeb_MAAAAA:OI0PTWOM1wuotlIDi0DcUDgEvtKLiEHbpJUBBxFaGbIXwyyAM27T7M2OK3IpzssDNcAQCMuhj502e-WRCQ4); Carleton et al. (2021) [link](https://www.nber.org/papers/w27599)
+
+- **Final projects!** Presentations: 12/2 and 12/7; Blogs: 12/2
+-->
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)
 -->
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
