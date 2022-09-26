@@ -12,7 +12,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 ### Week 1
 
-- **Slides 01**: No class on Tuesday 9/20
+- **Slides**: No class on Tuesday 9/20
 
 - **Reading:** 
   + [Preface, Chapters 1.1-1.3](https://openintro-ims.netlify.app/preface.html), _Introduction to Modern Statistics_
@@ -24,25 +24,27 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 1 posted 9/22; due 10/04, 9am
 
-<!--
+
 ### Week 2
 
 - **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
 
+- **Slides 02**: To be posted before class on Thursday (Note: Thursday will be a lab/lecture combo this week only) <!--Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf) -->
+
 - **Reading:** 
-  + [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + (For Tuesday) [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + (For Thursday) [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
   + Optional reading: Rolf et al. (2021) ["Representation matters"](https://arxiv.org/abs/2103.03399)
   + Optional reading/watching: ["Gender shades"](http://gendershades.org/)
   + Optional watching: Esther Duflo on [Randomized Control Trials](https://www.youtube.com/watch?v=0zvrGiPkVcs)
 
-- **Lab:** No lab this week
+- **Lab:** Summary statistics in `R`. Will be posted alongside slides 02 before class on Thursday.
   
-- **Assignment:** Assignment 1 posted 9/23; due 9/30, 5pm
+- **Assignment:** Assignment 1 due 10/04, 9am
 
-- **Slides 02**: Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf)
-
+<!--
 - **Reading:** 
-  + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  
 
 - **Lab:** [setup script](https://www.dropbox.com/s/2pwolalmlai8n5m/_common.R?dl=0), [markdown](labs/02-week-two/week-2-lab.Rmd), [answers](labs/02-week-two/week-2-lab-answers.Rmd), [answers in html](labs/02-week-two/week-2-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
   

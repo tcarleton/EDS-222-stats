@@ -3,7 +3,7 @@ title: "Course intro & motivation"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2021"
+date: "Fall 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -73,7 +73,7 @@ knitr::include_graphics("The_Scientific_Method.svg")
 #### Ex: When Mt. Pinatubo erupted in 1991, much less sunlight was available for plants...
 - 20 Mt of sulfur dioxide $\longrightarrow$ increased stratospheric sulfate aerosols, decreased sunlight reaching Earth's surface
 
-```{r, out.width = "60%", echo=FALSE, fig.align='center'}
+```{r, out.width = "55%", echo=FALSE, fig.align='center'}
 knitr::include_graphics("ash-cloud2.jpeg")
 ```
 
@@ -144,7 +144,7 @@ knitr::include_graphics("The_Scientific_Method.svg")
 - Designed to build your fundamental statistical toolkit
 - Designed to teach you to _apply_ statistics in `R` 
 - Designed to show you key spatio-temporal methods that come up frequently in environmental data science
-- **Brand new!** $\longrightarrow$ Things will not go according to plan. But you can help shape the curriculum!
+- **Still new!** $\longrightarrow$ We are actively adjusting based on last year's test run. Your feedback will help shape the curriculum!
 
 ### This course is **not**:
 - A programming class $\longrightarrow$ I will make mistakes. I don't know all the new exciting things. I will learn from you!
@@ -155,6 +155,16 @@ knitr::include_graphics("The_Scientific_Method.svg")
 # Syllabus 
 
 Syllabus can always be found on our [course website.](https://tcarleton.github.io/EDS-222-stats/)
+
+
+---
+# COVID-19 
+
+- This course is **in-person**, following UCSB guidelines
+
+- If you are sick (with anything), **please stay home** and just let me know ahead of time. We will get you caught up with notes from classmates, extra office hours, etc.
+
+- If you test positive for COVID-19, stay home for at least 5 days, and follow UCSB protocol. In this case, I will provide a personal Zoom link for you to join, but cannot guarantee all lecture content (e.g., writing on the white board) will be perfectly visible via Zoom
 
 ---
 
@@ -368,7 +378,7 @@ knitr::include_graphics("simplerand_sample.png")
 
 - More complex to analyze sample to construct estimates of population parameters (but still possible)
 - Helpful when individuals within a strata are quite similar
-- Used often as a method of variance reduction (we'll discuss this later)
+- Used often as a method to reduce "noise" in your data (we'll discuss this later)
 
 ```{r, out.width = "100%", echo=FALSE, fig.align='center', fig.cap="Source: IMS"}
 knitr::include_graphics("stratified_sample.png")
@@ -489,10 +499,13 @@ par(par_og) # restore original par
 ---
 # Homework 1 (warmup): Logistics
 
+### Deadline: 10/04, 9am (before class)
+
 ### Where are the data?
 
-- All the data for Thursday labs and homeworks will be on Taylor
-- See EDS 214 for a refresher on how to access Taylor, compute on Taylor, and pull data to/from Taylor
+- All the data for homework will be on Taylor
+
+- See MEDS summer coursework for a refresher on how to access Taylor, compute on Taylor, and pull data to/from Taylor (**if you are not a MEDS student** please reach out to Sandy for help getting access to Taylor)
 
 ---
 # Homework 1 (warmup): Logistics
@@ -500,16 +513,27 @@ par(par_og) # restore original par
 ### Where should I do computation? 
 
 - All the data we use will be small enough to load and work with _locally_ (e.g., use Cyberduck to pull data down)
+
 - But you're welcome to work on Taylor with an RStudio GUI or Workbench, etc.
+
 - You won't have write access to our class directory, but you do have your own directories on Taylor
 
 ---
-# Homework 1 (warmup): Logistics
+# Github in this class
 
-### Github classrooms
+Github will be used in multiple ways in this class:
 
-- I'm learning, you're learning, might be a little bumpy in the beginning
-- Please communicate and give me feedback! 
+--
+
+1. My course website is built in git, so you can access any source code you might want (slide materials, lab materials, etc.) from this repo, [#EDS-222-stats](https://github.com/tcarleton/EDS-222-stats). But you won't ever need to interact with this repo if you don't want to. 
+
+--
+
+2. Github Classrooms. All homework assignments will be accessed via GH Classrooms. You will pull the assignment from GH, edit and push your code by the submission deadline, and then pull again once grades are posted to see your grade and to get feedback.
+
+--
+
+3. Final projects. You will submit a Github repo alongside your final project report. We will not be grading this repository, but expect you to keep your project code here.
 
 ---
 class: center, middle

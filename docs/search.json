@@ -5,7 +5,7 @@
       "title": "Assignments",
       "author": [],
       "contents": "\n\nContents\nAssignment materials and\ndates\nAssignment expectations and\ngrading\n\n\n\nTO UPDATE THIS PAGE: Open and edit the assignments.Rmd\nfile, in the project root, to delete this placeholder text and customize\nwith your own!\n\nAssignment materials and\ndates\nAssignment materials\nAssigned\nDue date\nA link to the repo\n2021-01-01\n2021-01-08\nA link to the repo\n2021-01-15\n2021-01-23\nA link to the repo\n2021-02-01\n2021-02-09\nA link to the repo\n2021-02-14\n2021-02-23\nAssignment expectations and\ngrading\nThis might also go on the home page & in syllabus\nOr could reinforce here\n\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:03-07:00"
+      "last_modified": "2022-09-26T10:00:28-07:00"
     },
     {
       "path": "index.html",
@@ -13,84 +13,84 @@
       "description": "Master’s of Environmental Data Science Program, UC Santa Barbara",
       "author": [],
       "contents": "\n\nContents\nWelcome to\nEDS 222\nSome concepts we’ll cover:\n\nInstructor\nImportant\nlinks\nWeekly course schedule\nLearning\nobjectives\nCourse\nrequirements\nComputing\nTextbook\n\nWeekly topics [subject to\nchange]\n\n\n\n\nFigure 1: Classroom Stats\n\n\n\nWelcome to EDS 222\nStatistics is the science of collecting, manipulating, and analyzing\nempirical data. In this class, we will learn the statistical\nfundamentals that will enable us to draw conclusions about the\nenvironment and its interaction with social and economic systems. We\nwill cover fundamental statistical concepts and tools, and then apply\nand expand upon those tools to learn some temporal and spatial\nstatistical methods that are particularly helpful in environmental data\nscience. Welcome!\nSome concepts we’ll cover:\nSampling and study design, descriptive statistics\nLinear and logistic regression (univariate and\nmultivariate)\nHypothesis testing and inference\nSpatial weighting, spatial clustering\nTime series analysis, forecasting\nInstructor\nTamma Carleton (tcarleton@ucsb.edu)\nOffice: Bren Hall 3418\nOffice hours: 3:30pm-4:30pm Tuesdays, 3526 Bren\nHall (Pine Room)\nImportant links\nSyllabus link\n\nUCSB\nCode of Conduct\nWeekly course schedule\nLectures: Tuesday 9:30am - 10:45am (4016 Bren\nHall)\nLabs: Thursdays 9:30am - 10:45am (4016 Bren\nHall)\nLearning objectives\nThe goal of this course is to enable MEDS students to confidently and\ncompetently apply statistical tools to environmental and\nsocio-environmental datasets.\nMaster fundamental statistical concepts and learn\nto apply them in R\nDesign, conduct, and interpret linear and nonlinear\nregression models\nApply spatial statistical methods to environmental\ndata\nLearn about and address common spatial and temporal\ndependency issues that arise in environmental datasets\nCourse requirements\nComputing\nMinimum\nMEDS device requirements\nR version 4.0.2 (or higher)\nRStudio version 1.4.1103 (or higher)\nTextbook\nIntroduction to Modern Statistics, by Mine Çetinkaya-Rundel\nand Johanna Hardin (link)\nWeekly topics [subject to\nchange]\nWeek\nLecture topics (Tues)\nLab topics (Thurs)\n1 (9/19)\nNo class\nLab setup (taught by Sandy Sum)\n2 (9/26)\nClass intro, sampling, study design\nSummary stats in R\n3 (10/03)\nOrdinary Least Squares\nOLS in R\n4 (10/10)\nMultiple linear regression\nRegression in R, continued\n5 (10/17)\nInteraction models and model fit\nInteractions in R\n6 (10/24)\nNonlinear relationships\nMidterm Exam\n7 (10/31)\nNonlinear regression models\nLogistic regression in R\n8 (11/07)\nStatistical inference\nHypothesis testing in R\n9 (11/14)\nTime series in OLS\nForecasting in R\n10 (11/21)\nIntro to Bayesian stats\nNo class\n11 (11/28)\nTBD\nStatistics in climate change research\nFinals\nFinal project presentations (Dec 6)\nn/a\nThis webpage was designed following a\ntemplate by Dr. Allison Horst.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:04-07:00"
+      "last_modified": "2022-09-26T10:00:29-07:00"
     },
     {
       "path": "resources.html",
       "title": "Course resources",
       "author": [],
-      "contents": "\n\nContents\nWeek 1\n\n\nAll lecture slides, readings, and labs will be posted here each week.\nAssignments will be mentioned here, but all assignments will be posted,\nsubmitted, and graded through Github Classrooms.\nWeek 1\nSlides 01: No class on Tuesday 9/20\nReading:\nPreface,\nChapters 1.1-1.3, Introduction to Modern Statistics\n\nLab: EDS 222 Lab setup and Github Classrooms\ndemo (taught by TA, Sandy Sum)\nLab markdown\nLab html\n_common.R setup\nscript\n\nAssignment: Assignment 1 posted 9/22; due 10/04,\n9am\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:05-07:00"
+      "contents": "\n\nContents\nWeek 1\nWeek 2\n\n\nAll lecture slides, readings, and labs will be posted here each week.\nAssignments will be mentioned here, but all assignments will be posted,\nsubmitted, and graded through Github Classrooms.\nWeek 1\nSlides: No class on Tuesday 9/20\nReading:\nPreface,\nChapters 1.1-1.3, Introduction to Modern Statistics\n\nLab: EDS 222 Lab setup and Github Classrooms\ndemo (taught by TA, Sandy Sum)\nLab markdown\nLab html\n_common.R setup\nscript\n\nAssignment: Assignment 1 posted 9/22; due 10/04,\n9am\nWeek 2\nSlides 01: Course intro html pdf\nSlides 02: To be posted before class on Thursday\n(Note: Thursday will be a lab/lecture combo this week only)\n\nReading:\n(For Tuesday) Chapter 2,\nIntroduction to Modern Statistics\n(For Thursday) Chapters\n4-6, Introduction to Modern Statistics\nOptional reading: Rolf et al. (2021) “Representation\nmatters”\nOptional reading/watching: “Gender shades”\nOptional watching: Esther Duflo on Randomized Control\nTrials\n\nLab: Summary statistics in R. Will\nbe posted alongside slides 02 before class on Thursday.\nAssignment: Assignment 1 due 10/04, 9am\n\n\n\n",
+      "last_modified": "2022-09-26T10:00:29-07:00"
     },
     {
       "path": "topic_1.html",
       "title": "Topic 1: Add/remove a site page",
       "author": [],
       "contents": "\n\nContents\nAdd a site\npage\nThe quick\nversion:\nMake each page an R\nMarkdown document\nAdd it to your navigation\nbar\n\nDelete/disappear a site\npage\n\nNOTE: There are 10 toy Topic sections here,\nexpecting that some teachers may want to have one page per week (for a\n10 week course). You are encouraged to structure your course\nhowever works best for your class. All of your course\ninformation could be on a single page, or you might have a different\nnumber of topics, or organize weekly, or any other organization that\nworks for you.\n\nTO UPDATE THIS PAGE: Open and edit the topic_1.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nAdd a site page\nThe quick version:\nMake a new R Markdown document, save\nAdd the rendered .html to _site.yaml so the page exists on the\nsite\nBuild to see updated site\nBelow for a bit more detail…\nMake each page an R\nMarkdown document\nTo make a new page:\nWithin your website Project, create a new .Rmd (File > New\nFile > R Markdown). Save it to the project root. For this example,\nlet’s say you’ve saved it as new_page.Rmd.\nIn that .Rmd file, remove everything but the title (which you can\nchange) from the YAML - that’s the top section of the .Rmd, where by\ndefault it has title, author, date, etc.\nUpdate the .Rmd to contain whatever you want to have on that\npage. Don’t know a lot about markdown? Considering switching over to the\nVisual\nEditor in RStudio (versions >= 1.4).\nSave the .Rmd\nAdd it to your navigation\nbar\nOpen the _site.yml file in your Project\nAdd the information to the YAML navbar section, which will almost\nalways be the text that you want to appear in the navigation bar, and\nthe file name of the knitted html that will be\nautomatically rendered to /docs when you Build your website. That would\nbe new_page.html for this example (since the .Rmd it is\nrendered from is new_page.Rmd). So in the\n_site.yml I would need to add this to the navbar\nsection:\n    - text: \"A new page!\"\n      href: new_page.html\nNote: YAML is space & indentation specific.\nFollow the structure that already exists in this template to avoid YAML\nerrors.\nHow is the website finding the html? Notice in the\n_site.yml file, the output_dir is set to\ndocs. That means when we press ‘Build website’ (in the\nBuild tab in RStudio), our .Rmd pages are knitted to HTML & sent to\nthe _docs folder. This is also important because when we\ndeploy the site (make it live), we will want to deploy from that\ndocs folder using GitHub pages.\nTake a look at some other pages in this template (Resources,\nAssignments, etc.) to see the structure, & give it a shot!\nDelete/disappear a site page\nThe safest thing to do if you don’t want a page to show up\nis to remove it from the _site.yml navbar listings. That\nway, the material on the page still exists as a file in your project,\nbut doesn’t show up on the website – don’t delete a page file unless you\nare REALLY SURE that you’re never going to want the material on that\npage ever again.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:05-07:00"
+      "last_modified": "2022-09-26T10:00:30-07:00"
     },
     {
       "path": "topic_10.html",
       "title": "Topic 10: Inserting tables",
       "author": [],
       "contents": "\n\nContents\nUse\nthe Visual Editor\nOther\noptions\n\n\nTO UPDATE THIS PAGE: Open and edit the topic_10.Rmd\nfile, in the project root, to delete this placeholder text and customize\nwith your own!\n\nUse the Visual Editor\nIf you want to create a table in your R Markdown from scratch that is\neasily editable (e.g., a table of Assignment due dates or something), it\nmight be easiest to just make the thing manually right in your R\nMarkdown document.\nTo do that, I strongly recommend using the RStudio Visual Editor (in\nRStudio versions >= 1.4), which has an easy-to-use Table maker\nsimilar to what you’d see in Word or Google Docs.\nOpen the .Rmd in which you want to add the table\nSwitch over to the visual editor by clicking on the compass-looking\nicon in the top right of your .Rmd screen, to the right of the ‘Run’ and\n‘Publish’ buttons (hover text is “Switch to visual markdown\neditor”)\nIn the Visual Editor menu, click on Table, then in the dropdown Menu\nclick ‘Insert Table’…and create & populate your new table like you\nwould normally in non-markdown tools\nOther options\nThere are a bunch of different ways to add & format tables in R\nMarkdown (see several of many options in David Keyes’ post on\nMaking\nBeautiful Tables in R). I think most of them are most useful when\nyou’re trying to make a finalized table with data in it, but if you\nreally want to beautify your website tables there are options.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:06-07:00"
+      "last_modified": "2022-09-26T10:00:31-07:00"
     },
     {
       "path": "topic_2.html",
       "title": "Topic 2: Update site title and subtitle",
       "author": [],
       "contents": "\n\nTO UPDATE THIS PAGE: Open and edit the topic_2.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nOne of the first things you’ll want to do is update your site title,\nsubtitle, and the short link on the right side of the navbar.\nHere’s how:\nThe main title and subtitle for the home page live in the YAML of\nthe index.Rmd file. Open it in your project, update the\ntitle and description fields in the YAML,\nsave, then build your site (In RStudio: Build > Build Website) to see\nthe updated title.\nThe label for the short link in the upper right of the page\n(right side of the navigation bar) is specified in the\n_site.yml page. Open the _site.yml file in\nyour project, update the Title field, save, and rebuild the site to see\nyour update.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:06-07:00"
+      "last_modified": "2022-09-26T10:00:31-07:00"
     },
     {
       "path": "topic_3.html",
       "title": "Topic 3: Adding images",
       "author": [],
       "contents": "\n\nContents\nWhere should I save my\nimages?\nHow do I make images\nshow up on my site?\n\n\nTO UPDATE THIS PAGE: Open and edit the topic_3.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nWhere should I save my\nimages?\nDrop images you want to include on your site into the existing\nimg folder within your R Project (or make your own folder\nfor images, set up a subfolder structure, etc.) - as long as you can\neasily point to them within your project.\nHow do I make images\nshow up on my site?\nThere are a bunch of ways to add images in an R Markdown document\n(see more examples from the R Markdown Cookbook here).\nI recommend using\nknitr::include_graphics(\"path_to_image\").\nFor example, if there is an image saved as cool_dogs.jpg\nin the img folder, then you can add this to your R Markdown\ndocument by adding (within a code chunk):\n\n```{r, echo = FALSE}\n  knitr::include_graphics(\"img/cool_dogs.jpg\")\n```\nYou can also update the size of the image, add a caption, etc. by\nupdating the code chunk header, e.g.:\n\n```{r, echo = FALSE, out.width = \"50%\", fig.cap = \"Some cool dogs!\"}\n  knitr::include_graphics(\"img/cool_dogs.jpg\")\n```\nFor example, the image usgs_sat.jpeg is in the\nimg folder of this template. I can have it show up here by\ninclude a code chunk that looks like this:\n\n```{r, echo = FALSE, out.width = \"80%\", fig.cap = \"USGS image of Mississippi River.\"}\n  knitr::include_graphics(\"img/usgs_sat.jpeg\")\n```\nWhich creates:\n\n\n\nFigure 1: USGS image of Mississippi River.\n\n\n\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:07-07:00"
+      "last_modified": "2022-09-26T10:00:32-07:00"
     },
     {
       "path": "topic_4.html",
       "title": "Topic 4: Change the theme",
       "author": [],
       "contents": "\n\nTO UPDATE THIS PAGE: Open and edit the topic_4.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nThe bells and whistles of this MEDS template (colors, fonts, spacing,\netc.) are customized in the theme.css file in your Project\nroot.\nIf you love css or want to make changes, you’re encouraged to\ncustomize your site! There is minor annotation in the css file, but\nhonestly this will probably just take quite a bit of Inspect Element to\nfigure out what to change.\nFonts: If you specifically want to know how to\nchange the site fonts, see here.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:07-07:00"
+      "last_modified": "2022-09-26T10:00:32-07:00"
     },
     {
       "path": "topic_5.html",
       "title": "Topic 5: Basic formatting",
       "author": [],
       "contents": "\n\nTO UPDATE THIS PAGE: Open and edit the topic_5.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nIf you’re familiar with markdown, use standard syntax to update font\nstyles, add bulleted lists, subscripts/superscripts, etc. (or learn more\nfrom the R Markdown\ncheatsheet).\nIf you’re not familiar with markdown and want an easier way to update\nformatting, there is a Visual Editor in RStudio versions > 1.4. It is\nabsolutely worth it to check it out for easier formatting of text,\nimages, tables, citations, and more. Read more about the new RStudio\nVisual Editor here.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:08-07:00"
+      "last_modified": "2022-09-26T10:00:33-07:00"
     },
     {
       "path": "topic_6.html",
       "title": "Topic 6: Internal & external links",
       "author": [],
       "contents": "\n\nContents\nLinking to internal\nparts of your site\nExternal\nlinks\n\n\nTO UPDATE THIS PAGE: Open and edit the topic_6.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nLinking to internal\nparts of your site\nSometimes you’ll want to have a link to another page in your\nwebsite. How? Use the format\n[text](link_to_this_page.html).\nFor example, if I want to link here to the Resources page, within my\n.Rmd that looks like this:\n  Find more resources [here](resources.html). \nWhich, when built, looks like this:\nFind more resources here.\nExternal links\nSame thing, just add the full URL within the parentheses. For\nexample, to link to UCSB’s home page that would look like:\n  Learn more about [UCSB](https://www.ucsb.edu/).\n  \nWhich when built looks like this:\nLearn more about UCSB.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:09-07:00"
+      "last_modified": "2022-09-26T10:00:33-07:00"
     },
     {
       "path": "topic_7.html",
       "title": "Topic 7: Remove tables of contents",
       "author": [],
       "contents": "\n\nTO UPDATE THIS PAGE: Open and edit the topic_7.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nIn this template, you’ll notice that a Table of Contents is\nautomatically created on pages with headings (starting with Level 2\nheaders as top-level items).\nTo remove the auto-table of contents, open the _site.yml\nfile. In the output section, change the toc:\nand toc_float: fields to false.\nThat section in _site.yml would then look like this, and\nthe table of contents won’t appear:\noutput:\n  distill::distill_article:\n    toc: false\n    toc_float: false\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:09-07:00"
+      "last_modified": "2022-09-26T10:00:34-07:00"
     },
     {
       "path": "topic_8.html",
       "title": "Topic 8: Dropdown list from a navigation bar item",
       "author": [],
       "contents": "\n\nTO UPDATE THIS PAGE: Open and edit the topic_8.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nIf you look at this template, you’ll notice that some navigation bar\nitems go directly to a single page, while the Modules item takes you to\na dropdown menu.\nTo create a dropdown menu of pages:\nCreate and save the pages as individual R Markdown documents as\ndescribed here.\nOpen the _site.yml file. In the navbar\nsection, create a menu with the pages as linked items using a structure\nlike this:\n   - text: \"Dropdown menu\"\n      menu:\n        - text: \"First dropdown item\"\n          href: item_1.html\n        - text: \"Second dropdown item\"\n          href: item_2.html\nThe example above would only work if the new pages were created as\nitem_1.Rmd and item_2.Rmd, so that when the\nsite is built the rendered item_1.html and\nitem_2.html files exist in the docs output\ndirectory.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:10-07:00"
+      "last_modified": "2022-09-26T10:00:34-07:00"
     },
     {
       "path": "topic_9.html",
       "title": "Topic 9: Changing site fonts",
       "author": [],
       "contents": "\n\nContents\nFonts are\nimported and specified in theme.css\nUse\ndifferent fonts\n\n\nTO UPDATE THIS PAGE: Open and edit the topic_9.Rmd file,\nin the project root, to delete this placeholder text and customize with\nyour own!\n\nYou are welcome to use any fonts you want on your website. Here, only\nusing Google fonts is described (there are other methods for downloading\nfonts and adding, not included here).\nFonts are\nimported and specified in theme.css\nIn your Project in RStudio, open the theme.css file.\nNear the top, you’ll see some lines that look like this:\n/* Header font */\n@import url('https://fonts.googleapis.com/css2?family=Sanchez&display=swap');\n\n/* Body font */\n@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400&display=swap');\n\n/* Code font (Roboto Mono) */\n@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');\nThose are the import command to get 3 different Google fonts\n(Sanchez, Nunito Sans, and Roboto Mono). You can explore many different\nGoogle fonts here.\nUse different fonts\nFind a Google Font you\nlike.\nClick on the font. To the right of the font example text, you\nshould see an option to ‘+ Select this style’. Click the one(s) you want\nto select.\nThat will probably bring up a side menu. If you don’t\nsee that side menu, you can see your selected styles at any time by\nclicking on the top-right menu icon that is a grid with 3 squares and a\nplus sign - hovering reveals this is to ‘View your selected families’.\nIn the Use on the web section of the side menu that appears,\nselect the radio button for @import. It’ll look weird like this\n(for the Zen Dots Google Font):\n    <style>\n    @import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');\n    <\/style> \nCopy everything BETWEEN (but excluding) the ending\n<style> and <\/style>tags\nPaste the @import line you’ve copied into the top\nsection of theme.css near the other fonts imported there.\nIt is now available for use in your theme.\nUpdate the css with your new fonts, replacing the existing font\nnames with the name you’ve imported. You might want to use a Find &\nReplace All if you want to make sure you’re updating a font everywhere\nit appears in the current theme.\nRepeat for as many different fonts as you want to update in your\ntheme.\n\n\n\n",
-      "last_modified": "2022-09-12T16:45:10-07:00"
+      "last_modified": "2022-09-26T10:00:35-07:00"
     }
   ],
   "collections": []
