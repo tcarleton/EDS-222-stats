@@ -29,7 +29,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
 
-- **Slides 02**: To be posted before class on Thursday (Note: Thursday will be a lab/lecture combo this week only) <!--Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf) -->
+- **Slides 02**: To be posted before class on Thursday (Note: Thursday will be a lecture instead of a lab this week only) <!--Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf) -->
 
 - **Reading:** 
   + (For Tuesday) [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
@@ -37,8 +37,6 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + Optional reading: Rolf et al. (2021) ["Representation matters"](https://arxiv.org/abs/2103.03399)
   + Optional reading/watching: ["Gender shades"](http://gendershades.org/)
   + Optional watching: Esther Duflo on [Randomized Control Trials](https://www.youtube.com/watch?v=0zvrGiPkVcs)
-
-- **Lab:** Summary statistics in `R`. Will be posted alongside slides 02 before class on Thursday.
   
 - **Assignment:** Assignment 1 due 10/04, 9am
 
