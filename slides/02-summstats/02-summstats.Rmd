@@ -3,7 +3,7 @@ title: "Summarizing data"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2021"
+date: "Fall 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -729,7 +729,7 @@ geom_qq(aes(sample=ssn), color = "lightcoral", size=6) +
 ---
 # Which statistics are robust to outliers?
 
-- Consider a sample of loans from a bank, each with an associated interest rate. 
+- Consider a sample of loans from a bank, each with an associated interest rate ($x$). 
   + $\bar x = 11.57%$
   + $s=5.05%$
   
@@ -1064,9 +1064,9 @@ ggplot(data = df, aes(x = x3, y = y3)) +
 ---
 # Next up
 
-### Summary statistics in `R` (Thursday lab, Assignment 02)
+### Intro to ordinary least squares (Tuesday lecture)
 
-### Linear regression (Next Tuesday)
+### Correlations and linear regressions in `R` (Thursday lab)
 
 ---
 

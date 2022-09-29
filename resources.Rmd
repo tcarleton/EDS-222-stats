@@ -29,7 +29,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
 
-- **Slides 02**: To be posted before class on Thursday (Note: Thursday will be a lecture instead of a lab this week only) <!--Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf) -->
+- **Slides 02**: Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf) 
 
 - **Reading:** 
   + (For Tuesday) [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_

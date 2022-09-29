@@ -14,10 +14,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Summarizing data
+]
+.subtitle[
 ## EDS 222
+]
+.author[
 ### Tamma Carleton
-### Fall 2021
+]
+.date[
+### Fall 2022
+]
 
 ---
 
@@ -57,7 +65,7 @@ layout: false
 class: clear, middle, inverse
 # Assignment #1 check-in: How's it going?
 
-### Reminder: OH today, 3418 Bren Hall, 3-4pm
+### Reminder: OH Tuesdays, Pine Room, 3:30-4:30pm
 
 ---
 layout: false
@@ -139,7 +147,7 @@ class: clear, middle, inverse
 ---
 # Probability density functions
 
-For _continuous_ variables, the **probability density function (p.d.f.)** tells us the probability that a random variable falls within a given range of values. 
+For _continuous_ variables, the **probability density function (p.d.f.)** tells us the probability that a variable falls within a given range of values. 
 
 Formally: The **p.d.f.** of a continuous variable `\(X\)` with support (i.e., range of possible values) `\(S\)` is an integrable function `\(f(x)\)` satisfying:
 
@@ -202,7 +210,7 @@ The probability this normally distributed variable takes on a value between -2 a
 There are infinite different normal distributions. They all have the following p.d.f.:
 
 $$f(x) =\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)} $$
-where `\(\mu\)` is the mean (i.e., average) and `\(\sigma\)` is the standard deviation (will define soon).
+where `\(\mu\)` is the mean (i.e., average) and `\(\sigma\)` is the standard deviation (will define soon). `\(\mu\)` and `\(\sigma\)` are **parameters** describing the population p.d.f.
 
 &lt;img src="normals.png" width="50%" style="display: block; margin: auto;" /&gt;
 #### Many results in statistics rely on the assumption that our data are normally distributed. We will return to this distribution **frequently!**
@@ -242,7 +250,9 @@ A probability density function describes a **population**
 
 As we learned last week, we rarely have a **census** so we rarely can directly describe the p.d.f. itself.
 
-#### Instead, we use _statistics_ from a _sample_ to estimate _parameters_ of the _population_
+--
+
+Instead, we use **statistics** from a _sample_ to estimate **parameters** of the _population_. Randomness in sampling means we call the variables in our sample "random variables"
 
 &lt;img src="02-summstats_files/figure-html/examplepdf3-1.svg" style="display: block; margin: auto;" /&gt;
 
@@ -275,7 +285,7 @@ In a **population**, the median `\(m\)` is defined as: `$$P(X\leq m) = \int_{-\i
 
 --
 
-In our **sample**, we compute the median as: 
+In our **sample**, we order all our data from lowest to highest and then compute the median as: 
 - `\(n\)` even? median = mean of the middle two values
 - `\(n\)` odd? median = middle value
 
@@ -349,7 +359,7 @@ $$\mathrm{E}[X+Y] = \mathrm{E}[X] + \mathrm{E}[Y] $$
 
 **Green**: High variance/standard deviation `\(\sigma = 2\)`
 
-&lt;img src="02-summstats_files/figure-html/low variance-1.svg" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-summstats_files/figure-html/lowvariance-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 # Variance, visually
@@ -416,7 +426,7 @@ Common quantiles have names you have head of, such as _quartiles_ for `\(q=4\)`:
 
 #### Examples of percentiles:
 - At 5'3", my height is the 40th percentile of the U.S. adult female height distribution `\(\rightarrow\)` 40% of American female adults are shorter than me
-- At 24.5 lbs, my son is the 81st percentile of U.S. male 13 month old weight distribution `\(\rightarrow\)` 81% of American male 13 month olds are lighter than my son
+- At 31 lbs, my son is the 90th percentile of U.S. male 2 year old weight distribution `\(\rightarrow\)` 90% of American male 2 year olds are lighter than my son
 
 &gt; Exercise: Draw approximately where you think the 1st, 10th, 20th, 50th, 80th, 90th and 99th percentiles would be on a normal distribution. 
 
@@ -469,7 +479,7 @@ Common quantiles have names you have head of, such as _quartiles_ for `\(q=4\)`:
 ---
 # Which statistics are robust to outliers?
 
-- Consider a sample of loans from a bank, each with an associated interest rate. 
+- Consider a sample of loans from a bank, each with an associated interest rate ($x$). 
   + `\(\bar x = 11.57%\)`
   + `\(s=5.05%\)`
   
@@ -643,9 +653,9 @@ But now, the magnitude is interpretable:
 ---
 # Next up
 
-### Summary statistics in `R` (Thursday lab, Assignment 02)
+### Intro to ordinary least squares (Tuesday lecture)
 
-### Linear regression (Next Tuesday)
+### Correlations and linear regressions in `R` (Thursday lab)
 
 ---
 
@@ -707,6 +717,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
