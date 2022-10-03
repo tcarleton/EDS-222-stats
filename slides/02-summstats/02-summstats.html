@@ -14,18 +14,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-.title[
 # Summarizing data
-]
-.subtitle[
 ## EDS 222
-]
-.author[
 ### Tamma Carleton
-]
-.date[
 ### Fall 2022
-]
 
 ---
 
@@ -53,11 +45,6 @@ name: Overview
 
 #### Law of large numbers
 - How big does my sample need to be? 
-
---
-
-#### Relationships between variables
-- Covariance, correlation
 
 ---
 
@@ -479,7 +466,7 @@ Common quantiles have names you have head of, such as _quartiles_ for `\(q=4\)`:
 ---
 # Which statistics are robust to outliers?
 
-- Consider a sample of loans from a bank, each with an associated interest rate ($x$). 
+- Consider a sample of loans from a bank, each with an associated interest rate `\(x\)`. 
   + `\(\bar x = 11.57%\)`
   + `\(s=5.05%\)`
   
@@ -529,131 +516,11 @@ $$\bar{x} \rightarrow \mu \hskip2mm \text{as} \hskip2mm n \rightarrow \infty $$
 &lt;p class="caption"&gt;Source: IMS, Ch. 5.6&lt;/p&gt;
 &lt;/div&gt;
 ---
-layout: false
-class: clear, middle, inverse
-# Relationships between variables
----
-# Two random variables
-
-### Often we are interested in the _relationship_ between two (or more) random variables.
-E.g., heat waves and heart attacks, nitrogen fertilizer and water pollution
-
---
-
-&lt;img src="02-summstats_files/figure-html/scatter1-1.svg" style="display: block; margin: auto;" /&gt;
-
-*Note: these are simulated data. But the violence-temperature link is real! See [here](https://www.annualreviews.org/doi/abs/10.1146/annurev-economics-080614-115430) for a summary of research.
----
-# Two random variables
-
-### What metrics can we use to characterize the _relationship_ between two variables? 
-
-There are lots. But let's start with...
-
---
-
-#### 1. Covariance
-
-
-#### 2. Correlation
-
-&lt;img src="02-summstats_files/figure-html/scatter2-1.svg" style="display: block; margin: auto;" /&gt;
----
-# Covariance 
-
-#### **Variance** indicates how dispersed a distribution is (average squared deviation from the mean)
-
---
-
-#### **Covariance** is a measure of the _joint_ distribution of two variables 
-
-- Higher values of `\(X\)` correspond to higher values of `\(Y\)` `\(\rightarrow\)` **positive** covariance
-- Higher values of `\(X\)` correspond to lower values of `\(Y\)` `\(\rightarrow\)` **negative** covariance 
-
---
-
-In the population:
-`$$Cov(X,Y) = E[(X-\mu_x)(Y-\mu_y)] = E[XY]-\mu_x\mu_y$$`
-
-In the sample:
-`$$s_{xy} = \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$`
-
-#### The **sign** of `\(s_{xy}\)` tells us the sign of the linear relationship between `\(X\)` and `\(Y\)`, but the **magnitude** depends on the units of the variables and is therefore difficult to interpret
-
----
-# Covariance
-
-### Example: positive covariance
-&lt;img src="02-summstats_files/figure-html/covar1-1.svg" style="display: block; margin: auto;" /&gt;
-
----
-# Covariance
-
-### Example: zero covariance
-
-&lt;img src="02-summstats_files/figure-html/covar2-1.svg" style="display: block; margin: auto;" /&gt;
-
-
----
-# Covariance
-
-### Example: Negative covariance
-
-&lt;img src="02-summstats_files/figure-html/covar3-1.svg" style="display: block; margin: auto;" /&gt;
-
-How do I interpret these units?! Hard to compare across these three graphs...
-
----
-
-# Correlation
-
-#### **Correlation** allows us to normalize covariance into interpretable units
-The sign still tells us about the nature of the (linear) relationship between two variables:
-  
-  - **positive** covariance `\(\rightarrow\)` **positive** correlation (and vice versa)
-
-But now, the magnitude is interpretable:
-  
-  - Ranges from -1 to 1, with magnitude indicating _strength_ of the relationship
-
----
-# Correlation
-
-#### **Correlation** allows us to normalize covariance into interpretable units  
-  
-  In the population:
-  `$$\rho_{X,Y} = corr(X,Y) = \frac{cov(X,Y)}{\sigma_x \sigma_y}$$`
-  
-  In the sample:
-  `$$r_{x,y} = \frac{s_{x,y}}{s_x s_y} = \frac{1}{(n-1)s_x s_y}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$`
-  
----
-  
-# Correlation
-  
-### Example: Strong positive correlation
-
-&lt;img src="02-summstats_files/figure-html/corr1-1.svg" style="display: block; margin: auto;" /&gt;
-
-
----
-# Correlation
-  
-### Example: zero correlation
-  
-&lt;img src="02-summstats_files/figure-html/corr2-1.svg" style="display: block; margin: auto;" /&gt;
-
----
-# Correlation
-  
-### Example: Moderate negative correlation
-  
-&lt;img src="02-summstats_files/figure-html/corr3-1.svg" style="display: block; margin: auto;" /&gt;
-
----
 # Next up
 
-### Intro to ordinary least squares (Tuesday lecture)
+### Relationships between variables
+
+### Intro to ordinary least squares 
 
 ### Correlations and linear regressions in `R` (Thursday lab)
 
@@ -717,19 +584,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
-// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
-// screen reader (see PR #262)
-(function(d) {
-  let res = {};
-  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
-    const t = tr.querySelector('td:nth-child(2)').innerText;
-    tr.querySelectorAll('td:first-child .key').forEach(key => {
-      const k = key.innerText;
-      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
-    });
-  });
-  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
-})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
