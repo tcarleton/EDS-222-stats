@@ -14,18 +14,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-.title[
 # Ordinary Least Squares
-]
-.subtitle[
 ## EDS 222
-]
-.author[
 ### Tamma Carleton
-]
-.date[
 ### Fall 2022
-]
 
 ---
 
@@ -281,7 +273,7 @@ For any line `\(\left(\hat{y} = \hat{\beta}_0 + \hat{\beta}_1 x\right)\)`, we ca
 
 ### OLS chooses a line that minimizes the **sum of squared errors**:
 
-`$$SSE = \sum_i e_i^2 = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x)^2$$`
+`$$SSE = \sum_i e_i^2 = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$$`
 #### In other words, OLS gives us a combination of `\(\hat\beta_0\)` and `\(\hat\beta_1\)` that minimizes the SSE.
 
 #### Now you see where "least squares" comes from! 
@@ -1169,19 +1161,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
-// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
-// screen reader (see PR #262)
-(function(d) {
-  let res = {};
-  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
-    const t = tr.querySelector('td:nth-child(2)').innerText;
-    tr.querySelectorAll('td:first-child .key').forEach(key => {
-      const k = key.innerText;
-      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
-    });
-  });
-  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
-})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

@@ -563,7 +563,7 @@ theme_bw() + theme(line = element_blank(),
 
 ### OLS chooses a line that minimizes the **sum of squared errors**:
 
-$$SSE = \sum_i e_i^2 = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x)^2$$
+$$SSE = \sum_i e_i^2 = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$$
 #### In other words, OLS gives us a combination of $\hat\beta_0$ and $\hat\beta_1$ that minimizes the SSE.
 
 #### Now you see where "least squares" comes from! 
