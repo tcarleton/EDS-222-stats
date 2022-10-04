@@ -3,7 +3,7 @@ title: "Ordinary Least Squares"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2021"
+date: "Fall 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -93,23 +93,15 @@ name: Overview
 
 # Announcements/check-in
 
-- Assignment #1: No grading, answers posted this week
+- Assignment #1: Grading and answers early next week 
 
 --
 
-- Assignment #2: Updated data 
-
---
-
-- Labs: Repo should fork for everyone; if you don't have all the packages installed please get in touch!
+- Assignment #2: To be posted this week, due 10/13, 9am 
 
 --
 
 - Flag on IMS and linear regression
-
---
-
-- Finals week: Project presentations!
 
 ---
 layout: false
