@@ -53,17 +53,18 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 ### Week 3
 
-<!--
 - **Slides 03**: Ordinary Least Squares [html](slides/03-ols/03-ols.html) [pdf](slides/03-ols/03-ols.pdf)
--->
+
 - **Reading:** 
   + [Chapter 7](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
 
-<!--
-- **Lab:** OLS in `R` [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
-  
-- **Assignment:** Assignment 3 posted 10/8; due 10/18, 5pm [Note: deadline delayed from original 10/15]
 
+- **Lab:** OLS in `R` (to be posted) <!-- [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
+  -->
+  
+- **Assignment:** Assignment 2 posted 10/4 or 10/5; due 10/13, 9am 
+
+<!--
 ### Week 4
 
 - **Slides 04**: Ordinary Least Squares, continued [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf)

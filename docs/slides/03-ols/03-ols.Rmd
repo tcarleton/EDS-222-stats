@@ -459,7 +459,11 @@ pop_df <- tibble(
 
 ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
@@ -478,7 +482,11 @@ ggplot(data = pop_df, aes(x = x, y = y)) +
 # geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "orange", size = 2, alpha = 0.9) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
@@ -497,7 +505,11 @@ ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "orange", size = 2, alpha = 0.9) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
@@ -516,7 +528,11 @@ ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "orange", size = 2, alpha = 0.9) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
@@ -535,7 +551,11 @@ ggplot(data = pop_df, aes(x = x, y = y)) +
 geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1)), size = 0.5, alpha = 0.2) +
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "orange", size = 2, alpha = 0.9) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
@@ -543,7 +563,7 @@ theme_empty
 
 ### OLS chooses a line that minimizes the **sum of squared errors**:
 
-$$SSE = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x)^2$$
+$$SSE = \sum_i e_i^2 = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x)^2$$
 #### In other words, OLS gives us a combination of $\hat\beta_0$ and $\hat\beta_1$ that minimizes the SSE.
 
 #### Now you see where "least squares" comes from! 
@@ -573,13 +593,17 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = "orange", size = 2, alpha = 0.9) +
 scale_color_viridis(option = "cividis", direction = -1) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
 # Ordinary Least Squares
 
-The OLS estimate is the combination of $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimize SSE. $\color{#ffffff}{\bigg|}$
+The OLS estimate is the combination of $\hat{\beta}_0$ and $\hat{\beta}_1$ that minimizes SSE. $\color{#ffffff}{\bigg|}$
 
 ```{R, lines7, echo = F, dev = "svg", fig.height = 6}
 # Define a function
@@ -593,7 +617,11 @@ geom_segment(aes(x = x, xend = x, y = y, yend = y_hat(x, b0, b1), color = (y - y
 geom_point(size = 5, color = "darkslategray", alpha = 0.9) +
 geom_abline(intercept = b0, slope = b1, color = red_pink, size = 2, alpha = 0.9) +
 scale_color_viridis(option = "cividis", direction = -1) +
-theme_empty
+theme_bw() + theme(line = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_text(size=22,face="bold"))
 ```
 
 ---
@@ -763,6 +791,8 @@ theme(axis.text.x = element_text(size = 40))
 
 ]
 
+Distributions show probability density function of $\hat\beta$ estimates recovered from many different randomly drawn samples. 
+
 ---
 # OLS property #2: Lowest variance
 
@@ -814,7 +844,7 @@ theme(axis.text.x = element_text(size = 20))
 
 **Property 2: Variance.**
 
-**Subtlety:** The bias-variance tradeoff.
+**Subtlety: The bias-variance tradeoff.**
 
 Should we be willing to take a bit of bias to reduce the variance?
 
@@ -853,7 +883,7 @@ These very nice properties depend on a key set of assumptions:
 
 --
 
-2. Our $X$ variable is **exogenous**, _i.e._, $\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0$.
+2. The $X$ variable is **exogenous**, _i.e._, $\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0$.
   + I.e., is there no other variable correlated with $X$ that also affects $Y$
   + You will talk a lot more about this in EDS 241 👀
 
@@ -969,6 +999,18 @@ geom_point(color = "darkslategrey", alpha = 0.9, size=4) +
   geom_smooth(method='lm', formula= y~x+I(x^2), color="lightcoral", se=F, size=3) +
 theme_empty
 ```
+---
+# OLS: Assumptions
+
+### Q: Can we test these assumptions?
+
+> A: Some of them.
+
+####Assumption 1: Linear in parameters. 
+
+Example of a population relationship that is _not_ linear in parameters:
+
+$Y = e^{\beta_0 + \beta_1 X + u}$
 
 ---
 # OLS: Assumptions
@@ -1358,8 +1400,7 @@ class: clear, middle, inverse
 
 The true population model probably involves **other regressors**:
 
-$$ y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + ... + \beta_k x_{ik} + \varepsilon_i  $$
-
+$y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + ... + \beta_k x_{ik} + \varepsilon_i$
 This raises many questions:
 
 --
