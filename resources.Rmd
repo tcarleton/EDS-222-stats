@@ -63,18 +63,20 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 2 posted 10/5; due 10/13, 9am 
 
-<!--
+
 ### Week 4
 
-- **Slides 04**: Ordinary Least Squares, continued [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf)
+- **Slides 04**: Ordinary Least Squares, continued (to be posted) <!-- [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf) -->
 
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + [Optional/Extra: Ch 10](https://openintro-ims.netlify.app/model-application.html), _Introduction to Modern Statistics_
 
-- **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html).
+- **Lab:** OLS in `R`, continued (to be posted) <!-- [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html). -->
   
-- **Assignment:** Assignment 4 DELAYED until after midterm
+- **Assignment:** Assignment 2 due 10/13, 9am
 
+<!--
 ### Week 5
 
 - **Slides 05**: Multiple linear regression [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
