@@ -66,7 +66,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 ### Week 4
 
-- **Slides 04**: Ordinary Least Squares, continued (to be posted) <!-- [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf) -->
+- **Slides 04**: Ordinary Least Squares, continued [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf) 
 
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_

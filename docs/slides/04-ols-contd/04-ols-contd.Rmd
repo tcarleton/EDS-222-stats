@@ -3,7 +3,7 @@ title: "Ordinary Least Squares, continued"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2021"
+date: "Fall 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -16,7 +16,7 @@ output:
 ```{r Setup, include = F}
 options(htmltools.dir.version = FALSE)
 library(pacman)
-p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown,cowplot,latex2exp,parallel,gg3D)
+p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown,cowplot,latex2exp,parallel)
 # Define pink color
 red_pink <- "#e64173"
 # Notes directory
@@ -62,27 +62,18 @@ theme_simple <- theme_bw() + theme(
 
 # Announcements/check-in
 
-**New office hours location!!** We will now meet in the Pine Room (Bren Hall 3526) for office hours so we have more space.
+- Assignment #1: Grades posted
+  + Please ensure your `.html` file is compiled and pushed to GitHub
+  + Please do not push data to GitHub (generally a good rule to follow)
+  + Sampling with vs. without replacement: careful! 
 
 --
 
-- Assignment #2: Grades and answers by the end of the week
+- Assignment #2: Due 10/13, 9am
 
 --
 
-- Assignment #3: Posted, due Friday 5pm
-
---
-
-- Labs and repos: No more .mono[git] for labs, please download directly
-
---
-
-- Midterm heads up: week after next
-
---
-
-- Thank you for the feedback on Slack
+- Feedback forms for all fall classes coming end of this week
 
 ---
 name: Overview
@@ -90,7 +81,7 @@ name: Overview
 # Today
 
 #### Notes on OLS
-- Unit conversions, missing data, outliers
+- Outliers, missing data
 
 --
 
@@ -115,26 +106,6 @@ name: Overview
 layout: false
 class: clear, middle, inverse
 # Notes on OLS
-
----
-# Units of X and Y matter
-
-### Original regression (Temperature in degrees F)
-
-```{r,echo=TRUE}
-mod <- lm(Ozone ~ Temp, data=airquality)
-summary(mod)
-```
-
----
-# Units of X and Y matter
-
-### New regression (Temperature in degrees C)
-
-```{r, echo = T}
-airquality$TempC <- (airquality$Temp - 32)*5/9
-summary(lm(Ozone~TempC, data=airquality))
-```
 
 ---
 # Outliers
@@ -361,7 +332,7 @@ $$y_i = \beta_0 + \beta_1 MALE_i + \varepsilon_i $$
 ---
 # Categorical variables
 
-#### For a categorical variable with two "levels", OLS reports the difference in means across the two groups
+#### For a categorical variable with two "levels", the OLS slope coefficient is the _difference_ in means across the two groups
 
 ```{r, echo=FALSE, fig.height=5.5}
 set.seed(444)
@@ -407,6 +378,23 @@ class(penguins$species)
 ```{r, echo=T}
 summary(lm(body_mass_g ~ species, data = penguins))
 ```
+
+---
+# Categorical variables
+
+What is going on here?? One _x_ variable turned into multiple slope coefficients? 🤔
+
+--
+
+.mono[R] is turning our regression
+
+$$y_i = \beta_0 + \beta_1 SPECIES_i + \varepsilon_i $$
+
+where _SPECIES_ is a categorical variable indicating one of three species, into:
+
+$$y_i = \beta_0 + \beta_1 CHINSTRAP_i +\beta_2 GENTOO_i + \varepsilon_i $$
+
+where _CHINSTRAP_ and _GENTOO_ are dummy variables for the Chinstrap and Gentoo species, respectively.
 
 ---
 # Categorical variables
@@ -572,76 +560,8 @@ scale_shape_manual(
 ---
 # Multiple regression
 
-With groups' means removed:
 
-```{R, multregplot3, dev = "svg", echo = F, fig.height =6}
-ggplot(data = gen_df %>% mutate(y = y - 4 * x2), aes(y = y_dm, x = x1)) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3, aes(color = x2, shape = x2)) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
----
-# Multiple regression
-
-$\hat{\beta}_1$ estimates the relationship between $y$ and $x_1$ after controlling for $x_2$.
-
-```{R, multregplot4, dev = "svg", echo = F, fig.height = 6}
-ggplot(data = gen_df %>% mutate(y = y - 4 * x2), aes(y = y_dm, x = x1)) +
-geom_smooth(method = lm, se = F, color = "orange") +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3, aes(color = x2, shape = x2)) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
----
-# Multiple regression
-
-Another way to think about it:
+$\hat{\beta}_1$ estimates the relationship between $y$ and $x_1$ after controlling for $x_2$. This is often called the "parallel slopes" model (one slope $\beta_1$ for each of the groups in $x_2$)
 
 ```{R, multregplot5, dev = "svg", echo = F, fig.height = 6}
 ggplot(data = gen_df, aes(y = y, x = x1, color = x2, shape = x2)) +
@@ -820,7 +740,7 @@ thus
 
 - $\beta_1$: the returns to an additional year of schooling (*ceteris paribus*)
 - $\beta_2$: the premium for being male (*ceteris paribus*)
-<br>If $\beta_2 > 0$, then there is discrimination against women—receiving less pay based upon gender.
+<br>If $\beta_2 > 0$, then women are receiving less pay based upon gender
 
 ---
 
@@ -850,7 +770,7 @@ bu2 <- lm_unbias$coefficients[3] %>% round(1)
 ```
 
 
-**Example, continued:** $\text{Pay}_i = `r beta0` + `r beta1` \times \text{School}_i + `r beta2` \times \text{Male}_i + u_i$
+**"True" relationship:** $\text{Pay}_i = `r beta0` + `r beta1` \times \text{School}_i + `r beta2` \times \text{Male}_i + u_i$
 
 The relationship between pay and schooling.
 
@@ -883,8 +803,7 @@ ylab("Pay") +
 theme_empty +
 theme(
   axis.title = element_text(size = 18),
-  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
-)
+  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"))
 ```
 
 ---
@@ -1039,8 +958,7 @@ $y_i = \beta_0 + \beta_1 x + u_i$
 ggplot(data = trans_df, aes(x = x, y = y)) +
 geom_line(stat = "smooth", method = lm, formula = y ~ 1, color = "orange", size = 1.5, alpha = 0.3) +
 geom_line(stat = "smooth", method = lm, formula = y ~ x, color = "orange", size = 1.5) +
-geom_point(size = 2.5, color = "darkslategrey", alpha = 0.5) +
-theme_empty
+geom_point(size = 2.5, color = "darkslategrey", alpha = 0.5) + theme_empty
 ```
 ---
 count: false
@@ -1052,9 +970,9 @@ $y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + u_i$
 ggplot(data = trans_df, aes(x = x, y = y)) +
 geom_line(stat = "smooth", method = lm, formula = y ~ 1, color = "orange", size = 1.5, alpha = 0.3) +
 geom_line(stat = "smooth", method = lm, formula = y ~ x, color = "orange", size = 1.5, alpha = 0.3) +
-geom_line(stat = "smooth", method = lm, formula = y ~ poly(x, 2), color = "orange", size = 1.5) +
-geom_point(size = 2.5, color = "darkslategrey", alpha = 0.5) +
-theme_empty
+geom_line(stat = "smooth", method = lm, formula = y ~ poly(x, 2), color = "orange", size = 1.5) + 
+  geom_point(size = 2.5, color="darkslategrey", alpha=0.5) + 
+  theme_empty
 ```
 
 ---
@@ -1157,7 +1075,7 @@ $R^2$ literally tells us the share of the variance in $y$ our current models acc
 **One solution:**
 Penalize for the number of variables, _e.g._, .pink[adjusted] $\color{#e64173}{R^2}$:
 
-$$ \overline{R}^2 = 1 - \dfrac{\sum_i \left( y_i - \hat{y}_i \right)^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
+$$ \overline{R}^2 = 1 - \dfrac{\sum_i e_i^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
 
 *Note:* Adjusted $R^2$ need not be between 0 and 1.
 

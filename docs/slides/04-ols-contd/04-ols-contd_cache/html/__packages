@@ -1,4 +1,3 @@
-base
 pacman
 leaflet
 ggplot2
@@ -12,5 +11,4 @@ pagedown
 cowplot
 latex2exp
 palmerpenguins
-gg3D
 plotly
