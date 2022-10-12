@@ -50,17 +50,16 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  { color: #00769e; background-color: #f1f3f5; }
+  {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { color: #657422; } /* Attribute */
+code span.at { color: #20794d; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #00769e; } /* ControlFlow */
+code span.cf { color: #007ba5; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -74,18 +73,17 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #00769e; } /* Keyword */
+code span.kw { color: #007ba5; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #00769e; } /* Other */
+code span.ot { color: #007ba5; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
-code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.sc { color: #20794d; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
 code span.st { color: #20794d; } /* String */
 code span.va { color: #111111; } /* Variable */
 code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
-
 
   <!--radix_placeholder_meta_tags-->
   <title>EDS 222: Topic 1: Add/remove a site page</title>
@@ -785,7 +783,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
-    font-size: 100%;
   }
 
   .html-widget {
@@ -1027,6 +1024,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
   }
 
   .figure .caption {
@@ -1858,22 +1859,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        const citeChild = $(this).children()[0]
-        // Do not process if @xyz has been used without escaping and without bibliography activated
-        // https://github.com/rstudio/distill/issues/466
-        if (citeChild === undefined) return true
-
-        if (citeChild.nodeName == "D-FOOTNOTE") {
-          var fn = citeChild
-          $(this).html(fn.shadowRoot.querySelector("sup"))
-          $(this).id = fn.id
-          fn.remove()
-        }
-        var refs = $(this).attr('data-cites').split(" ");
-        var refHtml = refs.map(function(ref) {
-          // Could use CSS.escape too here, we insure backward compatibility in navigator
-          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
-        }).join("\n");
+        var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
         window.tippy(this, {
           allowHTML: true,
           content: refHtml,
@@ -1884,31 +1870,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
-
-      // fix footnotes in tables (#411)
-      // replacing broken distill.pub feature
-      $('table d-footnote').each(function() {
-        // we replace internal showAtNode methode which is triggered when hovering a footnote
-        this.hoverBox.showAtNode = function(node) {
-          // ported from https://github.com/distillpub/template/pull/105/files
-          calcOffset = function(elem) {
-              let x = elem.offsetLeft;
-              let y = elem.offsetTop;
-              // Traverse upwards until an `absolute` element is found or `elem`
-              // becomes null.
-              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
-                  x += elem.offsetLeft;
-                  y += elem.offsetTop;
-              }
-
-              return { left: x, top: y };
-          }
-          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
-          const bbox = node.getBoundingClientRect();
-          const offset = calcOffset(node);
-          this.show([offset.left + bbox.width, offset.top + bbox.height]);
-        }
-      })
 
       // clear polling timer
       clearInterval(tid);
@@ -2008,8 +1969,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
-      // ignore leaflet img layers (#106)
-      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -2032,7 +1991,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
       });
     }
 
@@ -2480,7 +2439,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     color: var(--hover-color, white);
   }</style>
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+  <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2537,49 +2496,98 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#add-a-site-page" id="toc-add-a-site-page">Add a site page</a>
+<li><a href="#add-a-site-page" id="toc-add-a-site-page">Add a site
+page</a>
 <ul>
-<li><a href="#the-quick-version" id="toc-the-quick-version">The quick version:</a></li>
-<li><a href="#make-each-page-an-r-markdown-document" id="toc-make-each-page-an-r-markdown-document">Make each page an R Markdown document</a></li>
-<li><a href="#add-it-to-your-navigation-bar" id="toc-add-it-to-your-navigation-bar">Add it to your navigation bar</a></li>
+<li><a href="#the-quick-version" id="toc-the-quick-version">The quick
+version:</a></li>
+<li><a href="#make-each-page-an-r-markdown-document"
+id="toc-make-each-page-an-r-markdown-document">Make each page an R
+Markdown document</a></li>
+<li><a href="#add-it-to-your-navigation-bar"
+id="toc-add-it-to-your-navigation-bar">Add it to your navigation
+bar</a></li>
 </ul></li>
-<li><a href="#deletedisappear-a-site-page" id="toc-deletedisappear-a-site-page">Delete/disappear a site page</a></li>
+<li><a href="#deletedisappear-a-site-page"
+id="toc-deletedisappear-a-site-page">Delete/disappear a site
+page</a></li>
 </ul>
 </nav>
 </div>
-<p><strong>NOTE:</strong> There are 10 toy Topic sections here, expecting that some teachers may want to have one page per week (for a 10 week course). You are encouraged to structure your course <strong>however works best for your class</strong>. All of your course information could be on a single page, or you might have a different number of topics, or organize weekly, or any other organization that works for you.</p>
+<p><strong>NOTE:</strong> There are 10 toy Topic sections here,
+expecting that some teachers may want to have one page per week (for a
+10 week course). You are encouraged to structure your course
+<strong>however works best for your class</strong>. All of your course
+information could be on a single page, or you might have a different
+number of topics, or organize weekly, or any other organization that
+works for you.</p>
 <p style="color: #ba5e00">
-<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_1.Rmd</b> file, in the project root, to delete this placeholder text and customize with your own!
+<b>TO UPDATE THIS PAGE:</b> Open and edit the <b>topic_1.Rmd</b> file,
+in the project root, to delete this placeholder text and customize with
+your own!
 </p>
 <h2 id="add-a-site-page">Add a site page</h2>
 <h3 id="the-quick-version">The quick version:</h3>
 <ul>
 <li>Make a new R Markdown document, save</li>
-<li>Add the rendered .html to _site.yaml so the page exists on the site</li>
+<li>Add the rendered .html to _site.yaml so the page exists on the
+site</li>
 <li>Build to see updated site</li>
 </ul>
 <p>Below for a bit more detail…</p>
-<h3 id="make-each-page-an-r-markdown-document">Make each page an R Markdown document</h3>
+<h3 id="make-each-page-an-r-markdown-document">Make each page an R
+Markdown document</h3>
 <p>To make a new page:</p>
 <ol type="1">
-<li><p>Within your website Project, create a new .Rmd (File &gt; New File &gt; R Markdown). Save it to the project root. For this example, let’s say you’ve saved it as <code>new_page.Rmd.</code></p></li>
-<li><p>In that .Rmd file, remove everything but the title (which you can change) from the YAML - that’s the top section of the .Rmd, where by default it has title, author, date, etc.</p></li>
-<li><p>Update the .Rmd to contain whatever you want to have on that page. Don’t know a lot about markdown? Considering switching over to the <a href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/">Visual Editor in RStudio</a> (versions &gt;= 1.4).</p></li>
+<li><p>Within your website Project, create a new .Rmd (File &gt; New
+File &gt; R Markdown). Save it to the project root. For this example,
+let’s say you’ve saved it as <code>new_page.Rmd.</code></p></li>
+<li><p>In that .Rmd file, remove everything but the title (which you can
+change) from the YAML - that’s the top section of the .Rmd, where by
+default it has title, author, date, etc.</p></li>
+<li><p>Update the .Rmd to contain whatever you want to have on that
+page. Don’t know a lot about markdown? Considering switching over to the
+<a
+href="https://blog.rstudio.com/2020/09/30/rstudio-v1-4-preview-visual-markdown-editing/">Visual
+Editor in RStudio</a> (versions &gt;= 1.4).</p></li>
 <li><p>Save the .Rmd</p></li>
 </ol>
-<h3 id="add-it-to-your-navigation-bar">Add it to your navigation bar</h3>
+<h3 id="add-it-to-your-navigation-bar">Add it to your navigation
+bar</h3>
 <ol start="5" type="1">
 <li><p>Open the <code>_site.yml</code> file in your Project</p></li>
-<li><p>Add the information to the YAML navbar section, which will almost always be the text that you want to appear in the navigation bar, and the file name of the <strong>knitted html</strong> that will be automatically rendered to /docs when you Build your website. That would be <code>new_page.html</code> for this example (since the .Rmd it is rendered from is <code>new_page.Rmd</code>). So in the <code>_site.yml</code> I would need to add this to the navbar section:</p></li>
+<li><p>Add the information to the YAML navbar section, which will almost
+always be the text that you want to appear in the navigation bar, and
+the file name of the <strong>knitted html</strong> that will be
+automatically rendered to /docs when you Build your website. That would
+be <code>new_page.html</code> for this example (since the .Rmd it is
+rendered from is <code>new_page.Rmd</code>). So in the
+<code>_site.yml</code> I would need to add this to the navbar
+section:</p></li>
 </ol>
 <pre><code>    - text: &quot;A new page!&quot;
       href: new_page.html</code></pre>
-<p><strong>Note:</strong> YAML is space &amp; indentation specific. Follow the structure that already exists in this template to avoid YAML errors.</p>
-<p>How is the website finding the html? Notice in the <code>_site.yml</code> file, the <code>output_dir</code> is set to <code>docs</code>. That means when we press ‘Build website’ (in the Build tab in RStudio), our .Rmd pages are knitted to HTML &amp; sent to the <code>_docs</code> folder. This is also important because when we deploy the site (make it live), we will want to deploy <strong>from that docs folder</strong> using GitHub pages.</p>
-<p>Take a look at some other pages in this template (Resources, Assignments, etc.) to see the structure, &amp; give it a shot!</p>
+<p><strong>Note:</strong> YAML is space &amp; indentation specific.
+Follow the structure that already exists in this template to avoid YAML
+errors.</p>
+<p>How is the website finding the html? Notice in the
+<code>_site.yml</code> file, the <code>output_dir</code> is set to
+<code>docs</code>. That means when we press ‘Build website’ (in the
+Build tab in RStudio), our .Rmd pages are knitted to HTML &amp; sent to
+the <code>_docs</code> folder. This is also important because when we
+deploy the site (make it live), we will want to deploy <strong>from that
+docs folder</strong> using GitHub pages.</p>
+<p>Take a look at some other pages in this template (Resources,
+Assignments, etc.) to see the structure, &amp; give it a shot!</p>
 <h2 id="deletedisappear-a-site-page">Delete/disappear a site page</h2>
-<p>The safest thing to do if you don’t want a page to <em>show up</em> is to remove it from the <code>_site.yml</code> navbar listings. That way, the material on the page still exists as a file in your project, but doesn’t show up on the website – don’t delete a page file unless you are REALLY SURE that you’re never going to want the material on that page ever again.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>The safest thing to do if you don’t want a page to <em>show up</em>
+is to remove it from the <code>_site.yml</code> navbar listings. That
+way, the material on the page still exists as a file in your project,
+but doesn’t show up on the website – don’t delete a page file unless you
+are REALLY SURE that you’re never going to want the material on that
+page ever again.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
