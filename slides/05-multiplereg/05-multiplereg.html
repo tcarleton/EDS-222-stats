@@ -607,6 +607,41 @@ $$ {y\_i} = \beta\_0 + \beta\_1 {x\_{1i}} + \beta\_2 {x\_{2i}} + \beta\_3 x\_{1i
 - `\(\beta_2\)` is the effect of `\(x_2\)` on `\(y\)` when `\(x_1\)` is zero
 
 ---
+# Interactions in R
+
+This will be the focus of Lab on Thursday.
+
+As a preview...just like many other aspects of regression analysis, interactions are easy to implement but difficult to carefully interpret in `R`:
+
+--
+
+
+```r
+summary(lm(hwy ~ displ + year + displ:year, data = mpg))
+```
+
+```
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = hwy ~ displ + year + displ:year, data = mpg)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -7.8595 -2.4360 -0.2103  1.6037 15.3677 
+#&gt; 
+#&gt; Coefficients:
+#&gt;              Estimate Std. Error t value Pr(&gt;|t|)
+#&gt; (Intercept) -40.72485  319.45688  -0.127    0.899
+#&gt; displ       -71.54962   86.41661  -0.828    0.409
+#&gt; year          0.03828    0.15947   0.240    0.811
+#&gt; displ:year    0.03391    0.04313   0.786    0.433
+#&gt; 
+#&gt; Residual standard error: 3.784 on 230 degrees of freedom
+#&gt; Multiple R-squared:  0.6015,	Adjusted R-squared:  0.5963 
+#&gt; F-statistic: 115.7 on 3 and 230 DF,  p-value: &lt; 2.2e-16
+```
+
+---
 layout: false
 class: clear, middle, inverse
 # Multicollinearity

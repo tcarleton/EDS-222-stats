@@ -76,18 +76,20 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 2 due 10/13, 9am
 
-<!--
+
 ### Week 5
 
-- **Slides 05**: Multiple linear regression [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
+- **Slides 05**: Multiple linear regression and interaction models [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
 
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + Note that interaction models are not covered in _IMS_. [This](http://www.jkarreth.net/files/RPOS517_Day11_Interact.html) is a helpful resource that covers interaction models conceptually and shows how to code them up in `R` (note that we will cover the coding in Thursday's lab and please ignore anything after the subsection titled "Obtaining standard errors for marginal effects")
 
-- **Lab:** Interaction models in `R` [markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html).
+- **Lab:** Interaction models in `R` (to be posted) <!--[markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html). -->
   
-- **No assignment** 
+- **Assignment:** Assignment 3 to be posted ASAP, see lecture slides for details on timing and grading 
 
+<!--
 ### Week 6
 
 - Review \& Midterm Exam

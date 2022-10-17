@@ -728,6 +728,19 @@ $$ {y\_i} = \beta\_0 + \beta\_1 {x\_{1i}} + \beta\_2 {x\_{2i}} + \beta\_3 x\_{1i
 - $\beta_2$ is the effect of $x_2$ on $y$ when $x_1$ is zero
 
 ---
+# Interactions in R
+
+This will be the focus of Lab on Thursday.
+
+As a preview...just like many other aspects of regression analysis, interactions are easy to implement but difficult to carefully interpret in `R`:
+
+--
+
+```{r, echo=TRUE}
+summary(lm(hwy ~ displ + year + displ:year, data = mpg))
+```
+
+---
 layout: false
 class: clear, middle, inverse
 # Multicollinearity
