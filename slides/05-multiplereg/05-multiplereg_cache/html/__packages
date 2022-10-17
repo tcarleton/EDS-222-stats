@@ -1,4 +1,10 @@
 base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
 pacman
 leaflet
 ggplot2
@@ -11,5 +17,4 @@ knitr
 pagedown
 cowplot
 latex2exp
-gg3D
-plotly
+parallel

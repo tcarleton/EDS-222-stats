@@ -3,7 +3,7 @@ title: "Multiple Linear Regression and Interactions"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2021"
+date: "Fall 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -16,7 +16,7 @@ output:
 ```{r Setup, include = F}
 options(htmltools.dir.version = FALSE)
 library(pacman)
-p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown,cowplot,latex2exp,parallel,gg3D)
+p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown,cowplot,latex2exp,parallel,gg3D,xtable)
 # Define pink color
 red_pink <- "#e64173"
 # Notes directory
@@ -62,25 +62,19 @@ theme_simple <- theme_bw() + theme(
 
 # Announcements/check-in
 
-**Slowing down the pace for the next 1.5 weeks** 
-In response to very helpful feedback, I've decided to push hypothesis testing and inference to _after the midterm exam_. 
-
-- No more assignments before the midterm
-
-- Tuesday 10/26: Review. Please come with questions.
+- Thank you for filling out the survey!
+  + Lectures: 64% (right on), 36% (too fast)
+  + Labs: 96% (right on), 1% (too fast)
+  + HW: 84% (right on), 16% (too fast)
 
 --
 
-- Assignment #2: Grades posted. Focus on interpretation!
-
---
-
-- Assignment #3: Grading TBD, answer key mid-week
-
---
-
-- Reminder: Office hours in the Pine Room (Bren Hall 3526)
-
+- In response to survey:
+  + Adding more examples of applying concepts _during the lecture_
+  + Slightly slower pace in lectures, try to remove jargon where possible, ensure definitions are provided
+  + **Key adjustments to HW3**: due Nov 1, 9am; complete assignments all get 100%, answer key posted with HW to aid midterm studying
+  + Extra example of testing OLS assumptions posted on our [Resources page](https://tcarleton.github.io/EDS-222-stats/resources.html)
+  
 ---
 # Midterm Exam
 
@@ -96,7 +90,7 @@ In response to very helpful feedback, I've decided to push hypothesis testing an
   
   + You do not need to memorize math rules (e.g., $var(ax+b)=a^2var(x)$)
   
-  + Be able to interpret probability distributions, scatter plots, QQ-plots, boxplots
+  + Be able to interpret probability distributions, scatter plots, QQ-plots, boxplots, linear regression output (not $p$-values or $t$-statistics)
 
 ---
 # Midterm Exam
@@ -116,18 +110,8 @@ name: Overview
 
 # Today
 
-#### Interpreting multiple linear regression
-"All else equal", parallel slopes model
-
---
-
-#### Omitted-variable bias
-The challenge and some solutions
-
---
-
-#### Adjusted $R^2$
-Correction to coefficient of determination
+#### Model fit in multiple regression
+Nonlinear relationships in linear models, adjusted $R^2$
 
 --
 
@@ -140,579 +124,154 @@ Implementation and interpretation
 Problems and (some) solutions
 
 ---
-layout: false
-class: clear, middle, inverse
-# Multiple linear regression
-
----
-
-# More explanatory variables
-
-We're moving from **simple linear regression** (one .pink[outcome variable] and one .purple[explanatory variable])
-
-$$ \color{#e64173}{y_i} = \beta_0 + \beta_1 \color{#6A5ACD}{x_i} + u_i $$
-
---
-
-to the land of **multiple linear regression** (one .pink[outcome variable] and multiple .purple[explanatory variables])
-
-$$ \color{#e64173}{y\_i} = \beta\_0 + \beta\_1 \color{#6A5ACD}{x\_{1i}} + \beta\_2 \color{#6A5ACD}{x\_{2i}} + \cdots + \beta\_k \color{#6A5ACD}{x\_{ki}} + u\_i $$
-
---
-
-**Why?**
---
- We can better explain the variation in $y$, improve predictions, avoid omitted-variable bias (i.e., second assumption needed for unbiased OLS estimates), ...
-
----
-# More explanatory variables
-
-Multiple linear regression...
-
-$$ \color{#e64173}{y\_i} = \beta\_0 + \beta\_1 \color{#6A5ACD}{x\_{1i}} + \beta\_2 \color{#6A5ACD}{x\_{2i}} + \cdots + \beta\_k \color{#6A5ACD}{x\_{ki}} + u\_i $$
---
-
-... raises many questions:
-
---
-
-- Which $x$'s should I include? This is the problem of "model selection".
-
---
-
-- How does my interpretation of $\beta_1$ change?
-
---
-
-- What if my $x$'s interact with each other? E.g., race and gender, temperature and rainfall.
-
---
-
-- How do I measure model fit now?
-
---
-
-**We will dig into each of these here,** and you will see these questions in other MEDS courses
-
----
-# Multiple regression
-
-```{R, gendata, cache = T, include = F}
-n <- 1e2
-set.seed(1234)
-gen_df <- tibble(
-  x1 = runif(n = n, min = -3, max = 3),
-  x2 = sample(x = c(F, T), size = n, replace = T),
-  u  = rnorm(n = n, mean = 0, sd = 1),
-  y  = -0.5 + x1 + x2 * 4 + u
-)
-mean_a <- filter(gen_df, x2 == F)$y %>% mean()
-mean_b <- filter(gen_df, x2 == T)$y %>% mean()
-gen_df %<>% mutate(y_dm = y - mean_a * (x2 == F) - mean_b * (x2 == T))
-```
-
-$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i \quad$ $x_1$ is continuous $\quad x_2$ is categorical
-
---
-
-```{R, multregplot1, dev = "svg", echo = F, fig.height = 6}
-ggplot(data = gen_df, aes(y = y, x = x1, color = x2, shape = x2)) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
-
-
----
-# Multiple regression
-
-The intercept and categorical variable $x_2$ control for the groups' means.
-
-```{R, multregplot2, dev = "svg", echo = F, fig.height =6}
-ggplot(data = gen_df, aes(y = y, x = x1, color = x2, shape = x2)) +
-geom_hline(yintercept = mean_a, color = "darkslategrey", alpha = 0.5) +
-geom_hline(yintercept = mean_b, color = red_pink, alpha = 0.5) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
----
-# Multiple regression
-
-With groups' means removed:
-
-```{R, multregplot3, dev = "svg", echo = F, fig.height =6}
-ggplot(data = gen_df %>% mutate(y = y - 4 * x2), aes(y = y_dm, x = x1)) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3, aes(color = x2, shape = x2)) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
----
-# Multiple regression
-
-$\hat{\beta}_1$ estimates the relationship between $y$ and $x_1$ after controlling for $x_2$.
-
-```{R, multregplot4, dev = "svg", echo = F, fig.height = 6}
-ggplot(data = gen_df %>% mutate(y = y - 4 * x2), aes(y = y_dm, x = x1)) +
-geom_smooth(method = lm, se = F, color = "orange") +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3, aes(color = x2, shape = x2)) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
----
-# Multiple regression
-
-This regression gives the "parallel slopes" model: 
-
-```{R, multregplot5, dev = "svg", echo = F, fig.height = 6}
-ggplot(data = gen_df, aes(y = y, x = x1, color = x2, shape = x2)) +
-geom_smooth(method = lm, se = F) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-annotate("text", x = -0.075, y = 7.75, label = TeX("$y$"), size = 8) +
-annotate("text", x = 2.95, y = 0.3, label = TeX("$x_1$"), size = 8) +
-geom_point(size = 3) +
-ylim(c(-4.5, 8)) +
-scale_color_manual(
-  expression(x[2]),
-  values = c("darkslategrey", red_pink),
-  labels = c("A", "B")
-) +
-scale_shape_manual(
-  expression(x[2]),
-  values = c(1, 19),
-  labels = c("A", "B")
-) +
-  theme_bw() + theme(
-    line = element_blank(),
-    rect = element_blank(),
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    axis.title = element_blank(),
-    legend.position = "bottom",
-    text = element_text(size = 20))
-```
-
-
----
-# Multiple regression
-
-More generally, how do we think about multiple explanatory variables?
-
---
-
-Suppose $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i$ where $x_1$ and $x_2$ are both continuous numerical variables
-
-```{R, gendata2, cache = T, include = F}
-n <- 1e2
-set.seed(1234)
-mr_df <- tibble(
-  x1 = runif(n = n, min = -3, max = 3),
-  x2 = runif(n=n, min = 5, max = 15),
-  u  = rnorm(n = n, mean = 0, sd = 1),
-  y  = -1 - 1*x1 + x2 * 4 + u
-)
-```
-
-.pull-left[
-
-```{R, yx1, echo = F, dev = "svg"}
-ggplot(data = mr_df, aes(x=x1, y=y)) +
-geom_point(color="darkslategrey", size=6) +
-theme_bw() + theme(
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    text = element_text(size = 20))
-```
-
-]
-
---
-
-.pull-right[
-
-```{R, yx2, echo = F, dev = "svg"}
-ggplot(data = mr_df, aes(x=x2, y=y)) +
-geom_point(color="lightcoral", size=6) +
-theme_bw() + theme(
-    strip.text = element_blank(),
-    axis.text = element_blank(),
-    plot.title = element_blank(),
-    text = element_text(size = 20))
-```
-
-]
-
----
-# Multiple regression
-
-More generally, how do we think about multiple explanatory variables?
-
-```{R, 3dplot, echo = F, dev = "svg"}
-library(plotly)
-
-plot_ly(x=mr_df$x1, y=mr_df$x2, z=mr_df$y, type="scatter3d", mode="markers", color=mr_df$y) %>%
-  layout(scene = list(xaxis = list(title = "x1"), yaxis = list(title = "x2"), zaxis = list(title = "y")))
-
-```
-
----
-# Multiple regression
-
-### With **many** explanatory variables, we visualizing relationships means thinking about **hyperplanes** 🤯
-
-$$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki} + u_i$$
-#### Math notation looks very similar to simple linear regression, but _conceptually_ and _visually_ multiple regression is **very different**
-
----
-# Multiple regression
-
-### Interpretation of coefficients
-
-$$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki} + u_i$$
-
---
-
-- $\beta_k$ tells us the change in $y$ due to a one unit change in $x_k$ when **all other variables are held constant**
-
---
-
-- This is an "all else equal" interpretation
-
---
-
-- E.g., how much do wages increase with one more year of education, _holding gender fixed_? 
-
---
-
-- E.g., how much does ozone increase when temperature rises, _holding NOx emissions fixed_? 
-
----
-# Tradeoffs
-
-There are tradeoffs to consider as we add/remove variables:
-
-**Fewer variables**
-
-- Generally explain less variation in $y$
-- Provide simple interpretations and visualizations (*parsimonious*)
-- May need to worry about omitted-variable bias
-
-**More variables**
-
-- More likely to find *spurious* relationships (statistically significant due to chance—does not reflect a true, population-level relationship)
-- More difficult to interpret the model
-- You may still miss important variables—still omitted-variable bias
-
----
-layout: false
-class: clear, middle, inverse
-# Omitted-variable bias
-
----
-# Omitted-variable bias
-
-You will study this in much more depth in EDS 241, but here's a primer.
-
-**Omitted-variable bias** (OVB) arises when we omit a variable that
-
-1. affects our outcome variable $y$
-
-2. correlates with an explanatory variable $x_j$
-
-As it's name suggests, this situation leads to bias in our estimate of $\beta_j$. In particular, it violates Assumption 2 of OLS (see week 03 slides). 
-
---
-
-**Note:** OVB Is not exclusive to multiple linear regression, but it does require multiple variables affect $y$.
-
----
-# Omitted-variable bias
-
-**Example**
-
-Let's imagine a simple model for the amount individual $i$ gets paid
-
-$$ \text{Pay}_i = \beta_0 + \beta_1 \text{School}_i + \beta_2 \text{Male}_i + u_i $$
-
-where
-
-- $\text{School}_i$ gives $i$'s years of schooling
-- $\text{Male}_i$ denotes an indicator variable for whether individual $i$ is male.
-
-thus
-
-- $\beta_1$: the returns to an additional year of schooling (*ceteris paribus*)
-- $\beta_2$: the premium for being male (*ceteris paribus*)
-<br>If $\beta_2 > 0$, then there is discrimination against women—receiving less pay based upon gender.
-
----
-
-# Omitted-variable bias
-
-
-```{R, genovbdata, include = F, cache = T}
-# Set seed
-set.seed(12345)
-# Sample size
-n <- 1e3
-# Parameters
-beta0 <- 20; beta1 <- 0.5; beta2 <- 10
-# Dataset
-omit_df <- tibble(
-  male = sample(x = c(F, T), size = n, replace = T),
-  school = runif(n, 3, 9) - 3 * male,
-  pay = beta0 + beta1 * school + beta2 * male + rnorm(n, sd = 7)
-)
-lm_bias <- lm(pay ~ school, data = omit_df)
-bb0 <- lm_bias$coefficients[1] %>% round(1)
-bb1 <- lm_bias$coefficients[2] %>% round(1)
-lm_unbias <- lm(pay ~ school + male, data = omit_df)
-bu0 <- lm_unbias$coefficients[1] %>% round(1)
-bu1 <- lm_unbias$coefficients[2] %>% round(1)
-bu2 <- lm_unbias$coefficients[3] %>% round(1)
-```
-
-
-**Example, continued:** $\text{Pay}_i = `r beta0` + `r beta1` \times \text{School}_i + `r beta2` \times \text{Male}_i + u_i$
-
-The relationship between pay and schooling.
-
-```{R, plotovb1, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, color = "black", alpha = 0.4, shape = 16) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-xlab("Schooling") +
-ylab("Pay") +
-theme_empty +
-theme(
-  axis.title = element_text(size = 18),
-  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
-)
-```
----
-# Omitted-variable bias
-
-Biased regression estimate: $\widehat{\text{Pay}}_i = `r bb0` + `r bb1` \times \text{School}_i$
-
-```{R, plotovb2, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, color = "black", alpha = 0.4, shape = 16) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-geom_smooth(se = F, color = "orange", method = lm) +
-xlab("Schooling") +
-ylab("Pay") +
-theme_empty +
-theme(
-  axis.title = element_text(size = 18),
-  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
-)
-```
-
----
-# Omitted-variable bias
-
-Recalling the omitted variable: Gender (**<font color="#e64173">female</font>** and **<font color="#314f4f">male</font>**)
-
-```{R, plotovb3, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, alpha = 0.8, aes(color = male, shape = male)) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-geom_line(stat = "smooth", color = "orange", method = lm, alpha = 0.5, size = 1) +
-xlab("Schooling") +
-ylab("Pay") +
-theme_empty +
-theme(
-  axis.title = element_text(size = 18),
-  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
-) +
-scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("Female", "Male")) +
-scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
-```
-
----
-# Omitted-variable bias
-
-Recalling the omitted variable: Gender (**<font color="#e64173">female</font>** and **<font color="#314f4f">male</font>**)
-
-```{R, plotovb4, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, alpha = 0.8, aes(color = male, shape = male)) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-geom_line(stat = "smooth", color = "orange", method = lm, alpha = 0.2, size = 1) +
-geom_abline(
-  intercept = lm_unbias$coefficients[1],
-  slope = lm_unbias$coefficients[2],
-  color = red_pink, size = 1
-) +
-geom_abline(
-  intercept = lm_unbias$coefficients[1] + lm_unbias$coefficients[3],
-  slope = lm_unbias$coefficients[2],
-  color = "darkslategrey", size = 1
-) +
-xlab("Schooling") +
-ylab("Pay") +
-theme_empty +
-theme(
-  axis.title = element_text(size = 18),
-  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
-) +
-scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("Female", "Male")) +
-scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
-```
-
----
-# Omitted-variable bias
-
-Unbiased regression estimate: $\widehat{\text{Pay}}_i = `r bu0` + `r bu1` \times \text{School}_i + `r bu2` \times \text{Male}_i$
-
-```{R, plotovb5, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, alpha = 0.8, aes(color = male, shape = male)) +
-geom_hline(yintercept = 0) +
-geom_vline(xintercept = 0) +
-geom_line(stat = "smooth", color = "orange", method = lm, alpha = 0.2, size = 1) +
-geom_abline(
-  intercept = lm_unbias$coefficients[1],
-  slope = lm_unbias$coefficients[2],
-  color = red_pink, size = 1
-) +
-geom_abline(
-  intercept = lm_unbias$coefficients[1] + lm_unbias$coefficients[3],
-  slope = lm_unbias$coefficients[2],
-  color = "darkslategrey", size = 1
-) +
-xlab("Schooling") +
-ylab("Pay") +
-theme_empty +
-theme(
-  axis.title = element_text(size = 18),
-  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
-) +
-scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("Female", "Male")) +
-scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
-```
-
----
 
 layout: false
 class: clear, middle, inverse
-# Adjusted $R^2$
+# Model fit in multiple regression
 
 ---
 # Nonlinear transformations
 
-Our linearity assumption requires that **parameters enter linearly** (_i.e._, the $\beta_k$ multiplied by variables)
+- Our linearity assumption requires that **parameters enter linearly** (_i.e._, the $\beta_k$ multiplied by variables)
+- We allow nonlinear relationships between $y$ and the explanatory variables $x$.
 
-We allow nonlinear relationships between $y$ and the explanatory variables $x$.
+**Example: Polynomials**
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i$$
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^2=3 + u_i$$
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + u_i$$
+
+...
+---
+# Polynomials
+
+- Consider the relationship between **temperature** and **harmful algal blooms** (this is a [real thing!](https://www.epa.gov/nutrientpollution/climate-change-and-harmful-algal-blooms#:~:text=Warmer%20temperatures%20prevent%20water%20from,warmer%20and%20promoting%20more%20blooms.)).
+
+- Suppose we sampled many coastal locations across the US, and measured the total surface water area at each site that had blooms present. 
+
+- Perhaps we have scientific evidence to suggest there is a nonlinear effect of temperature on extent of the blooms. 
+
+- We might want to estimate the following model:
+
+$$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
+---
+# Polynomials
+
+$$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
+
+```{R, polys, dev = "svg", fig.height = 6, echo = F}
+# Set seed
+set.seed(1235)
+# Sample size
+n <- 1e3
+# Generate data
+blooms_df <- tibble(
+  temp = runif(n, 0, 3),
+  # y = 1 + x + x^2 + x^3 + x^4 + 0.5 * x^5 + rnorm(n, mean = 0, sd = 6)
+  area = 0.5*temp + 2*temp^2 + rnorm(n, mean = 0, sd=3)
+)
+# Plot
+ggplot(data = blooms_df, aes(x = temp, y = area)) +
+  geom_point(size = 2.5, color = "darkslategrey", alpha = 1) +
+  labs(x="temperature (degrees C)", y = "bloom area (hectares)") + 
+  theme_bw() + 
+  theme(
+    line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_blank(),
+  axis.text.y = element_blank(),
+  axis.title = element_text(size=18,face="bold"),
+  plot.title = element_blank(),
+  legend.position = "none")
+```
+---
+# Polynomials
+
+Estimating polynomial regressions in `R`, option 1:
+```{r, echo = T}
+blooms_df = blooms_df %>% mutate(temp2 = temp^2)
+summary(lm(area~temp+temp2, data=blooms_df))
+```
+
+---
+# Polynomials
+
+Estimating polynomial regressions in `R`, option 2:
+```{r, echo = T}
+summary(lm(area~temp+I(temp^2), data=blooms_df))
+```
+---
+# Polynomials
+
+Watch out! Some things are not intuitive:
+```{r, echo = T}
+summary(lm(area~poly(area,2), data=blooms_df))
+```
+
+---
+# Polynomials
+
+Watch out! Some things are not intuitive (need `raw=TRUE` for coefficients to be interpretable -- see helpful Stack Overflow on this [here](https://stackoverflow.com/questions/19484053/what-does-the-r-function-poly-really-do)):
+```{r, echo = T}
+summary(lm(area~poly(temp,2, raw=TRUE), data=blooms_df))
+```
+
+---
+# Polynomials
+```{r, echo = F}
+lm(area ~ temp + I(temp^2), data = blooms_df) %>%
+  summary() %>%
+  xtable() %>%
+  kable()
+```
 
 --
 
-**Examples**
+How do we interpret these coefficients?
 
-- **Polynomials** and **interactions:** $y_i = \beta_0 + \beta_1 x_1 + \beta_2 x_1^2 + \beta_3 x_2 + \beta_4 x_2^2 + \beta_5 \left( x_1 x_2 \right) + u_i$
+- Intercept: Predicted area of bloom when temperature = 0 degrees C
 
-- **Exponentials** and **logs:** $\log(y_i) = \beta_0 + \beta_1 x_1 + \beta_2 e^{x_2} + u_i$
+--
 
-- **Indicators** and **thresholds:** $y_i = \beta_0 + \beta_1 x_1 + \beta_2 \, \mathbb{I}(x_1 \geq 100) + u_i$
+- $\hat\beta_1$ (coeff. on $temp$) and $\hat\beta_2$ (coeff. on $temp^2$)... ???  
+
+--
+
+Go back to Algebra II (see [here](http://www.abcte.org/files/previews/math/s4_p2.html) for a refresher): $y=ax^2 + bx + c$. $a$ tells you whether the U-shape faces up or down, and how narrow or wide it is; $b$ tells you whether the U-shape shifts left or right away from the $y$-axis; $c$ simply shifts the U-shape up or down.
+
+---
+# Polynomials
+
+**Don't worry about the Algebra II if it doesn't feel familiar!**
+
+$$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
+
+You can always:
+- Graph your predicted values using `geom_smooth()` (see Lab 5)
+- Put your coefficients into an automated grapher function (online or on your Mac)
+- Use the regression output directly, along with a little basic math (e.g., predict area at temperature = 15, then at temperature = 16, and take the difference!)
+
+--
+
+**Key insight: effect of an increase in temperature on algal bloom area depends on the baseline level of temperature!** (true for all nonlinear relationships)
+---
+# Nonlinear transformations
+
+Other examples:
+
+- **Polynomials** and **interactions:** $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2 + \beta_3 x_{2i} + \beta_4 x_{2i}^2 + \beta_5 \left( x_{1i} x_{2i} \right) + u_i$
+
+- **Exponentials** and **logs:** $\log(y_i) = \beta_0 + \beta_1 x_{1i} + \beta_2 e^{x_{2i}} + u_i$ (more on this next week)
+
+- **Indicators** and **thresholds:** $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 \, \mathbb{I}(x_{1i} \geq 100) + u_i$
+
+--
+
+In all cases, the effect of a change in $x$ on $y$ will vary depending on your baseline level of $x$. This is not true with linear relationships! 
 
 ---
 # Nonlinear transformations
@@ -909,7 +468,6 @@ $$ \overline{R}^2 = 1 - \dfrac{\sum_i \left( y_i - \hat{y}_i \right)^2/(n-k-1)}{
 
 - Don't forget the _theory_ behind your data science! 
 
-
 ---
 layout: false
 class: clear, middle, inverse
@@ -923,20 +481,26 @@ Interactions allow the effect of one variable to change based upon the level of 
 
 1. Does the effect of schooling on pay change by gender?
 
-1. Does the effect of gender on pay change by race?
+2. Does the effect of gender on pay change by race?
 
-1. Does the effect of schooling on pay change by experience?
+3. Does the effect of schooling on pay change by experience?
+
+4. ??
 
 ---
 # Interactions
 
-Previously, we considered a model that allowed women and men to have different wages, but the model assumed the effect of school on pay was the same for everyone:
+Previously, we considered a model that allowed women and men to have different average wages, but the model assumed the effect of schooling on pay was the same for everyone:
 
 $$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + u_i $$
 
 but we can also allow the effect of school to vary by gender:
 
 $$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+
+--
+
+The multiplication of $School$ by $Male$ is called an **interaction term** 
 
 ---
 # Interactions
@@ -1036,17 +600,17 @@ scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
 
 Interpreting coefficients can be a little tricky -- carefully working through the math helps.
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Female}_i + \beta_3 \, \text{School}_i\times\text{Female}_i + u_i $$
-
-Expected returns for an additional year of schooling for **women**:
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+Expected effect of an additional year of schooling for **women**:
 
 $$
 \begin{aligned}
- \mathop{\boldsymbol{E}}\left[ \text{Pay}_i | \text{Female} \land \text{School} = \ell + 1 \right] -
-    \mathop{\boldsymbol{E}}\left[ \text{Pay}_i | \text{Female} \land \text{School} = \ell \right] &= \\
- \mathop{\boldsymbol{E}}\left[ \beta_0 + \beta_1 (\ell+1) + \beta_2 + \beta_3 (\ell + 1) + u_i \right] -
-    \mathop{\boldsymbol{E}}\left[ \beta_0 + \beta_1 \ell + \beta_2 + \beta_3 \ell + u_i  \right] &= \\
- \beta_1 + \beta_3
+\text{Pay}_i(\text{Female}\hskip1mm,\text{School}_i = \ell + 1)  -
+    \text{Pay}_i(\text{Female}\hskip1mm,\text{School}_i = \ell) &= \\
+ (\beta_0 + \beta_1 *(\ell+1) + \beta_2*0 + \beta_3 *(\ell+1)*0 + u_i) &- \\
+    (\beta_0 + \beta_1 * \ell + \beta_2*0 + \beta_3 *\ell*0 + u_i ) &= \\
+     \beta_1 *(\ell+1) - \beta_1 * \ell &= \\
+ \beta_1 
 \end{aligned}
 $$
 
@@ -1055,25 +619,41 @@ $$
 
 Interpreting coefficients can be a little tricky -- carefully working through the math helps.
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Female}_i + \beta_3 \, \text{School}_i\times\text{Female}_i + u_i $$
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
 
 Expected returns for an additional year of schooling for **men**:
 
 $$
 \begin{aligned}
- \mathop{\boldsymbol{E}}\left[ \text{Pay}_i | \text{Male} \land \text{School} = \ell + 1 \right] -
-    \mathop{\boldsymbol{E}}\left[ \text{Pay}_i | \text{Male} \land \text{School} = \ell \right] &= \\
- \mathop{\boldsymbol{E}}\left[ \beta_0 + \beta_1 (\ell+1) + u_i \right] -
-    \mathop{\boldsymbol{E}}\left[ \beta_0 + \beta_1 \ell + u_i  \right] &= \\
- \beta_1
+\text{Pay}_i(\text{Male}\hskip1mm,\text{School}_i = \ell + 1)  -
+    \text{Pay}_i(\text{Male}\hskip1mm,\text{School}_i = \ell) &= \\
+ (\beta_0 + \beta_1 *(\ell+1) + \beta_2 + \beta_3 *(\ell+1) + u_i) &- \\
+    (\beta_0 + \beta_1 * \ell + \beta_2 + \beta_3 *\ell + u_i ) &= \\
+     \beta_1 *(\ell+1) - \beta_1 * \ell +  \beta_3 *(\ell+1) - \beta_3 * \ell &= \\
+ \beta_1 + \beta_3 
 \end{aligned}
 $$
 
 --
 
-Thus, $\beta_3$ gives the **difference in the returns to schooling** for women and men.
+Thus, $\beta_3$ gives the **difference in the returns to schooling** for men versus women.
 
 ---
+# Interactions
+
+$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+
+Another way to do interpretation: rearrange the expression. 
+
+--
+
+- Effect of one more year of schooling on expected pay:
+
+$$ Pay_i = \beta_0 + \beta_2 Male_i + (\beta_1 + \beta_3 Male_i)\times School_i + u_i $$
+This helps you see that the effect of $School$ on $Pay$ is $\beta_1 + \beta_3 Male$, so it will vary based on whether an individual is $Male$ or $Female$
+
+---
+
 
 # Interactions
 
@@ -1085,7 +665,7 @@ In general, interaction models should be used when **the level of one variable i
 
 For example:
 
-- Income changes the relationship between extreme heat and mortality (Carleton et al., 2021)
+- Income changes the relationship between extreme heat and mortality (Carleton et al., 2022)
 
 --
 
@@ -1109,19 +689,43 @@ For example: What is the "slope" of the relationship between $y$ and $x_1$?
 
 $$
 \begin{aligned}
- \mathop{\boldsymbol{E}}\left[ y_i | x_{i2}, x_{i1} = \ell + 1 \right] -
-    \mathop{\boldsymbol{E}}\left[ y_i | x_{i2}, x_{i1} = \ell \right] &= \\
- \mathop{\boldsymbol{E}}\left[ \beta_0 + \beta_1 (\ell+1) + \beta_3 (\ell+1) \times x_{i2} + u_i \right] -
-    \mathop{\boldsymbol{E}}\left[ \beta_0 + \beta_1 \ell + \beta_3 (\ell) \times x_{i2} + u_i  \right] &= \\
+ y_i(x_{i2}, x_{i1} = \ell + 1) -
+     y_i (x_{i2}, x_{i1} = \ell ) &= \\
+ (\beta_0 + \beta_1 *(\ell+1) + \beta_2 x_{i2} + \beta_3* (\ell+1) \times x_{i2} + u_i ) &- \\
+    (\beta_0 + \beta_1 * \ell + \beta_2 x_{i2} + \beta_3 * \ell \times x_{i2} + u_i  ) &= \\
  \beta_1 + \beta_3 x_{i2}
 \end{aligned}
 $$
-**Note: higher $x_{i2}$ increases the slope of the relationship between $y$ and $x_1$!**
+**Key insight: Higher $x_{i2}$ increases the slope of the relationship between $y$ and $x_1$!** The inverse is also true.
 
-The inverse is also true.
+For two continuous random variables, we now have infinitely many slopes for each variable, depending on the level of the other independent variable.
 
-For two continous random variables, we now have infinitely many slopes for each variable, depending on the level of the other independent variable.
+---
+# Interactions 
 
+Putting it all in one place...interaction models with two continuous variables:
+
+$$ {y\_i} = \beta\_0 + \beta\_1 {x\_{1i}} + \beta\_2 {x\_{2i}} + \beta\_3 x\_{1i}\times x\_{2i} + u\_i $$
+
+--
+
+- $\beta_3$ is the **difference** in the effect of $x_1$ on $y$ between an individual with $x_2=\ell+1$ and an individual with $x_2=\ell$
+
+--
+ 
+- $\beta_3$ is **also** the difference in the effect of $x_2$ on $y$ between an individual with $x_1=\ell+1$ and an individual with $x_1=\ell$
+
+--
+ 
+- $\beta_0$ is the predicted level of $y$ when **both** $x_1$ and $x_2$ are zero
+
+--
+ 
+- $\beta_1$ is the effect of $x_1$ on $y$ when $x_2$ is zero
+
+--
+ 
+- $\beta_2$ is the effect of $x_2$ on $y$ when $x_1$ is zero
 
 ---
 layout: false
@@ -1173,7 +777,6 @@ knitr::include_graphics("collinearity.png")
 
 - Eliminate highly correlated variables (ensure your interpretation changes accordingly)
   + E.g., temperature and humidity
-
 
 ---
 
