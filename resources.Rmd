@@ -87,7 +87,9 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Lab:** Interaction models in `R` (to be posted) <!--[markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html). -->
   
-- **Assignment:** Assignment 3 to be posted ASAP, see lecture slides for details on timing and grading 
+- **Assignment:** Assignment 3 posted 10/18, see lecture slides for details on timing and grading 
+
+- **Extra exam study material:** Here is an example of how you can evaluate the plausibility of OLS Assumption #4, which is necessary to ensure that OLS is the lowest variance estimator of all the unbiased estimators: [html](labs/05-week-five/example_OLS_assumptions.html), [markdown](labs/05-week-five/example_OLS_assumptions.Rmd)
 
 <!--
 ### Week 6

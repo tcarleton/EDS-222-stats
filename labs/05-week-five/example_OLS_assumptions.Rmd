@@ -1,0 +1,78 @@
+---
+title: "EDS 222: Testing OLS Assumption 4"
+author: ""
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Load all the packages needed here
+library(tidyverse)
+library(readr)
+library(gt)
+library(tufte)
+library(ggplot2)
+
+# Set your filepath here! Or, set this up as an .Rproj if you'd like.
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
+datadir <- file.path(rootdir,"data")
+setwd(file.path(rootdir,"homework"))
+```
+
+# OLS Assumptions
+
+This short example analysis demonstrates how to evaluate one of the key assumptions of OLS. It relies on data that is already stored in `R` and was used in the week 4 lab assignment. It follows very closely the steps in week 3's lab, but in a different empirical setting. 
+
+Recall our four assumptions needed to ensure that OLS is an unbiased estimator with the lowest variance:
+
+1. The population relationship is linear in parameters with an additive disturbance.
+
+2. Our $X$ variable is **exogenous**, _i.e._, $\mathop{\boldsymbol{E}}\left[ u \mid X \right] = 0$.
+
+3. The $X$ variable has variation. 
+
+4. The population disturbances $u_i$ are independently and identically distributed as **normal** random variables with mean zero $\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)$ and variance $\sigma^2$ (_i.e._,  $\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2$)
+  
+As in the week 4 lab, we will be using the `mpg` dataset, which is pre-loaded in `R`. Suppose we are interested in the relationship between fuel efficiency of automobiles (the `hwy` variable) and engine displacement (i.e., engine size, the `displ` variable):
+
+$$hwy_i =\beta_{0}+\beta_{1} \cdot displ_i +\varepsilon_i$$
+
+We will assume for now that OLS assumptions 1 and 2 hold. You can easily confirm that assumption 3 holds (show that `var(mpg$displ)!=0`. Here, we will dig into assumption 4. 
+
+As we did in week 3's lab, generate residuals from your main regression and use residuals to assess the three components of assumption #4. Would you recommend using simple linear regression in this case? Which property of OLS (unbiasedness and/or lowest variance) is likely not being upheld in these data?
+
+**Answer:**
+
+**First, let's assess whether the residuals appear to be mean zero and normally distributed. The plot below shows that the residuals look _roughly_ normally distributed, but have a longer right tail than we would expect. This suggests that OLS Assumption #4 may be in threat, and that you'd want toreassess whether the modeling choices you made (e.g., we have not accounted for possibly nonlinear effects of engine displacement on fuel efficiency).**
+
+```{r}
+# regression
+model_1 <- lm(hwy ~ displ, data = mpg)
+
+# create predictions and residuals
+predictions <- mpg %>% modelr::add_predictions(model_1) %>%
+  mutate(residuals = hwy-pred)
+
+# histogram of residuals
+ggplot(data=predictions) + geom_histogram(aes(residuals), bins=25)
+
+# mean
+mean(predictions$residuals)
+```
+
+**Second, let's explore whether the residuals appear to have constant variance when plotted against $x$. Recall that what we are worried about is if there is larger spread at different levels of $x$, which violates the constant $\sigma^2$ assumption. The plot below shows relatively consistent variance -- for most of the data and across most of the support of $x$, we have a similar looking variance. However, there are some outliers at both extremes of engine displacement that may pose a threat to assumption 4.**
+
+```{r}
+# variance in residuals against tail length
+ggplot(predictions) + geom_point(aes(x=displ, y=residuals), size=2) 
+```
+
+**OLS is still unbiased in this case if assumptions 1, 2, and 3 hold. However, both plots showed some evidence that assumption 4 may not be plausible. Therefore, the property of lowest variance is possibly not upheld in this case – we might have an unbiased estimate of our coefficients, but an alternative estimator to OLS may do a better job getting us close to the true population coefficients in our single sample of data.  If you are worried about the couple of outliers causing assumption 4 to fail, you can also drop the outliers and re-estimate the linear model, even though this practice is not that recommended unless you think that those points are true errors in the data (i.e. sensor error or data input error). Such judgement is best made on a case by case basis!**

@@ -72,7 +72,7 @@ theme_simple <- theme_bw() + theme(
 - In response to survey:
   + Adding more examples of applying concepts _during the lecture_
   + Slightly slower pace in lectures, try to remove jargon where possible, ensure definitions are provided
-  + **Key adjustments to HW3**: due Nov 1, 9am; complete assignments all get 100%, answer key posted with HW to aid midterm studying
+  + **Key adjustments to HW3**: due Nov 1, 9am; graded Pass/Fail; answer key posted with HW to aid midterm studying
   + Extra example of testing OLS assumptions posted on our [Resources page](https://tcarleton.github.io/EDS-222-stats/resources.html)
   
 ---
