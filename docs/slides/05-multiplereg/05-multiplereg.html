@@ -14,18 +14,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-.title[
 # Multiple Linear Regression and Interactions
-]
-.subtitle[
 ## EDS 222
-]
-.author[
 ### Tamma Carleton
-]
-.date[
 ### Fall 2022
-]
 
 ---
 
@@ -111,7 +103,7 @@ class: clear, middle, inverse
 
 `$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i$$`
 
-`$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^2=3 + u_i$$`
+`$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + u_i$$`
 
 `$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + u_i$$`
 
@@ -121,9 +113,15 @@ class: clear, middle, inverse
 
 - Consider the relationship between **temperature** and **harmful algal blooms** (this is a [real thing!](https://www.epa.gov/nutrientpollution/climate-change-and-harmful-algal-blooms#:~:text=Warmer%20temperatures%20prevent%20water%20from,warmer%20and%20promoting%20more%20blooms.)).
 
+--
+
 - Suppose we sampled many coastal locations across the US, and measured the total surface water area at each site that had blooms present. 
 
+--
+
 - Perhaps we have scientific evidence to suggest there is a nonlinear effect of temperature on extent of the blooms. 
+
+--
 
 - We might want to estimate the following model:
 
@@ -301,7 +299,7 @@ You can always:
 
 Other examples:
 
-- **Polynomials** and **interactions:** `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2 + \beta_3 x_{2i} + \beta_4 x_{2i}^2 + \beta_5 \left( x_{1i} x_{2i} \right) + u_i\)`
+- **Polynomials** and **interactions:** `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2 + \beta_3 x_{2i} + \beta_4 x_{2i}^2 + \beta_5 \left( x_{1i} x_{2i} \right) + u_i\)` (more on this today)
 
 - **Exponentials** and **logs:** `\(\log(y_i) = \beta_0 + \beta_1 x_{1i} + \beta_2 e^{x_{2i}} + u_i\)` (more on this next week)
 
@@ -769,19 +767,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
-// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
-// screen reader (see PR #262)
-(function(d) {
-  let res = {};
-  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
-    const t = tr.querySelector('td:nth-child(2)').innerText;
-    tr.querySelectorAll('td:first-child .key').forEach(key => {
-      const k = key.innerText;
-      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
-    });
-  });
-  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
-})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
