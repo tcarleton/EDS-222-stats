@@ -215,7 +215,7 @@ summary(lm(area~temp+I(temp^2), data=blooms_df))
 
 Watch out! Some things are not intuitive:
 ```{r, echo = T}
-summary(lm(area~poly(area,2), data=blooms_df))
+summary(lm(area~poly(temp,2), data=blooms_df))
 ```
 
 ---
@@ -451,6 +451,7 @@ $R^2$ literally tells us the share of the variance in $y$ our current models acc
 Penalize for the number of variables, _e.g._, .pink[adjusted] $\color{#e64173}{R^2}$:
 
 $$ \overline{R}^2 = 1 - \dfrac{\sum_i \left( y_i - \hat{y}_i \right)^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
+Where $k$ is the number of independent variables in the regression model and $n$ is the total number of observations in your data.
 
 *Note:* Adjusted $R^2$ need not be between 0 and 1.
 

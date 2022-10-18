@@ -200,29 +200,29 @@ summary(lm(area~temp+I(temp^2), data=blooms_df))
 Watch out! Some things are not intuitive:
 
 ```r
-summary(lm(area~poly(area,2), data=blooms_df))
+summary(lm(area~poly(temp,2), data=blooms_df))
 ```
 
 ```
 #&gt; 
 #&gt; Call:
-#&gt; lm(formula = area ~ poly(area, 2), data = blooms_df)
+#&gt; lm(formula = area ~ poly(temp, 2), data = blooms_df)
 #&gt; 
 #&gt; Residuals:
-#&gt;        Min         1Q     Median         3Q        Max 
-#&gt; -1.278e-13 -6.600e-16  7.900e-17  3.970e-16  3.026e-13 
+#&gt;      Min       1Q   Median       3Q      Max 
+#&gt; -12.5966  -2.0923  -0.1423   1.9951   9.4874 
 #&gt; 
 #&gt; Coefficients:
-#&gt;                 Estimate Std. Error   t value Pr(&gt;|t|)    
-#&gt; (Intercept)    7.059e+00  3.304e-16 2.136e+16   &lt;2e-16 ***
-#&gt; poly(area, 2)1 2.021e+02  1.045e-14 1.934e+16   &lt;2e-16 ***
-#&gt; poly(area, 2)2 1.394e-14  1.045e-14 1.334e+00    0.182    
+#&gt;                 Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)      7.05901    0.09554   73.88   &lt;2e-16 ***
+#&gt; poly(temp, 2)1 173.40269    3.02137   57.39   &lt;2e-16 ***
+#&gt; poly(temp, 2)2  40.99164    3.02137   13.57   &lt;2e-16 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
-#&gt; Residual standard error: 1.045e-14 on 997 degrees of freedom
-#&gt; Multiple R-squared:      1,	Adjusted R-squared:      1 
-#&gt; F-statistic: 1.871e+32 on 2 and 997 DF,  p-value: &lt; 2.2e-16
+#&gt; Residual standard error: 3.021 on 997 degrees of freedom
+#&gt; Multiple R-squared:  0.7772,	Adjusted R-squared:  0.7768 
+#&gt; F-statistic:  1739 on 2 and 997 DF,  p-value: &lt; 2.2e-16
 ```
 
 ---
@@ -403,6 +403,7 @@ Recall `\(\sum_i \left( y_i - \hat{y}_i \right)^2 = \sum_i e_i^2\)` is the "sum 
 Penalize for the number of variables, _e.g._, .pink[adjusted] `\(\color{#e64173}{R^2}\)`:
 
 $$ \overline{R}^2 = 1 - \dfrac{\sum_i \left( y_i - \hat{y}_i \right)^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
+Where `\(k\)` is the number of independent variables in the regression model and `\(n\)` is the total number of observations in your data.
 
 *Note:* Adjusted `\(R^2\)` need not be between 0 and 1.
 
