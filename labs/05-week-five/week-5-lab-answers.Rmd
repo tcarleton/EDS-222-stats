@@ -14,19 +14,7 @@ output:
 
 # Section 0: Getting set up
 
-You should already have done the following:
-
-1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
-2. Download `_common.R` and put it in the _Labs/_ folder.
-3. Install the following packages:
-
-```{r setup, include=FALSE, echo = FALSE, eval = FALSE}
-suppressMessages({
-  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
-})
-```
-
-For today, load the following packages:
+Load the following packages:
 
 ```{r, echo = FALSE, eval = TRUE}
 # You probably already have these packages installed, so let's just load them
@@ -110,23 +98,13 @@ summary(mod_int)
 
 **You can see this by looking at 2008 and 1999 vintages one at a time. The slope of the relationship between `hwy` and `displ` in 2008 is $\beta_1 displ  + \beta_3 \cdot displ \cdot 1 = (\beta_1 + \beta_3)\cdot displ$. In contrast, the slope of the relationship between `hwy` and `displ` in 1999 is $\beta_1 displ + \beta_3 \cdot displ \cdot 0 = \beta_1 displ$, so the difference in slopes is $\beta_3$.**
 
-## Plotting an interaction model
+# Section 2: Plotting an interaction model
 
 Interaction models are difficult to interpret. Writing out the algebra of what each independent variable and its associated coefficient mean is really valuable, but visualizing the data and resulting model can also help. Here, let's remake our scatter plot above, but overlay our regression results from the interaction model.
 
 **Intuition check before you dive in:** What do you expect to see in terms of intercepts and slopes of your vintage-specific regression lines? 
 
-As usual, `ggplot2` with `geom_smooth` plotting our regression line makes this easy for us. If we specify `color` as our grouping variable (i.e., car vintage year) in the first `ggplot()` command, and do not add aesthetics in `geom_point()`, or `geom_smooth()` later on, `geom_point` will _automatically_ color scatter points by vintage year, and `geom_smooth()` will estimate whatever regression you specify _separately by vintage year_. This gives a coefficient and slope for each vintage, as our regression model above does. 
-
-Let's give it a try:
-
-```{r}
-ggplot(mpg, aes(y = hwy, x = displ, color = year)) + 
-  geom_point() + 
-  geom_smooth(method = "lm", se = FALSE)
-```
-
-Note that you could also plot the same thing using `augment()` as we did above, in combination with `geom_line()`. This gives you a bit more control over what is going on, since it's not obvious in the prior approach what regression exactly `geom_smooth()` is running.
+We will use `ggplot2` with `augment()` to obtain predictions, in combination with `geom_line()`. 
 
 ```{r}
 mod_int <- lm(hwy ~ displ + year + displ:year, data = mpg)
@@ -136,7 +114,7 @@ mpg %>%
   geom_line(data = augment(mod_int), aes(y = .fitted, color = year)) 
 ```
 
-## Adjusted R-squared
+# Section 3: Adjusted $R^2$
 
 We saw in the previous exercise that an interaction model resulted in different slopes for each group. However, is this more complex model actually "better"? We have explored using $R^2$ as a measure of model fit. It is a common one and you should be comfortable computing and interpreting it. Maybe it can help us answer the question of which model to use in this case.
 
@@ -161,3 +139,17 @@ print(AdjR2_int)
 ```
 Since the adjusted $R^2$ value declined slightly, we conclude that the interaction model did *not* meaningfully improve model fit. 
 
+Note that if you compare $R^2$ across models, without accounting for the additional independent variables, you get a slightly different picture: 
+
+```{r}
+# no interaction
+mod <- lm(hwy ~ displ + year, data=mpg)
+R2 <- summary(mod)$r.squared
+print(R2)
+
+# with the interaction
+R2_int <- summary(mod_int)$r.squared
+print(R2_int)
+```
+
+For multiple regression, you should generally rely on adjusted $R^2$ and not $R^2$.

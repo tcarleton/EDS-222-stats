@@ -1,6 +1,6 @@
 ---
 title: "EDS 222: Week 5: In-class Lab"
-author: "{STUDENT NAME}"
+author: ""
 date: "`r Sys.Date()`"
 output:
   tufte::tufte_html: default
@@ -14,19 +14,7 @@ output:
 
 # Section 0: Getting set up
 
-You should already have done the following:
-
-1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
-2. Download `_common.R` and put it in the _Labs/_ folder.
-3. Install the following packages:
-
-```{r setup, include=FALSE, echo = FALSE, eval = FALSE}
-suppressMessages({
-  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
-})
-```
-
-For today, load the following packages:
+Load the following packages:
 
 ```{r, echo = FALSE, eval = TRUE}
 # You probably already have these packages installed, so let's just load them
@@ -92,36 +80,26 @@ Complete the following:
 ```
 2. What does the intercept tell you, in words?  
 
-
 3. What does the coefficient on `displ` tell you, in words? 
 
 4. What does the coefficient estimate on the 2008 vintage indicator variable (`year2008`) tell you, in words? 
 
 5. What does the coefficient on `displ:year2008` tell you, in words?^[Hint: This is tricky. Start by writing down the relationship between miles per gallon and engine size when the car vintage is 2008. Then write the same thing for car vintage 1999. Can you see what role this coefficient plays?]
 
-## Plotting an interaction model
+
+# Section 2: Plotting an interaction model
 
 Interaction models are difficult to interpret. Writing out the algebra of what each independent variable and its associated coefficient mean is really valuable, but visualizing the data and resulting model can also help. Here, let's remake our scatter plot above, but overlay our regression results from the interaction model.
 
 **Intuition check before you dive in:** What do you expect to see in terms of intercepts and slopes of your vintage-specific regression lines? 
 
-As usual, `ggplot2` with `geom_smooth` plotting our regression line makes this easy for us. If we specify `color` as our grouping variable (i.e., car vintage year) in the first `ggplot()` command, and do not add aesthetics in `geom_point()`, or `geom_smooth()` later on, `geom_point` will _automatically_ color scatter points by vintage year, and `geom_smooth()` will estimate whatever regression you specify _separately by vintage year_. This gives a coefficient and slope for each vintage, as our regression model above does. 
-
-Let's give it a try:
+We will use `ggplot2` with `augment()` to obtain predictions, in combination with `geom_line()`. 
 
 ```{r}
 
 ```
 
-Note that you could also plot the same thing using `augment()` as we did above, in combination with `geom_line()`. This gives you a bit more control over what is going on, since it's not obvious in the prior approach what regression exactly `geom_smooth()` is running. 
-
-First, run the interaction model. Then, use `geom_line()` to plot the regression lines using the fitted values from `augment()`.
-
-```{r}
- 
-```
-
-## Adjusted R-squared
+# Section 3: Adjusted $R^2$
 
 We saw in the previous exercise that an interaction model resulted in different slopes for each group. However, is this more complex model actually "better"? We have explored using $R^2$ as a measure of model fit. It is a common one and you should be comfortable computing and interpreting it. Maybe it can help us answer the question of which model to use in this case.
 
@@ -130,12 +108,24 @@ However, as we discussed in lecture, $R^2$ _mechanically_ increases as you add m
 These two measures are:
 $$R^{2}=1 - \frac{\sum_i e_i^2}{\sum_i (y_i - \bar y)^2}$$
 $$ \overline{R}^2 = 1 - \dfrac{\sum_i e_i^2/(n-k-1)}{\sum_i \left( y_i - \overline{y} \right)^2/(n-1)} $$
-**Did the added interaction term in our regression improve model fit?** 
 
 In this case, the interaction model added a new variable to our regression, so we should be comparing adjusted $R^2$ results from a model without the interaction to a model with it. You can see the adjusted $R^2$ in `summary(lm())`, but you can also access it by saving your `lm` object and calling `summary(mod)$adj.r.squared`.
 
 ```{r}
+# no interaction
+
+# with the interaction
+
+```
+Since the adjusted $R^2$ value declined slightly, we conclude that the interaction model did *not* meaningfully improve model fit. 
+
+Note that if you compare $R^2$ across models, without accounting for the additional independent variables, you get a slightly different picture: 
+
+```{r}
+# no interaction
+
+# with the interaction
 
 ```
 
-
+For multiple regression, you should generally rely on adjusted $R^2$ and not $R^2$.
