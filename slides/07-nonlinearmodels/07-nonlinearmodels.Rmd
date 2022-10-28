@@ -1,0 +1,456 @@
+---
+title: "Logistic Regression (and other nonlinear models)"
+subtitle: "EDS 222"
+author: "Tamma Carleton"
+#institute: ""
+date: "Fall 2022"
+output:
+  xaringan::moon_reader:
+    css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r Setup, include = F}
+options(htmltools.dir.version = FALSE)
+library(pacman)
+p_load(leaflet, ggplot2, ggthemes, viridis, dplyr, magrittr, knitr,pagedown,cowplot,latex2exp,parallel,gg3D)
+
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
+source(file.path(rootdir,"labs","_common.R"))
+
+# Define pink color
+red_pink <- "#e64173"
+# Notes directory
+dir_slides <- "~/Dropbox/Teaching/UCSB/EDS_222/EDS222_code/EDS-222-stats/slides/06-nonlinearmodels/"
+# Knitr options
+opts_chunk$set(
+  comment = "#>",
+  fig.align = "center",
+  fig.height = 7,
+  fig.width = 10.5,
+  # dpi = 300,
+  # cache = T,
+  warning = F,
+  message = F,
+  dev = "svg"
+)
+# A blank theme for ggplot
+theme_empty <- theme_bw() + theme(
+  line = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+theme_simple <- theme_bw() + theme(
+  line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_text(size = 14),
+  axis.text.y = element_blank(),
+  axis.ticks = element_blank(),
+  plot.title = element_blank(),
+  axis.title = element_blank(),
+  # plot.margin = structure(c(0, 0, -1, -1), unit = "lines", valid.unit = 3L, class = "unit"),
+  legend.position = "none"
+)
+
+theme_axes <- theme_empty + theme(
+  axis.title = element_text(size = 18),
+  plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
+)
+```
+
+```{css, echo = FALSE}
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+```
+
+# Announcements/check-in
+
+- Assignment 03 pass/fail, due **today** (9am)
+
+--
+
+- Assignment 04 after we cover inference/uncertainty (likely assigned next week)
+
+--
+
+- Final project proposals, due 11/10 (9am)
+  + More details in a few slides
+
+
+---
+# Final project
+
+
+### Goal:
+
+Apply **some of** the statistical concepts you have learned in this course to **answer an environmental data science question**.<sup>*</sup> 
+
+--
+
+### Two parts:
+
+1. Technical blog post. Some examples:
+  + [G-FEED](http://www.g-feed.com/2020/09/indirect-mortality-from-recent.html)
+  + [emLab](https://emlab.ucsb.edu/blog/summertime-blues)
+  + [MEDS '22, ex. 1](https://cullen-molitor.github.io/posts/2021-12-05-species-density-sst-lagsst/)
+  + [MEDS '22, ex. 2](https://jake-eisaguirre.github.io/posts/2021-11-29-mpasandkelp/)
+  + [MEDS '22, ex. 3](https://hdolinh.github.io/posts/2021-11-14-stats-final/)
+  
+2. Three-minute in-class presentation during final exam slot (8-11am, 12/6)
+
+
+.footnote[
+[*]: Your project _must_ include concepts from the second half of the course.
+] 
+---
+# Final project
+
+### Proposal: 
+
+Short paragraph (4-5 sentences) describing your proposed project. Motivate the question, describe possible data sources, suggest possible analyses. 
+
+**Email Sandy your proposal** at sandysum@ucsb.edu by 9am on November 10th. 
+
+---
+# Final project
+
+Full guidelines on our [Resources Page](https://tcarleton.github.io/EDS-222-stats/resources.html)
+
+### Some example topics:
+
+- Are political views on climate change associated with recent natural disaster exposure? 
+
+--
+
+- Detecting trends in air quality for disadvantaged groups across California
+
+--
+
+- Spatial patterns of deforestation during COVID-19
+
+--
+
+- Are there gendered health effects of wildfire smoke?
+
+---
+name: Overview
+
+# Today
+
+#### More on nonlinear relationships with linear regression models
+Log-linear, log-log regressions
+
+--
+
+#### Logistic regression
+How do we model binary outcomes? + note on generalization to discrete categories
+
+---
+layout: false
+class: clear, middle, inverse
+# Nonlinear relationships in linear regression models
+
+---
+# Nonlinear transformations
+
+- Our linearity assumption requires that **parameters enter linearly** (_i.e._, the $\beta_k$ multiplied by variables)
+- We allow nonlinear relationships between $y$ and the explanatory variables $x$.
+
+**Example: Polynomials**
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i$$
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + u_i$$
+
+$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + u_i$$
+
+...
+---
+# Polynomials
+
+- Recall the relationship between **temperature** and **harmful algal blooms**:
+
+$$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
+
+```{R, polys, dev = "svg", fig.height = 6, echo = F}
+# Set seed
+set.seed(1235)
+# Sample size
+n <- 1e3
+# Generate data
+blooms_df <- tibble(
+  temp = runif(n, 0, 3),
+  # y = 1 + x + x^2 + x^3 + x^4 + 0.5 * x^5 + rnorm(n, mean = 0, sd = 6)
+  area = 0.5*temp + 2*temp^2 + rnorm(n, mean = 0, sd=3)
+)
+# Plot
+ggplot(data = blooms_df, aes(x = temp, y = area)) +
+  geom_point(size = 2.5, color = "darkslategrey", alpha = 1) +
+  labs(x="temperature (degrees C)", y = "bloom area (hectares)") + 
+  theme_bw() + 
+  theme(
+    line = element_blank(),
+  panel.grid = element_blank(),
+  rect = element_blank(),
+  strip.text = element_blank(),
+  axis.text.x = element_blank(),
+  axis.text.y = element_blank(),
+  axis.title = element_text(size=18,face="bold"),
+  plot.title = element_blank(),
+  legend.position = "none")
+```
+---
+# Polynomials
+
+Estimating polynomial regressions in `R`:
+```{r, echo = T}
+blooms_df = blooms_df %>% mutate(temp2 = temp^2)
+summary(lm(area~temp+temp2, data=blooms_df))
+```
+---
+# Other nonlinear-in-X regressions
+
+- **Polynomials** and **interactions:** $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2 + \beta_3 x_{2i} + \beta_4 x_{2i}^2 + \beta_5 \left( x_{1i} x_{2i} \right) + u_i$ (more on this today)
+
+- **Exponentials** $\log(y_i) = \beta_0 + \beta_2 e^{x_{2i}} + u_i$ 
+
+- **Logs:** $\log(y_i) = \beta_0 + \beta_1 x_{1i} + u_i$ (Today!)
+
+- **Indicators** and **thresholds:** $y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 \, \mathbb{I}(x_{1i} \geq 100) + u_i$
+
+--
+
+In all cases, the effect of a change in $x$ on $y$ will vary depending on your baseline level of $x$. This is not true with linear relationships! 
+
+
+---
+
+# Log-linear specification
+
+You will frequently see logged<sup>*</sup>  outcome variables with linear (non-logged) explanatory variables, _e.g._,
+
+$$ \log(\text{Pay}_i) = \beta_0 + \beta_1 \, \text{School}_i + u_i $$
+
+This specification changes our interpretation of the slope coefficients.
+
+--
+
+**Interpretation**
+
+- A one-unit increase in our explanatory variable increases the outcome variable by approximately $\beta_1\times 100$ percent.
+
+- *Example:* If $\beta_1 = 0.03$, an additional year of schooling increases pay by approximately 3 percent.
+
+.footnote[
+[*]: When I say "log", I mean "natural log", i.e. $ln(x) = log_e(x)$.
+] 
+
+---
+# Review: Percent changes
+
+- What is a percent change again, anyway?
+
+--
+
+- Local gasoline prices were $5/gallon, but last month increased by 12%. How much are they now?
+
+--
+
+$$ 5(1+0.12) = 5\times1.12 = 5.6$$ 
+--
+
+Can also write this as $$0.12 = \frac{5.6-5}{5}$$
+
+--
+
+Generally, we have that when $y$ increases by $r$ percent, our new value is $y(1+r)$.
+
+$$ r = \frac{y_2 - y_1}{y_1}$$
+---
+# Log differences as percent changes?
+
+Near $y=1$, $log(y)$ is approximately slope 1, i.e. $log(y) \approx y-1$
+
+
+```{R, logs, dev = "svg", fig.height = .5, echo = F}
+
+x = seq(0.1, 4, by=0.01)
+lny = log(x)
+df = data.frame(x,lny)
+# Plot
+ggplot(data = df, aes(x = x, y = lny)) +
+  geom_line(size = 2.5, color = "darkslategrey", alpha = 1) +
+  labs(x="y", y = "y") + geom_abline(intercept = -1, slope = 1, color = "lightcoral", size=2, linetype="dashed") +
+  theme_bw() + 
+  theme(
+  rect = element_blank(),
+  strip.text = element_blank(),  
+  axis.text.x = element_text(size=18),
+  axis.text.y = element_text(size=18),
+  axis.title = element_text(size=18,face="bold"),
+  plot.title = element_blank(),
+  legend.position = "none")
+```
+
+---
+
+# Log differences as percent changes?
+
+Near $y=1$, $log(y)$ is approximately slope 1, i.e. $log(y) \approx y-1$
+
+Therefore, $log(1+r) \approx r$ **when $r$ is small!** (so that you're still close to 1 on the x-axis)
+
+--
+
+This lets us show that:
+
+$$log(y(1+r))  =  log(y) + log(1+r) \approx log(y) + r$$
+
+So when we see $log(y)$ go up by $r$, we can say that represents an $r \times 100$ percent change in $y$!
+
+--
+
+For example: $y$ is increased by 5% means $y$ increases to $y(1.05)$. The log of $y$ changes from $log(y)$ to approximately $log(y) + 0.05$.  Increasing $y$ by 5% is therefore (almost) equivalent to adding 0.05 to $log(y)$.
+
+---
+# Log-linear specification
+
+Back to our log-linear model
+
+$$ \log(y_i) = \beta_0 + \beta_1 \, x_i + u $$
+
+A one unit change in $x$ causes a $\beta_1$ unit change in $log(y)$. 
+
+This is equivalent to a $\beta_1$ **percentage change** in $y$.
+
+---
+# Log-linear specification
+
+Because the log-linear specification comes with a different interpretation, you need to make sure it fits your data-generating process/model.
+
+Does $x$ change $y$ in levels (_e.g._, a 3-unit increase) or percentages (_e.g._, a 10-percent increase)?
+
+--
+
+_I.e._, you need to be sure an exponential relationship makes sense:
+
+$$ \log(y_i) = \beta_0 + \beta_1 \, x_i + u_i \iff y_i = e^{\beta_0 + \beta_1 x_i + u_i} $$
+
+--
+
+Note: You are using linear regression to estimate a nonlinear-in-parameters relationship. This is the power of taking logs! 
+
+---
+# Log-linear specification
+
+```{r, log linear plot, echo = F, cache = T, dev = "svg", fig.height = 6}
+# Set seed
+set.seed(1234)
+# Sample size
+n <- 1e3
+# Generate data
+ll_df <- tibble(
+  x = runif(n, 0, 3),
+  y = exp(-100 + 0.75 * x + rnorm(n, sd = 0.5))
+)
+# Plot
+ggplot(data = ll_df, aes(x = x, y = y)) +
+geom_hline(yintercept = 0) +
+geom_vline(xintercept = 0) +
+geom_point(size = 3, color = "darkslategrey", alpha = 0.5) +
+geom_smooth(color = red_pink, se = F) +
+xlab("x") +
+ylab("y") +
+theme_axes
+```
+
+
+---
+# Log-log specification
+
+Similarly, log-log models are those where the outcome variable is logged *and* at least one explanatory variable is logged
+
+$$ \log(\text{Pay}_i) = \beta_0 + \beta_1 \, \log(\text{School}_i) + u_i $$
+
+**Interpretation:**
+
+- A one-percent increase in $x$ will lead to a $\beta_1$ percent change in $y$.
+- Often interpreted as an "elasticity" in economics.
+
+---
+# Log-linear with a binary variable
+
+**Note:** If you have a log-linear model with a binary indicator variable, the interpretation for the coefficient on that variable changes.
+
+Consider
+
+$$ \log(y_i) = \beta_0 + \beta_1 x_{1i} + u_i $$
+
+for binary variable $x_1$.
+
+The interpretation of $\beta_1$ is now
+
+- When $x_1$ changes from 0 to 1, $y$ will change by $100 \times \left( e^{\beta_1} -1 \right)$ percent.
+- When $x_1$ changes from 1 to 0, $y$ will change by $100 \times \left( e^{-\beta_1} -1 \right)$ percent.
+
+---
+# Log-log specification
+
+```{r, log log plot, echo = F, cache = T, dev = "svg", fig.height = 6}
+# Set seed
+set.seed(1234)
+# Sample size
+n <- 1e3
+# Generate data
+log_df <- tibble(
+  x = runif(n, 0, 10),
+  y = exp(3 * log(x) + rnorm(n, sd = 0.5))
+)
+# Plot
+ggplot(data = log_df, aes(x = x, y = y)) +
+geom_hline(yintercept = 0) +
+geom_vline(xintercept = 0) +
+geom_point(size = 3, color = "darkslategrey", alpha = 0.5) +
+geom_smooth(color = red_pink, se = F) +
+xlab("x") +
+ylab("y") +
+theme_axes
+```
+---
+layout: false
+class: clear, middle, inverse
+# Logistic regression
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+Some slide components were borrowed from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
+
+---
+exclude: true
+
+
+```{R, print pdfs, echo = F, eval = F}
+pagedown::chrome_print(
+  input = "06-inference.html",
+  output = "06-inference.pdf",
+  timeout = 60
+)
+```
+

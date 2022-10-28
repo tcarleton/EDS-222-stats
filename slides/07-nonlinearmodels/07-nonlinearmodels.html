@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Logistic Regression (and other nonlinear models)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tamma Carleton" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Logistic Regression (and other nonlinear models)
+## EDS 222
+### Tamma Carleton
+### Fall 2022
+
+---
+
+
+
+&lt;style type="text/css"&gt;
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+
+# Announcements/check-in
+
+- Assignment 03 pass/fail, due **today** (9am)
+
+--
+
+- Assignment 04 after we cover inference/uncertainty (likely assigned next week)
+
+--
+
+- Final project proposals, due 11/10 (9am)
+  + More details in a few slides
+
+
+---
+# Final project
+
+
+### Goal:
+
+Apply **some of** the statistical concepts you have learned in this course to **answer an environmental data science question**.&lt;sup&gt;*&lt;/sup&gt; 
+
+--
+
+### Two parts:
+
+1. Technical blog post. Some examples:
+  + [G-FEED](http://www.g-feed.com/2020/09/indirect-mortality-from-recent.html)
+  + [emLab](https://emlab.ucsb.edu/blog/summertime-blues)
+  + [MEDS '22, ex. 1](https://cullen-molitor.github.io/posts/2021-12-05-species-density-sst-lagsst/)
+  + [MEDS '22, ex. 2](https://jake-eisaguirre.github.io/posts/2021-11-29-mpasandkelp/)
+  + [MEDS '22, ex. 3](https://hdolinh.github.io/posts/2021-11-14-stats-final/)
+  
+2. Three-minute in-class presentation during final exam slot (8-11am, 12/6)
+
+
+.footnote[
+[*]: Your project _must_ include concepts from the second half of the course.
+] 
+---
+# Final project
+
+### Proposal: 
+
+Short paragraph (4-5 sentences) describing your proposed project. Motivate the question, describe possible data sources, suggest possible analyses. 
+
+**Email Sandy your proposal** at sandysum@ucsb.edu by 9am on November 10th. 
+
+---
+# Final project
+
+Full guidelines on our [Resources Page](https://tcarleton.github.io/EDS-222-stats/resources.html)
+
+### Some example topics:
+
+- Are political views on climate change associated with recent natural disaster exposure? 
+
+--
+
+- Detecting trends in air quality for disadvantaged groups across California
+
+--
+
+- Spatial patterns of deforestation during COVID-19
+
+--
+
+- Are there gendered health effects of wildfire smoke?
+
+---
+name: Overview
+
+# Today
+
+#### More on nonlinear relationships with linear regression models
+Log-linear, log-log regressions
+
+--
+
+#### Logistic regression
+How do we model binary outcomes? + note on generalization to discrete categories
+
+---
+layout: false
+class: clear, middle, inverse
+# Nonlinear relationships in linear regression models
+
+---
+# Nonlinear transformations
+
+- Our linearity assumption requires that **parameters enter linearly** (_i.e._, the `\(\beta_k\)` multiplied by variables)
+- We allow nonlinear relationships between `\(y\)` and the explanatory variables `\(x\)`.
+
+**Example: Polynomials**
+
+`$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i$$`
+
+`$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + u_i$$`
+
+`$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + u_i$$`
+
+...
+---
+# Polynomials
+
+- Recall the relationship between **temperature** and **harmful algal blooms**:
+
+$$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
+
+&lt;img src="07-nonlinearmodels_files/figure-html/polys-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# Polynomials
+
+Estimating polynomial regressions in `R`:
+
+```r
+blooms_df = blooms_df %&gt;% mutate(temp2 = temp^2)
+summary(lm(area~temp+temp2, data=blooms_df))
+#&gt; 
+#&gt; Call:
+#&gt; lm(formula = area ~ temp + temp2, data = blooms_df)
+#&gt; 
+#&gt; Residuals:
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -12.597  -2.092  -0.142   1.995   9.487 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)   0.0636     0.2925    0.22     0.83    
+#&gt; temp          0.6254     0.4401    1.42     0.16    
+#&gt; temp2         1.9212     0.1416   13.57   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 3.02 on 997 degrees of freedom
+#&gt; Multiple R-squared:  0.777,	Adjusted R-squared:  0.777 
+#&gt; F-statistic: 1.74e+03 on 2 and 997 DF,  p-value: &lt;2e-16
+```
+---
+# Other nonlinear-in-X regressions
+
+- **Polynomials** and **interactions:** `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{1i}^2 + \beta_3 x_{2i} + \beta_4 x_{2i}^2 + \beta_5 \left( x_{1i} x_{2i} \right) + u_i\)` (more on this today)
+
+- **Exponentials** `\(\log(y_i) = \beta_0 + \beta_2 e^{x_{2i}} + u_i\)` 
+
+- **Logs:** `\(\log(y_i) = \beta_0 + \beta_1 x_{1i} + u_i\)` (Today!)
+
+- **Indicators** and **thresholds:** `\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 \, \mathbb{I}(x_{1i} \geq 100) + u_i\)`
+
+--
+
+In all cases, the effect of a change in `\(x\)` on `\(y\)` will vary depending on your baseline level of `\(x\)`. This is not true with linear relationships! 
+
+
+---
+
+# Log-linear specification
+
+You will frequently see logged&lt;sup&gt;*&lt;/sup&gt;  outcome variables with linear (non-logged) explanatory variables, _e.g._,
+
+$$ \log(\text{Pay}_i) = \beta_0 + \beta_1 \, \text{School}_i + u_i $$
+
+This specification changes our interpretation of the slope coefficients.
+
+--
+
+**Interpretation**
+
+- A one-unit increase in our explanatory variable increases the outcome variable by approximately `\(\beta_1\times 100\)` percent.
+
+- *Example:* If `\(\beta_1 = 0.03\)`, an additional year of schooling increases pay by approximately 3 percent.
+
+.footnote[
+[*]: When I say "log", I mean "natural log", i.e. `\(ln(x) = log_e(x)\)`.
+] 
+
+---
+# Review: Percent changes
+
+- What is a percent change again, anyway?
+
+--
+
+- Local gasoline prices were $5/gallon, but last month increased by 12%. How much are they now?
+
+--
+
+$$ 5(1+0.12) = 5\times1.12 = 5.6$$ 
+--
+
+Can also write this as `$$0.12 = \frac{5.6-5}{5}$$`
+
+--
+
+Generally, we have that when `\(y\)` increases by `\(r\)` percent, our new value is `\(y(1+r)\)`.
+
+$$ r = \frac{y_2 - y_1}{y_1}$$
+---
+# Log differences as percent changes?
+
+Near `\(y=1\)`, `\(log(y)\)` is approximately slope 1, i.e. `\(log(y) \approx y-1\)`
+
+
+&lt;img src="07-nonlinearmodels_files/figure-html/logs-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Log differences as percent changes?
+
+Near `\(y=1\)`, `\(log(y)\)` is approximately slope 1, i.e. `\(log(y) \approx y-1\)`
+
+Therefore, `\(log(1+r) \approx r\)` **when `\(r\)` is small!** (so that you're still close to 1 on the x-axis)
+
+--
+
+This lets us show that:
+
+`$$log(y(1+r))  =  log(y) + log(1+r) \approx log(y) + r$$`
+
+So when we see `\(log(y)\)` go up by `\(r\)`, we can say that represents an `\(r \times 100\)` percent change in `\(y\)`!
+
+--
+
+For example: `\(y\)` is increased by 5% means `\(y\)` increases to `\(y(1.05)\)`. The log of `\(y\)` changes from `\(log(y)\)` to approximately `\(log(y) + 0.05\)`.  Increasing `\(y\)` by 5% is therefore (almost) equivalent to adding 0.05 to `\(log(y)\)`.
+
+---
+# Log-linear specification
+
+Back to our log-linear model
+
+$$ \log(y_i) = \beta_0 + \beta_1 \, x_i + u $$
+
+A one unit change in `\(x\)` causes a `\(\beta_1\)` unit change in `\(log(y)\)`. 
+
+This is equivalent to a `\(\beta_1\)` **percentage change** in `\(y\)`.
+
+---
+# Log-linear specification
+
+Because the log-linear specification comes with a different interpretation, you need to make sure it fits your data-generating process/model.
+
+Does `\(x\)` change `\(y\)` in levels (_e.g._, a 3-unit increase) or percentages (_e.g._, a 10-percent increase)?
+
+--
+
+_I.e._, you need to be sure an exponential relationship makes sense:
+
+$$ \log(y_i) = \beta_0 + \beta_1 \, x_i + u_i \iff y_i = e^{\beta_0 + \beta_1 x_i + u_i} $$
+
+--
+
+Note: You are using linear regression to estimate a nonlinear-in-parameters relationship. This is the power of taking logs! 
+
+---
+# Log-linear specification
+
+&lt;img src="07-nonlinearmodels_files/figure-html/log linear plot-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Log-log specification
+
+Similarly, log-log models are those where the outcome variable is logged *and* at least one explanatory variable is logged
+
+$$ \log(\text{Pay}_i) = \beta_0 + \beta_1 \, \log(\text{School}_i) + u_i $$
+
+**Interpretation:**
+
+- A one-percent increase in `\(x\)` will lead to a `\(\beta_1\)` percent change in `\(y\)`.
+- Often interpreted as an "elasticity" in economics.
+
+---
+# Log-linear with a binary variable
+
+**Note:** If you have a log-linear model with a binary indicator variable, the interpretation for the coefficient on that variable changes.
+
+Consider
+
+$$ \log(y_i) = \beta_0 + \beta_1 x_{1i} + u_i $$
+
+for binary variable `\(x_1\)`.
+
+The interpretation of `\(\beta_1\)` is now
+
+- When `\(x_1\)` changes from 0 to 1, `\(y\)` will change by `\(100 \times \left( e^{\beta_1} -1 \right)\)` percent.
+- When `\(x_1\)` changes from 1 to 0, `\(y\)` will change by `\(100 \times \left( e^{-\beta_1} -1 \right)\)` percent.
+
+---
+# Log-log specification
+
+&lt;img src="07-nonlinearmodels_files/figure-html/log log plot-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+layout: false
+class: clear, middle, inverse
+# Logistic regression
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+Some slide components were borrowed from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
+
+---
+exclude: true
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

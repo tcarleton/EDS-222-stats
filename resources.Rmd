@@ -98,19 +98,19 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Assignment 3 answer key:** [html](labs/assignment-03-answers.html) [rmd](labs/assignment-03-answers.Rmd)
 
-<!--
 
 ### Week 7
 
-- **Slides 06**: Statistical inference [html](slides/06-inference/06-inference.html) [pdf](slides/06-inference/06-inference.pdf)
+- **Slides 07**: Logistic regression and other nonlinear models (to be posted) 
 
 - **Reading:** 
-  + [Chapters 13, 19.2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + [Chapter 9](https://openintro-ims.netlify.app/model-logistic.html), _Introduction to Modern Statistics_
 
-- **Lab:** Hypothesis testing in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html).
+- **Lab:** Logistic regressions in `R` (to be posted)
   
-- **Assignment:** Assignment 4 released in Week 8
+- **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](exams/EDS222_final_project_guidelines.pdf)
 
+<!--
 ### Week 8
 
 - **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
