@@ -101,7 +101,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 ### Week 7
 
-- **Slides 07**: Logistic regression and other nonlinear models (to be posted) 
+- **Slides 07**: Logistic regression and other nonlinear models [html](slides/07-nonlinearmodels/07-nonlinearmodels.html) [pdf](slides/07-nonlinearmodels/07-nonlinearmodels.pdf)
 
 - **Reading:** 
   + [Chapter 9](https://openintro-ims.netlify.app/model-logistic.html), _Introduction to Modern Statistics_
