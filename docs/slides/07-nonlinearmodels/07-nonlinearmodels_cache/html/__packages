@@ -1,4 +1,3 @@
-base
 pacman
 leaflet
 ggplot2
@@ -52,3 +51,4 @@ survival
 waffle
 ggrepel
 ggpubr
+base

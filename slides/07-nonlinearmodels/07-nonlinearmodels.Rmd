@@ -109,19 +109,32 @@ Apply **some of** the statistical concepts you have learned in this course to **
 
 ### Two parts:
 
-1. Technical blog post. Some examples:
+Deliverable 1: Technical blog post. Some examples:
   + [G-FEED](http://www.g-feed.com/2020/09/indirect-mortality-from-recent.html)
   + [emLab](https://emlab.ucsb.edu/blog/summertime-blues)
   + [MEDS '22, ex. 1](https://cullen-molitor.github.io/posts/2021-12-05-species-density-sst-lagsst/)
   + [MEDS '22, ex. 2](https://jake-eisaguirre.github.io/posts/2021-11-29-mpasandkelp/)
   + [MEDS '22, ex. 3](https://hdolinh.github.io/posts/2021-11-14-stats-final/)
+
+---
+# Final project
+
+
+### Goal:
+
+Apply **some of** the statistical concepts you have learned in this course to **answer an environmental data science question**.<sup>*</sup> 
+
+--
+
+### Two parts:
   
-2. Three-minute in-class presentation during final exam slot (8-11am, 12/6)
+Deliverable 2: Three-minute in-class presentation during final exam slot (8-11am, 12/6)
 
 
 .footnote[
 [*]: Your project _must_ include concepts from the second half of the course.
 ] 
+
 ---
 # Final project
 
@@ -192,7 +205,7 @@ $$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + 
 
 $$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
 
-```{R, polys, dev = "svg", out.width = "90%", echo = F}
+```{R, polys, dev = "svg", out.width="70%", echo = F}
 # Set seed
 set.seed(1235)
 # Sample size
@@ -215,7 +228,7 @@ ggplot(data = blooms_df, aes(x = temp, y = area)) +
   strip.text = element_blank(),
   axis.text.x = element_blank(),
   axis.text.y = element_blank(),
-  axis.title = element_text(size=18,face="bold"),
+  axis.title = element_text(size=12,face="bold"),
   plot.title = element_blank(),
   legend.position = "none")
 ```
@@ -292,7 +305,7 @@ $$ r = \frac{y_2 - y_1}{y_1}$$
 Near $y=1$, $log(y)$ is approximately slope 1, i.e. $log(y) \approx y-1$
 
 
-```{R, logs, dev = "svg", out.width = "90%", echo = F}
+```{R, logs, dev = "svg", out.width = "80%", echo = F}
 
 x = seq(0.1, 4, by=0.01)
 lny = log(x)
@@ -300,14 +313,14 @@ df = data.frame(x,lny)
 # Plot
 ggplot(data = df, aes(x = x, y = lny)) +
   geom_line(size = 2.5, color = "darkslategrey", alpha = 1) +
-  labs(x="y", y = "y") + geom_abline(intercept = -1, slope = 1, color = "lightcoral", size=2, linetype="dashed") +
+  labs(x="y", y = "log(y), y - 1") + geom_abline(intercept = -1, slope = 1, color = "lightcoral", size=2, linetype="dashed") +
   theme_bw() + 
   theme(
   rect = element_blank(),
   strip.text = element_blank(),  
-  axis.text.x = element_text(size=18),
-  axis.text.y = element_text(size=18),
-  axis.title = element_text(size=18,face="bold"),
+  axis.text.x = element_text(size=12),
+  axis.text.y = element_text(size=12),
+  axis.title = element_text(size=12,face="bold"),
   plot.title = element_blank(),
   legend.position = "none")
 ```
@@ -356,8 +369,6 @@ _I.e._, you need to be sure an exponential relationship makes sense:
 
 $$ \log(y_i) = \beta_0 + \beta_1 \, x_i + u_i \iff y_i = e^{\beta_0 + \beta_1 x_i + u_i} $$
 
---
-
 Note: You are using linear regression to estimate a nonlinear-in-parameters relationship. This is the power of taking logs! 
 
 ---
@@ -377,8 +388,8 @@ ll_df <- tibble(
 ggplot(data = ll_df, aes(x = x, y = y)) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
-geom_point(size = 3, color = "darkslategrey", alpha = 0.5) +
-geom_smooth(color = red_pink, se = F) +
+geom_point(size = 2, color = "darkslategrey", alpha = 0.5) +
+geom_smooth(color = red_pink, se = F, size=2) +
 xlab("x") +
 ylab("y") +
 theme_axes
@@ -430,12 +441,51 @@ log_df <- tibble(
 ggplot(data = log_df, aes(x = x, y = y)) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
-geom_point(size = 3, color = "darkslategrey", alpha = 0.5) +
-geom_smooth(color = red_pink, se = F) +
+geom_point(size = 2, color = "darkslategrey", alpha = 0.5) +
+geom_smooth(color = red_pink, se = F, size=2) +
 xlab("x") +
 ylab("y") +
 theme_axes
 ```
+---
+# When the approximation fails
+
+The nice interpretation so far relies on the fact that near 1, $log(y) \approx y-1$ 
+  - So, for example, $log(y(1+r)) = log(y) + log(1+r) \approx log(y) + r$
+
+--
+
+What if $r$ is large? E.g., $r$=0.8:
+  - $log(1*(1.8)) = log(1) + log(1.8) = 0.59 \neq log(1) + 0.8 = 0.8$
+
+--
+
+Exact percentage change (use for large predicted changes):
+
+If $log(y) = \beta_0 + \beta_1 x + \varepsilon$, then the percentage change in $y$ for a one unit change in $x$ is:
+
+$$\text{% change in y} = (e^{\beta_1}-1)\times 100 $$
+--
+
+Note that $e^x$ in `R` is `exp(x)`
+
+---
+# When the approximation fails
+
+Example: Suppose in $log(y) = \beta_0 + \beta_1 x + \varepsilon$, we estimate that $\hat\beta_1 = 0.6$ 
+
+--
+
+This looks like a 1 unit change in $x$ causes a 60% change in $y$. But the exact percentage change in $y$ is:
+  + $(e^{0.6}-1)\times 100 = 0.82 \times 100 \implies 82%$ change in $y$
+  + Note that the imprecise approximation for large changes will always be biased _downwards_
+
+--
+
+Can you just change units of $x$? 
+  + Yes, mechanically you can do this and avoid the issues with approximation
+  + But think hard about your problem! You probably care about understanding the impacts of a meaningful increase in $x$, not a tiny increase in $x$ 
+  
 ---
 layout: false
 class: clear, middle, inverse
@@ -466,9 +516,9 @@ ylab("species presence") +
   theme(
   rect = element_blank(),
   strip.text = element_blank(),  
-  axis.text.x = element_text(size=18),
-  axis.text.y = element_text(size=18),
-  axis.title = element_text(size=18,face="bold"),
+  axis.text.x = element_text(size=12),
+  axis.text.y = element_text(size=12),
+  axis.title = element_text(size=12,face="bold"),
   plot.title = element_blank(),
   legend.position = "none")
 ```
@@ -492,9 +542,9 @@ ylab("species presence") +
   theme(
   rect = element_blank(),
   strip.text = element_blank(),  
-  axis.text.x = element_text(size=18),
-  axis.text.y = element_text(size=18),
-  axis.title = element_text(size=18,face="bold"),
+  axis.text.x = element_text(size=12),
+  axis.text.y = element_text(size=12),
+  axis.title = element_text(size=12,face="bold"),
   plot.title = element_blank(),
   legend.position = "none")
 ```
@@ -502,7 +552,7 @@ ylab("species presence") +
 ---
 # Modeling probabilities
 
-- Our data take on the form $y_i =$ or $y_i = 0$
+- Our data take on the form $y_i = 1$ or $y_i = 0$
 
 --
 
@@ -519,8 +569,15 @@ ylab("species presence") +
 
 $$transformation(p_i) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ...$$
 
+---
+# Modeling probabilities
+
+Basic idea: we need some transformation of the _probability_ that lets us write:
+
+$$transformation(p_i) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ...$$
+
 - We want this transformation to ensure that:
-  + we can input a value between 0 and 1 and return a continuous variable 
+  + we can input a value between 0 and 1 and return a continuous variable (i.e., we want our outcome variable to be a continuous variable)
   + our predicted probabilities $\hat p_i$ (inverse of the transformation) will fall between 0 and 1
 
 ---
@@ -545,9 +602,9 @@ ylab("p") +
   theme(
   rect = element_blank(),
   strip.text = element_blank(),  
-  axis.text.x = element_text(size=18),
-  axis.text.y = element_text(size=18),
-  axis.title = element_text(size=18,face="bold"),
+  axis.text.x = element_text(size=12),
+  axis.text.y = element_text(size=12),
+  axis.title = element_text(size=12,face="bold"),
   plot.title = element_blank(),
   legend.position = "none")
 ```
@@ -585,9 +642,14 @@ $$log\left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} 
   + Essentially, this asks: what combination of parameters $\beta_0, \beta_1, ...$ maximizes the likelihood that we would observe the data we have? 
   + E.g., if you have high $x_1$ values coinciding with many $y_i =1$ values, likely that $\beta_1$ is high and that $p_i$ is high for observations with large $x_1$
 
---
+---
+# Logistic regression
 
-- All you really need to know is...
+How do we estimate this regression?
+
+$$log\left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ...$$
+
+All you really need to know on estimation is...
   + That we use `glm()` instead of `lm()` -- GLM for "generalized linear model" 
   + Interpreting coefficients is a lot more complicated! (next slide)
 
@@ -711,7 +773,7 @@ resume <- resume %>%
          honors, military, has_email_address, race, sex)
 ```
 
-```{r, resumeexample}
+```{r, resumeexample, out.width="40%"}
 resume_variables <- tribble(
   ~variable,           ~description,
   "received_callback", "Specifies whether the employer called the applicant following submission of the application for the job.",
@@ -724,13 +786,30 @@ resume_variables <- tribble(
   "race",              "Race of the applicant, implied by their first name listed on the resume.",
   "sex",               "Sex of the applicant (limited to only and in this study), implied by the first name listed on the resume."
 )
-resume_variables %>%
+
+resume_variables[1:5,] %>%
   kbl(linesep = "", booktabs = TRUE) %>%
-  kable_styling(bootstrap_options = c("striped", "condensed"), 
-                latex_options = c("striped", "hold_position"), full_width = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                latex_options = c("striped",  "font_size"=7), full_width = TRUE) %>%
   column_spec(1, monospace = TRUE) %>%
   column_spec(2, width = "30em")
 ```
+
+---
+# Logistic regression: Example
+
+Variables included in the data (all randomly assigned):
+
+```{r, resumeexample2, out.width="40%"}
+
+resume_variables[6:9,] %>%
+  kbl(linesep = "", booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped", "condensed"),
+                latex_options = c("striped",  "font_size"=7), full_width = TRUE) %>%
+  column_spec(1, monospace = TRUE) %>%
+  column_spec(2, width = "30em")
+```
+
 ---
 # Logistic Regression: example
 
@@ -756,7 +835,10 @@ a.  If a resume is randomly selected from the study and it has a Black associate
 
 **Answer:** If a randomly chosen resume is associated with a Black name, then `race_white` takes the value of 0 and the right side of the model equation equals $-2.67$. Solving for $p_i$ gives $log(\frac{\hat p_i}{1-\hat p_i}) = -2.67 \implies \hat p_i = \frac{e^{-2.67}}{1+e^{-2.67}} = 0.065$.   
 
---
+---
+# Logistic regression: Example
+
+$$\log \left( \frac{\widehat{p}_i}{1-\widehat{p}_i} \right) = -2.67 + 0.44 \times {\texttt{race_white}}$$
 
 b.  What would the probability be if the resume name was associated with White individuals?
 
@@ -764,7 +846,7 @@ b.  What would the probability be if the resume name was associated with White i
 
 --
 
-**Conclude:** Being White increases the likelihood of a call back.
+**Conclude:** Being White increases the likelihood of a call back, by 3.2 percentage points.
 
 ---
 # Logistic regression: Example
@@ -787,7 +869,21 @@ $$
 
 To predict callback probability for a White individual, you also need to know job location, experience, honors, military experience, whether they have an email, race, and sex!
 
---
+---
+# Logistic regression: Example
+
+For example, you might estimate:
+
+$$
+\begin{aligned}
+&log \left(\frac{p}{1 - p}\right) \\
+&= - 2.7162 - 0.4364 \times \texttt{job_city}_{\texttt{Chicago}} \\
+& \quad \quad + 0.0206 \times \texttt{years_experience} \\
+& \quad \quad + 0.7634 \times \texttt{honors} - 0.3443 \times \texttt{military} + 0.2221 \times \texttt{email} \\
+& \quad \quad + 0.4429 \times \texttt{race}_{\texttt{White}} - 0.1959 \times \texttt{sex}_{\texttt{man}} 
+\end{aligned}
+$$
+
 
 Note: the effect of race on call back now varies based on all the other covariates! 
   + Try it: Effect of being white for Chicago male with 10 years experience, an email, no honors and no military experience _versus_ a female with the same characteristics? 
@@ -826,8 +922,8 @@ exclude: true
 
 ```{R, print pdfs, echo = F, eval = F}
 pagedown::chrome_print(
-  input = "06-inference.html",
-  output = "06-inference.pdf",
+  input = "07-nonlinearmodels.html",
+  output = "07-nonlinearmodels.pdf",
   timeout = 60
 )
 ```
