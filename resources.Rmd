@@ -108,7 +108,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Lab:** Logistic regressions in `R` (to be posted)
   
-- **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](exams/EDS222_final_project_guidelines.pdf)
+- **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
 
 <!--
 ### Week 8
