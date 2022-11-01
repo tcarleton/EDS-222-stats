@@ -163,7 +163,7 @@ Log-linear, log-log regressions
 --
 
 #### Logistic regression
-How do we model binary outcomes? + note on generalization to discrete categories
+How do we model binary outcomes? 
 
 ---
 layout: false
@@ -192,7 +192,7 @@ $$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + 
 
 $$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
 
-```{R, polys, dev = "svg", fig.height = 6, echo = F}
+```{R, polys, dev = "svg", out.width = "90%", echo = F}
 # Set seed
 set.seed(1235)
 # Sample size
@@ -292,7 +292,7 @@ $$ r = \frac{y_2 - y_1}{y_1}$$
 Near $y=1$, $log(y)$ is approximately slope 1, i.e. $log(y) \approx y-1$
 
 
-```{R, logs, dev = "svg", fig.height = .5, echo = F}
+```{R, logs, dev = "svg", out.width = "90%", echo = F}
 
 x = seq(0.1, 4, by=0.01)
 lny = log(x)
@@ -445,7 +445,7 @@ class: clear, middle, inverse
 
 What do you do when your dependent variable takes on just two values? 
 
-```{r, binary, echo = F, cache = T, dev = "svg", fig.height = 6}
+```{r, binary, echo = F, cache = T, dev = "svg", out.width = "90%"}
 # Set seed
 set.seed(1234)
 n <- 100
@@ -791,6 +791,25 @@ To predict callback probability for a White individual, you also need to know jo
 
 Note: the effect of race on call back now varies based on all the other covariates! 
   + Try it: Effect of being white for Chicago male with 10 years experience, an email, no honors and no military experience _versus_ a female with the same characteristics? 
+
+---
+# Multinomial logistic regression
+
+**What if** your outcome variable is categorical, not binary?
+
+--
+
+For example:
+  - Species
+  - Socioeconomic status
+  - Survey responses
+  - ...
+
+--
+
+**Multinomial logistic regression** generalizes the binary logistic regression you've seen here to work for multiple outcome categories
+  - Model predicts the probability an individual will fall into each category
+  - Beyond the scope of this class, but not a far leap from what you've seen here (lots of online resources -- ask me if you're interested!)
 
 ---
 
