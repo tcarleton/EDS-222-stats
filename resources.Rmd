@@ -106,7 +106,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapter 9](https://openintro-ims.netlify.app/model-logistic.html), _Introduction to Modern Statistics_
 
-- **Lab:** Logistic regressions in `R` (to be posted)
+- **Lab:** Logistic regressions in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html) 
   
 - **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
 

@@ -1,6 +1,6 @@
 ---
 title: "EDS 222: Week 7: In-class Lab"
-author: "{STUDENT NAME}"
+author: ""
 date: "`r Sys.Date()`"
 output:
   tufte::tufte_html: default
@@ -14,19 +14,7 @@ output:
 
 # Section 0: Getting set up
 
-You should already have done the following:
-
-1. Create a _Labs/_ folder where you will store all your lab materials for EDS 222. 
-2. Download `_common.R` and put it in the _Labs/_ folder.
-3. Install the following packages:
-
-```{r setup, include=FALSE, echo = FALSE, eval = FALSE}
-suppressMessages({
-  install.packages( "tidymodels", "gghighlight", "glue", "ggmosaic", "ggridges", "gridExtra", "infer", "janitor", "knitr", "kableExtra", "maps", "openintro", "patchwork", "quantreg", "tidyverse", "scales", "skimr", "caret", "palmerpenguins", "survival", "waffle", "ggrepel", "ggpubr", "openintro")
-})
-```
-
-For today, load the following packages:
+Load the following packages:
 
 ```{r, echo = FALSE, eval = TRUE}
 # You probably already have these packages installed, so let's just load them
@@ -44,146 +32,186 @@ options(scipen = 999) # disable scientific notation
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+# Section 1: Categorical response variable
 
-# Section 1: Hypothesis testing in `R`
+Thus far, we have only built models for a numeric response variable. Here, we will study a problem where the response variable is binary; that is, takes on a 1 or a 0 only. This example follows Tutorial 3, Lesson 9 from *Introduction to Modern Statistics* Chapter 10 quite closely.
 
-The state of North Carolina released to the public a large data set containing information on births recorded in this state. This data set has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children. `ncbirths` is a random sample of 1000 cases from this data set. We want to evaluate whether there is a difference between weights of babies born to smoker and non-smoker mothers.
+A well-known Stanford University study on heart transplants tracked the five-year survival rate of patients with dire heart ailments. The purpose of the study was to assess the efficacy of heart transplants, but for right now we will simply focus on modeling how *age* of a heart transplant patient influences their survival probability. Let's create a plot that illustrates the relationship between age when the study began and survival when the study ended, five years later.
 
-First, filter `ncbirths` for rows where habit is non-missing.
+We will use the `geom_jitter()` function to create the illusion of separation in our data. Because the y value is categorical, all of the points would either lie exactly on "dead" or "alive", making the individual points hard to see. To counteract this, `geom_jitter()` will move the points a small random amount up or down. Note that this is for visualization purposes only -- this is a binary outcome variable, after all!
 
-Use the is.na() function to specify that you want values of habit that are not missing (where is.na() is FALSE).
+If you fit a simple linear regression line to these data, what would it look like?
+
+```{r, echo=TRUE}
+
+
+```
+
+## Making a binary variable
+
+First, we have a technical problem -- it's difficult to interpret a binary variable when it's stored in `factor` format, since it's not clear which outcome `R` is treating as a 1 and which outcome `R` is treating as a 0. We can get around this by creating a new variable that is binary (either 0 or 1), based on whether the patient `survived` to the end of the study, or not. We call this new variable `is_alive`.
 
 ```{r}
 
 ```
 
-## Step 1: Define the **null** and **alternative** hypotheses: 
+## Visualizing a binary response
 
-Construct a null and an alternative hypothesis that will allow you to evaluate if the birth weight of babies born to smoking mothers is different from the birth weight of babies born to non-smoking mothers. 
-
-Answer: 
-
-We can write the two hypotheses as:
-
-$$H_{0}: \mu_{nonsmoker} - \mu_{smoker} = 0$$
-$$H_{A}: \mu_{nonsmoker} - \mu_{smoker} \neq 0$$
-## Step 2: Collect data and compute the point estimate.
-
-Use the complete version of the `ncbirths` data to estimate the "point estimate", which in this case is a difference in means.
-
-```{r}
-
-```
-This doesn't look like "no difference", and it's consistent with our prior that non-smoking mothers should have higher birth weight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.
-
-## Step 3:  Model the variability of the statistic
-
-Use the definition of the z-score as defined in class to construct a test statistic for this hypothesis **by hand**. Don't worry, we'll let `R` do it all for us in a minute. 
-
-Recall the definition of the z-score for hypothesis testing: 
-
-$$z_{score}=\frac{\text { point estimate }-\text { null value }}{S E}$$
-Recall how we compute a standard error of a difference in means:
-
-$$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s^2_2}{n_2}}$$
-First let's compute the SE by hand:
-
-```{r}
-
-```
-And now the test statistic:
-
-```{r}
-
-```
-Can you explain the z-score in words?
-
-**Answer: the observed difference in birth weights is 2.36 standard deviations above the null of zero difference.**
-
-## Step 4: Quantify the probability that your sample statistic differs from the null
-
-Use the z-score calculated in step 3 to compute the p-value which is is the probability of getting a point estimate at least as extreme as ours if the null hypothesis were true:
-$$p \text { - value }=\operatorname{Pr}(Z<-|z| \text { or } Z>|z|)=2 * \operatorname{Pr}(Z>|z|)$$
-Make use of the function `pnorm()` to access the normal distribution.^[Recall: `pnorm()` gives you the probability mass below a certain cutoff in a probability distribution with a mean and standard deviation you can control. You can use `lower.tail=FALSE` to get the mass above a given cutoff.]
-
-```{r}
-
-```
-
-## Step 5: Evaluate whether you can reject or fail to reject your null hypothesis 
-
-Use the p_value determined in step 4 to evaluate whether you can reject or fail to reject the null hypothesis at a 95% confidence level (i.e., $\alpha = .05$). State precisely the conclusion of your hypothesis test. 
-
-**Answer: Since $p-value = 0.018 < 0.05$ we reject the null that there is no difference in the birth weight of babies born to smoking versus non-smoking mothers. We can say there is a statistically significant difference (at the 5% significance level) in baby birth weight across smoking and non-smoking mothers.**
-
-# Using `t.test()` to implement a hypothesis test in `R`
-
-Let's repeat the above steps using the canned function in `R` that allows you to perform hypothesis tests for comparing one or two means. 
-
-Again, we want to know if there is a statistically significant difference in baby birth weight across smoking and non-smoking mothers. 
-
-First, take a look at `t.test()` documentation to see how the function works. 
-
-```{r}
-
-```
-
-We can implement our t-test in multiple ways using `t.test()`. First, let's use the `formula` object, as I think this is the nicest approach. To use this method, we first enter the variable we are interested in evaluating means of (i.e., `weight`), then use a tilde `~` like in regression analysis, followed by the variable indicating the groups for which we are testing for differences in means (`habit`).
-
-```{r}
-
-```
-Note that we obtain nearly the same p-value and test-statistic (shown as `t`) as we did above, although it's slightly different as this is using the t-distribution and we used the normal.^[By the time $n=1000$, the t-distribution and normal are very very similar.] 
-
-Another way to execute this test is to pass the two vectors of data into `t.test()` as the first two arguments. This works the same way, it's just uglier.
-
-```{r}
-
-```
-Finally, note that you **do not** want to enter the difference in the means directly into `t.test()`, since it will treat your second mean as a constant and not a random variable, giving you far too much confidence in your point estimate. 
-
-To see this, try entering $\mu_{nonsmoker} - \mu_{smoker}$ directly into the function:
-```{r}
-
-```
-Look how low your p-value is! And also note that `R` is telling you it's running a one-sample test, which we know we don't want because both variables are random (birth weight for nonsmoking mothers and birth weight for smoking moms).
-
-# Section 2: Confidence Intervals
-
-The above analysis revealed a statistically significant difference in birth weight between the two groups of mothers. Is this a meaningful difference? P-values tell us nothing about whether it's an effect size we should be concerned about or not! 
-
-Here, we'll build a confidence interval around our point estimate. Recall that a confidence interval gives us a range of values that is likely to contain the true population parameter.
-
-## Construct a 95% confidence interval by hand
-
-First, we'll do this by hand. Recall the formula for a confidence interval:
-
-$$ \text{point_estimate} \pm z_{\alpha/2}*SE$$
-What is $z_{\alpha/2}$? It is the z-score for which there is an $\alpha$ probability of observing a point estimate as extreme as yours. 
-
-We would like to construct a 95% confidence interval. This means we want a 5% probability of observing a point estimate as extreme as ours. What z-score gives us this 5%? 
-
-It must be close to 2, since we know the 68-95-99.7 rule is a close rule of thumb...to get the exact number, we can use the `qnorm()` function (or look it up in a z-table).
-
-`qnorm()` tells us the quantile of the normal distribution, which is what we're after. Note that we will pass `qnorm()` the 2.5% quantile, since we have a symmetric distribution and we want a 5% probability the z-score is at least as far from the null (in either direction) as our point estimate is.
-
-```{r}
-
-```
-
-Now we can construct the 95% confidence interval:
+Let's check that this transformation worked, and think about how we interpret our new variable. The vertical axis can now be thought of as the probability of being alive at the end of the study, given one's age at the beginning. We'll store this `ggplot` object to add on some new features later.
 
 ```{r}
 
 
 ```
 
-[If we have time, discuss effect sizes.]
+## Linear regression with a binary response
 
-Note that you got this output for free from `t.test()` earlier. You can change the confidence level reported by `t.test()` by using the `conf.level` argument. 
+Now there is nothing preventing us from fitting a simple linear regression model to these data, and in fact, in certain cases this may be an appropriate thing to do.
 
-Use `t.test()` to compute the 90% confidence interval around your point estimate. Does the interval get wider or tighter? Why?
+But it's not hard to see that the line doesn't fit very well. There are other problems as well...
 
 ```{r}
+
+
+```
+
+## Limitations of regression
+
+-   Could make nonsensical predictions
+-   Binary response problematic
+
+What would this model predict as the probability of a 70-year-old patient being alive? It would be a number less than zero, which doesn't make sense as a probability. Because the regression line always extends to infinity in either direction, it will make predictions that are not between 0 and 1, sometimes even for reasonable values of the explanatory variable. This does not make any sense.
+
+Second, the variability in a binary response may violate a number of other assumptions that we make when we do inference in multiple regression. You'll learn about those assumptions in the later class on inference for regression. Hint: it's called heteroskedasticity!
+
+# Section 2: Logistic regression
+
+Thankfully, a modeling framework exists that generalizes regression to include response variables that are non-normally distributed. This family is called **generalized linear models** or **GLMs** for short. One member of the family of GLMs is called **logistic regression**, and this is the one that models a binary response variable.
+
+A full treatment of GLMs is beyond the scope of this class, but the basic idea is that you apply a so-called link function to appropriately transform the scale of the response variable to match the output of a linear model. The link function used by logistic regression is the **logit** function. This constrains the fitted values of the model to always lie between 0 and 1, as a valid probability must.
+
+In this lesson, we will model the probability of a binary event using the *logit link* function:
+
+$$\operatorname{logit}(p)=\log \left(\frac{p}{1-p}\right)=\beta_0+\beta_1  x + \varepsilon $$
+
+Fitting a GLM in R requires only two small changes from fitting a regression model using `lm()`. First, the function is called `glm()` instead of `lm()`. Second, we have to specify which kind of GLM we want using the family argument.
+
+For logistic regression, we specify the `binomial` family,[^1] which uses the logit link function.
+
+[^1]: Why binomial? Binomial means that the response follows a binomial distribution, where our outcome is a random sample of "trials" where each "trial" has a success probability of $p$. `glm()` can also handle things like Poisson models, where instead of a binary outcome you have an outcome that counts the number of successes for a given "trial".
+
+```{r}
+# fit model
+
+
+```
+
+The model that we just fit tells us that:
+
+$$
+\operatorname{logit}(\hat p)=\log \left(\frac{\hat p}{1-\hat p}\right)=1.56-0.05847 x
+$$
+
+1.  What is the predicted probability of surviving for someone aged 64 at the time of study?
+
+
+$$
+\begin{align}
+\frac{\hat p}{1-\hat p} &= \dots 
+\end{align}
+$$
+
+Note that this is the same solution you'd get if you plugged in the equation for $p$ from lecture notes: $$\hat p = \frac{e^{\beta_0 + \beta_1 x}}{1+ e^{\beta_0 + \beta_1 x}}$$ Alternatively, you can solve for $p$ using `R`.[^2]
+
+[^2]: The `uniroot` function searches over the provided interval to find the zero value of the function provided. We pass the expression that should equal zero, and it finds us the $p$ that ensures it equals zero.
+
+```{r}
+# using the uniroot function 
+
+```
+
+## Visualizing logistic regression
+
+Unfortunately, since our model is now non-linear, it's harder to succinctly characterize how those probabilities decline. We can no longer say that "each additional year of age is associated with a particular change in the probability of surviving," because that change in probability is not constant across ages. Thus, plotting the probabilities over age is the easiest way to visualize the probabilities. We can do this using `geom_smooth()`, specifying the model arguments as we did when estimating the logistic regression.
+
+```{r}
+
+```
+
+Now, notice how the logistic regression line is curved---most noticeably at the ends. The red logistic regression line will never reach 0 or 1, eliminating those invalid predicted probabilities. In this case, for most ages, the simple linear regression line and the logistic regression line don't differ by very much, and you might not lose much by using the simpler regression model. But for older people, the logistic model performs much better.
+
+How can we visually assess how well the logistic model fits the data? Since the actual observations are all at 0 or 1, but our predictions are always between 0 and 1, we will always be off by some amount. In particular, our model predicts a 50% chance of survival for patients that are about 27 years old. Is that accurate?
+
+# Section 3: Interpreting coefficients
+
+## Odds ratio
+
+To combat the problem of the scale of the y variable, we can change the scale of the variable on the y-axis. Instead of thinking about the probability of survival, we can think about the odds. While these two concepts are often conflated, they are not the same. They are however, related by the simple formula below. The **odds** of a binary event are the ratio of how often it happens, to how often it doesn't happen.
+
+$$
+\operatorname{odds}(\hat{p})=\frac{\hat{p}}{1-\hat{p}}=\exp \left(\hat{\beta}_0+\hat{\beta}_1 x\right)
+$$
+
+Thus, if the probability of survival is 75%, then the odds of survival are 3:1, since you are three times more likely to survive than you are to die. Odds are commonly used to express uncertainty in a variety of contexts, most notably gambling.
+
+Let's create the `odds_hat` variable for predicted odds.
+
+```{r}
+
+
+```
+
+However, it is the odds scale that leads to the most common interpretation of the coefficients in a logistic regression model. As noted previously, interpreting the coefficients on the probability scale is hard because the model is non-linear. However, on the odds scale we can form the ratio of the odds when the explanatory variable increases by one unit. This works out mathematically to be equal to the exponential of $\beta_1$ or $e^{\beta_1}$,[^3] the "slope" coefficient. Our interest is in how this number differs from 1. If it's greater than one, then the odds increase. 
+
+[^3]: When $x$ increases by 1 unit from $x$ to $x+1$, the odds ratio goes from $odds_{x}=e^{\beta_0+\beta_1 x}$ to $odds_{x+1}=e^{\beta_0+\beta_1 (x+1)}$. The ratio tells us if the odds has increased or decreased: $\frac{odds_{x+1}}{odds_x}=\frac{e^{\beta_0+\beta_1 (x+1)}}{e^{\beta_0+\beta_1 \cdot x}}=e^{\beta_0+\beta_1 x + \beta_1-(\beta_0+\beta_1 x)} = e^{\beta_1}$. If this ratio is 1, the odds has not change, if this ratio is 9, the odds has increased 9-folds!
+
+By how much does our model predict that the odds of survival will change with each additional year of age?
+
+# Section 4: Using a logistic model
+
+One important reason to build a model is to learn from the coefficients about the underlying random process. For example, in the Stanford heart transplant study, we were able to estimate the effect of age on the five-year survival rate. This simple model shed no light on the obvious purpose of the study, which was to determine whether those patients who received heart transplants were likely to live longer than the control group that received no transplant.
+
+Let's include the `transplant` variable in our model.
+
+```{r}
+
+
+```
+
+By including the transplant variable in our model and exponentiating the coefficients, we see a huge effect. Patients who received a heart transplant saw their odds of survival improve by a factor of 6.2, even after controlling for age. Note that as expected, age still has a deleterious effect on mortality.
+
+## Making probabilistic predictions
+
+By setting the `type.predict` argument to "response", we retrieve the fitted values on the familiar probability scale.
+
+Making predictions about the probability of survival for those patients who took part in the study is of somewhat limited value. We already know whether they survived! Aside from learning about the efficacy of the treatment, another common purpose for modeling is to make predictions for observations that are not part of our data set. These are called **out-of-sample** predictions.
+
+```{r}
+# probability scale
+
+
+```
+
+For example, former Vice President Dick Cheney famously received a heart transplant in March of 2012 at the age of 71. More than five years later, Cheney is still alive, but what does our model predict for his five-year survival rate?
+
+**Answer:**
+
+To compute this, we build a data frame with Cheney's data, and run it through our model using the newdata argument to `augment()` .
+
+```{r}
+
+
+```
+
+The results suggest that Cheney had only a 6.8% chance of survival. Either Cheney is quite lucky to be alive, or---more likely---the survival rates of all heart transplant patients have improved considerably since the Stanford study was completed in 1973.
+
+## Making binary predictions
+
+If our response variable is binary, then why are we making probabilistic predictions? Shouldn't we be able to make binary predictions? That is, instead of predicting the probability that a person survives for five years, shouldn't we be able to predict definitively whether they will live or die?
+
+There are a number of different ways in which we could reasonably convert our probabilistic fitted values into a binary decision. The simplest way would be to simply round the probabilities.
+
+```{r}
+
 
 ```
