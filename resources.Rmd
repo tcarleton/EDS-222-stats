@@ -110,18 +110,21 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
 
-<!--
+
 ### Week 8
 
-- **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
+- **Slides 08:** Inference and hypothesis testing [html](slides/08-inference/08-inference.html) [pdf](slides/08-inference/08-inference.pdf)
 
 - **Reading:** 
-  + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_
-
-- **Lab:** NO CLASS. 
+  + [Chapters 13, 19.2](https://openintro-ims.netlify.app/foundations-mathematical.html)
   
-- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (at least 2 weeks to complete)
+<!--  + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_ -->
 
+- **Lab:** Inference and hypothesis testing in `R` (to be posted) 
+  
+- **Assignment:** Assignment 4 (due 11/22)
+
+<!--
 ### Week 9
 
 - **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
