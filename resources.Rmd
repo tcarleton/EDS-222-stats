@@ -122,7 +122,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Lab:** Inference and hypothesis testing in `R` (to be posted) 
   
-- **Assignment:** Assignment 4 (due 11/22)
+- **Assignment:** Assignment 4 (posted by 11/9, , likely due 11/22)
 
 - **Exam answer key:** Available [here](exams/EDS222_midterm_2022_ANSWERKEY.pdf)
 

@@ -73,15 +73,20 @@ theme_simple <- theme_bw() + theme(
 
 # Announcements/check-in
 
-- Assignment 04 will cover the next two weeks of material (due 11/22, 9am)
-
---
 
 - Increasing divergence between course material and IMS textbook (including today's lecture)
 
 --
 
 - Change in OH this week (individual slots)
+
+--
+
+- Assignment 4 posted by 11/9, likely due 11/22 but will depend on...
+
+--
+
+- ...the next few weeks. We might need 2.5 weeks for inference + time series. We will focus on going slow enough to fit it all in (we have slack time built in)
 
 ---
 name: Overview
