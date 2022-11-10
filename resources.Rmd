@@ -120,9 +120,9 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 <!--  + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_ -->
 
-- **Lab:** Inference and hypothesis testing in `R` (to be posted) 
-  
-- **Assignment:** Assignment 4 (posted by 11/9, , likely due 11/22)
+- **Lab:** Inference and hypothesis testing in `R` [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html)
+
+- **Assignment:** Assignment 4 (posted 11/9, due 11/23)
 
 - **Exam answer key:** Available [here](exams/EDS222_midterm_2022_ANSWERKEY.pdf)
 

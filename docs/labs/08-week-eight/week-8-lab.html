@@ -10,7 +10,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<meta name="author" content="{ANSWER KEY}" />
 
 <meta name="date" content="2022-11-09" />
 
@@ -292,7 +291,7 @@ if (window.hljs) {
 
 
 <h1 class="title toc-ignore">EDS 222: Week 8: In-class Lab</h1>
-<h4 class="author">{ANSWER KEY}</h4>
+<h4 class="author"></h4>
 <h4 class="date">2022-11-09</h4>
 
 
@@ -332,20 +331,6 @@ weights of babies born to smoker and non-smoker mothers.</p>
 mother smokes or not).</p>
 <p>Use the is.na() function to specify that you want values of habit
 that are not missing (where is.na() is FALSE).</p>
-<pre class="r"><code>head(ncbirths)</code></pre>
-<pre><code>## # A tibble: 6 × 13
-##    fage  mage mature    weeks premie visits marital gained weight lowbi…¹ gender
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;     &lt;int&gt; &lt;fct&gt;   &lt;int&gt; &lt;fct&gt;    &lt;int&gt;  &lt;dbl&gt; &lt;fct&gt;   &lt;fct&gt; 
-## 1    NA    13 younger …    39 full …     10 not ma…     38   7.63 not low male  
-## 2    NA    14 younger …    42 full …     15 not ma…     20   7.88 not low male  
-## 3    19    15 younger …    37 full …     11 not ma…     38   6.63 not low female
-## 4    21    15 younger …    41 full …      6 not ma…     34   8    not low male  
-## 5    NA    15 younger …    39 full …      9 not ma…     27   6.38 not low female
-## 6    NA    15 younger …    38 full …     19 not ma…     22   5.38 low     male  
-## # … with 2 more variables: habit &lt;fct&gt;, whitemom &lt;fct&gt;, and abbreviated
-## #   variable name ¹​lowbirthweight</code></pre>
-<pre class="r"><code>ncbirths_complete &lt;- ncbirths %&gt;%
-  filter(is.na(habit) == FALSE)</code></pre>
 <div id="step-1-define-the-null-and-alternative-hypotheses" class="section level2">
 <h2>Step 1: Define the <strong>null</strong> and
 <strong>alternative</strong> hypotheses:</h2>
@@ -355,26 +340,12 @@ different from the birth weight of babies born to non-smoking
 mothers.</p>
 <p><strong>Answer:</strong></p>
 <p>We can write the two hypotheses as:</p>
-<p><span class="math display">\[H_{0}: \mu_{nonsmoker} - \mu_{smoker} =
-0\]</span> <span class="math display">\[H_{A}: \mu_{nonsmoker} -
-\mu_{smoker} \neq 0\]</span></p>
 </div>
 <div id="step-2-collect-data-and-compute-the-point-estimate." class="section level2">
 <h2>Step 2: Collect data and compute the point estimate.</h2>
 <p>Use the complete version of the <code>ncbirths</code> data to
 estimate the “point estimate”, which in this case is a difference in
 means.</p>
-<pre class="r"><code>mu_nonsmoker = ncbirths_complete %&gt;% 
-  filter(habit == &quot;nonsmoker&quot;) %&gt;% 
-  summarize(mean(weight))
-
-mu_smoker = ncbirths_complete %&gt;% 
-  filter(habit == &quot;smoker&quot;) %&gt;% 
-  summarize(mean(weight))
-
-point_est = as.numeric(mu_nonsmoker - mu_smoker)
-print(point_est)</code></pre>
-<pre><code>## [1] 0.3155425</code></pre>
 <p>This doesn’t look like “no difference”, and it’s consistent with our
 prior that non-smoking mothers should have higher birth weight babies.
 But remember that to conduct a hypothesis test we need a measure of
@@ -391,20 +362,8 @@ worry, we’ll let <code>R</code> do it all for us in a minute.</p>
 error of a difference in means:</p>
 <p><span class="math display">\[SE = \sqrt{\frac{s_1^2}{n_1} +
 \frac{s^2_2}{n_2}}\]</span> First let’s compute the SE by hand:</p>
-<pre class="r"><code>n1 = ncbirths_complete %&gt;% filter(habit == &quot;nonsmoker&quot;) %&gt;% count()
-n2 = ncbirths_complete %&gt;% filter(habit == &quot;smoker&quot;) %&gt;% count()
-s1 = ncbirths_complete %&gt;% filter(habit == &quot;nonsmoker&quot;) %&gt;% summarize(sd(weight, na.rm = TRUE))
-s2 = ncbirths_complete %&gt;% filter(habit == &quot;smoker&quot;) %&gt;% summarize(sd(weight, na.rm = TRUE))
-SE = as.numeric(sqrt(s1^2/n1 + s2^2/n2))
-print(SE)</code></pre>
-<pre><code>## [1] 0.1337605</code></pre>
 <p>And now the test statistic:</p>
-<pre class="r"><code>zscore = (point_est - 0)/SE
-print(zscore)</code></pre>
-<pre><code>## [1] 2.359011</code></pre>
 <p>Can you explain the z-score in words?</p>
-<p><strong>Answer: the observed difference in birth weights is 2.36
-standard deviations above the null of zero difference.</strong></p>
 </div>
 <div id="step-4-quantify-the-probability-that-your-sample-statistic-differs-from-the-null" class="section level2">
 <h2>Step 4: Quantify the probability that your sample statistic differs
@@ -418,9 +377,6 @@ ours if the null hypothesis were true: <span class="math display">\[p
 mass below a certain cutoff in a probability distribution with a mean
 and standard deviation you can control. You can use
 <code>lower.tail=FALSE</code> to get the mass above a given cutoff.</span></p>
-<pre class="r"><code>p_val = 2 * pnorm(point_est, mean = 0, sd = SE, lower.tail=FALSE)
-print(p_val)</code></pre>
-<pre><code>## [1] 0.01832372</code></pre>
 </div>
 <div id="step-5-evaluate-whether-you-can-reject-or-fail-to-reject-your-null-hypothesis" class="section level2">
 <h2>Step 5: Evaluate whether you can reject or fail to reject your null
@@ -429,12 +385,6 @@ hypothesis</h2>
 reject or fail to reject the null hypothesis at a 95% confidence level
 (i.e., <span class="math inline">\(\alpha = .05\)</span>). State
 precisely the conclusion of your hypothesis test.</p>
-<p><strong>Answer: Since <span class="math inline">\(p-value = 0.018
-&lt; 0.05\)</span> we reject the null that there is no difference in the
-birth weight of babies born to smoking versus non-smoking mothers. We
-can say there is a statistically significant difference (at the 5%
-significance level) in baby birth weight across smoking and non-smoking
-mothers.</strong></p>
 </div>
 </div>
 <div id="using-t.test-to-implement-a-hypothesis-test-in-r" class="section level1">
@@ -448,7 +398,6 @@ difference in baby birth weight across smoking and non-smoking
 mothers.</p>
 <p>First, take a look at <code>t.test()</code> documentation to see how
 the function works.</p>
-<pre class="r"><code>?t.test</code></pre>
 <p>We can implement our t-test in multiple ways using
 <code>t.test()</code>. First, let’s use the <code>formula</code> object,
 as I think this is the nicest approach. To use this method, we first
@@ -456,18 +405,6 @@ enter the variable we are interested in evaluating means of (i.e.,
 <code>weight</code>), then use a tilde <code>~</code> like in regression
 analysis, followed by the variable indicating the groups for which we
 are testing for differences in means (<code>habit</code>).</p>
-<pre class="r"><code>t.test(weight ~ habit, data = ncbirths_complete)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  weight by habit
-## t = 2.359, df = 171.32, p-value = 0.01945
-## alternative hypothesis: true difference in means between group nonsmoker and group smoker is not equal to 0
-## 95 percent confidence interval:
-##  0.05151165 0.57957328
-## sample estimates:
-## mean in group nonsmoker    mean in group smoker 
-##                7.144273                6.828730</code></pre>
 <p>Note that we obtain nearly the same p-value and test-statistic (shown
 as <code>t</code>) as we did above, although it’s slightly different as
 this is using the t-distribution and we used the normal.<label for="tufte-sn-2" class="margin-toggle sidenote-number">2</label><input type="checkbox" id="tufte-sn-2" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">2</span> By the time <span class="math inline">\(n=1000\)</span>,
@@ -475,42 +412,12 @@ the t-distribution and normal are very very similar.</span></p>
 <p>Another way to execute this test is to pass the two vectors of data
 into <code>t.test()</code> as the first two arguments. This works the
 same way, it’s just uglier.</p>
-<pre class="r"><code>t.test(ncbirths_complete$weight[ncbirths_complete$habit==&quot;nonsmoker&quot;], ncbirths_complete$weight[ncbirths_complete$habit==&quot;smoker&quot;] )</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  ncbirths_complete$weight[ncbirths_complete$habit == &quot;nonsmoker&quot;] and ncbirths_complete$weight[ncbirths_complete$habit == &quot;smoker&quot;]
-## t = 2.359, df = 171.32, p-value = 0.01945
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  0.05151165 0.57957328
-## sample estimates:
-## mean of x mean of y 
-##  7.144273  6.828730</code></pre>
 <p>Finally, note that you <strong>do not</strong> want to enter the
 difference in the means directly into <code>t.test()</code>, since it
 will treat your second mean as a constant and not a random variable,
 giving you far too much confidence in your point estimate.</p>
 <p>To see this, try entering <span class="math inline">\(\mu_{nonsmoker}
 - \mu_{smoker}\)</span> directly into the function:</p>
-<pre class="r"><code>t.test(ncbirths_complete$weight[ncbirths_complete$habit==&quot;nonsmoker&quot;] - ncbirths_complete$weight[ncbirths_complete$habit==&quot;smoker&quot;] )</code></pre>
-<pre><code>## Warning in ncbirths_complete$weight[ncbirths_complete$habit == &quot;nonsmoker&quot;] - :
-## longer object length is not a multiple of shorter object length</code></pre>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  ncbirths_complete$weight[ncbirths_complete$habit == &quot;nonsmoker&quot;] - ncbirths_complete$weight[ncbirths_complete$habit == &quot;smoker&quot;]
-## t = 4.3656, df = 872, p-value = 0.0000142
-## alternative hypothesis: true mean is not equal to 0
-## 95 percent confidence interval:
-##  0.1699302 0.4475269
-## sample estimates:
-## mean of x 
-## 0.3087285</code></pre>
-<p>Look how low your p-value is! And also note that <code>R</code> is
-telling you it’s running a one-sample test, which we know we don’t want
-because both variables are random (birth weight for nonsmoking mothers
-and birth weight for smoking moms).</p>
 </div>
 <div id="section-2-confidence-intervals" class="section level1">
 <h1>Section 2: Confidence Intervals</h1>
@@ -540,13 +447,7 @@ distribution, which is what we’re after. Note that we will pass
 <code>qnorm()</code> the 2.5% quantile, since we have a symmetric
 distribution and we want a 5% probability the z-score is at least as far
 from the null (in either direction) as our point estimate is.</p>
-<pre class="r"><code>crit_val = qnorm(0.025, lower.tail=FALSE)</code></pre>
 <p>Now we can construct the 95% confidence interval:</p>
-<pre class="r"><code>ci_lower = round(point_est - crit_val*SE, 2)
-ci_upper = round(point_est + crit_val*SE, 2)
-
-print(paste0(&quot;95% probability that [&quot;, ci_lower, &quot; ,&quot;, ci_upper, &quot;] contains the difference in birth weights across smoking and non smoking mothers.&quot;))</code></pre>
-<pre><code>## [1] &quot;95% probability that [0.05 ,0.58] contains the difference in birth weights across smoking and non smoking mothers.&quot;</code></pre>
 <p>[If we have time, discuss effect sizes.]</p>
 <p>Note that you got this output for free from <code>t.test()</code>
 earlier. You can change the confidence level reported by
@@ -554,18 +455,6 @@ earlier. You can change the confidence level reported by
 <p>Use <code>t.test()</code> to compute the 90% confidence interval
 around your point estimate. Does the interval get wider or tighter?
 Why?</p>
-<pre class="r"><code>t.test(weight ~ habit, data = ncbirths_complete, conf.level = 0.90)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  weight by habit
-## t = 2.359, df = 171.32, p-value = 0.01945
-## alternative hypothesis: true difference in means between group nonsmoker and group smoker is not equal to 0
-## 90 percent confidence interval:
-##  0.09432986 0.53675506
-## sample estimates:
-## mean in group nonsmoker    mean in group smoker 
-##                7.144273                6.828730</code></pre>
 </div>
 </div>
 

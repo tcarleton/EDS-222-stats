@@ -1,6 +1,6 @@
 ---
 title: "EDS 222: Week 8: In-class Lab"
-author: "{STUDENT NAME}"
+author: ""
 date: "`r Sys.Date()`"
 output:
   tufte::tufte_html: default
@@ -12,158 +12,161 @@ output:
     latex_engine: xelatex
 ---
 
-**Note:** This lab is built from the exercise provided by Soren Wilke, posted [here](https://swilke-geoscience.net/post/2020-09-10-kriging_with_r/kriging/). Additional details and analyses are included in the original post.
-
 # Section 0: Getting set up
 
-1. Store this file in a _Labs/_ folder where you store all your lab materials for EDS 222. 
-2. Install the following new (new to EDS 222) packages:^[Hint: for `gstat` you do *not* want to install from source.]
+Load the following packages:
 
-```{r setup, include=FALSE, echo = TRUE, eval = FALSE}
-suppressMessages({
-  install.packages( "sf", "sp", "raster", "gstat", "automap", "patchwork", "viridis")
-})
-```
-
-3. Load the following packages:
-
-```{r, echo = TRUE, eval = TRUE}
+```{r, echo = FALSE, eval = TRUE}
+# You probably already have these packages installed, so let's just load them
 library(tidyverse)
-library(sf)
-library(sp)
-library(raster)
-library(gstat)
-library(automap)
-library(patchwork)
-library(viridis)
-
+library(readr)
+library(ggplot2)
+library(modelr)
+library(knitr)
+library(broom)
+library(openintro)
 
 options(scipen = 999) # disable scientific notation
 
 # For labs, we want to see all our code
 knitr::opts_chunk$set(echo = TRUE)
 ```
-4. Set your working directory
 
-```{r}
-rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
-```
 
-5. Generate this function. We will use it for plotting later -- it is not necessary at all, it will just make things look pretty.
+# Section 1: Hypothesis testing in `R`
 
-```{r}
-plot_my_gstat_output <- function(raster_object, object_name){
-  
-  df <- rasterToPoints(raster_object) %>% as_tibble()
-  colnames(df) <- c("X", "Y", "Z")
-  
-  ggplot(df, aes(x = X, y = Y, fill = Z)) +
-    geom_raster() +
-    ggtitle(label = object_name) +
-    scale_fill_viridis(option = "B", limits = c(48, 101)) +
-    theme_void() +
-    theme(
-      plot.title = element_text(hjust = 0.5)
-    )
-}
-```
+The state of North Carolina released to the public a large data set containing information on births recorded in this state. This data set has been of interest to medical researchers who are studying the relation between habits and practices of expectant mothers and the birth of their children. `ncbirths` is a random sample of 1000 cases from this data set, and is provided in the `openintro` package. We want to evaluate whether there is a difference between weights of babies born to smoker and non-smoker mothers.
 
-# Section 1: Spatial point data
+First, filter `ncbirths` for rows where the variable `habit` is non-missing (this variable indicates whether a mother smokes or not).
 
-The data for this tutorial is a xyz-file giving us the height of the groundwater table in a part of the German state of North Rhine-Westphalia in 1988. 
-
-We have measures of the groundwater level in 1988 at a limited number of monitoring wells, but our goal is ultimately to estimate the groundwater level throughout the surrounding region. This is often the case when studying groundwater, which is generally measured with a small set of monitoring wells.
-
-Here let's just take a look at our input data:
-
-1. Load the `week-eight-data.RDS` file into R using `readRDS`.
-
-2. Take a look -- what is the format? How many dimensions? Why? 
+Use the is.na() function to specify that you want values of habit that are not missing (where is.na() is FALSE).
 
 ```{r}
 
 ```
 
-3. Use `ggplot` to plot the locations of the monitoring wells as points, with color indicating depth of the well. I'm going to use `viridis` because it's aesthetically nice and `theme_classic()` to clean up the plot a bit.
+## Step 1: Define the **null** and **alternative** hypotheses: 
+
+Construct a null and an alternative hypothesis that will allow you to evaluate if the birth weight of babies born to smoking mothers is different from the birth weight of babies born to non-smoking mothers. 
+
+**Answer:**
+
+We can write the two hypotheses as:
+
+## Step 2: Collect data and compute the point estimate. 
+
+Use the complete version of the `ncbirths` data to estimate the "point estimate", which in this case is a difference in means.
 
 ```{r}
 
 ```
 
-4. What do you notice about the spatial correlation in this plot? Does it seem reasonable to attempt spatial interpolation in this setting?
+This doesn't look like "no difference", and it's consistent with our prior that non-smoking mothers should have higher birth weight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.
 
-# Section 2: Creating a Variogram
+## Step 3:  Model the variability of the statistic
 
-As we discussed in class, Kriging relies on an estimated or prescribed variogram, which is essentially a function describing the relationship between distance and covariance in "Z" in your point data. Here we are going to create an empirical variogram, which gives us the distribution of spatial dependencies observed in the data.
+Use the definition of the z-score as defined in class to construct a test statistic for this hypothesis **by hand**. Don't worry, we'll let `R` do it all for us in a minute. 
 
-1. First, we need to convert the data from a `data.frame` to and `sf` object, because that is usually the best way to easiest way to save and work with spatial data. Use the `st_as_sf` function to do this, noting that the [raw data](http://www.govdata.de/dl-de/by-2-0) come in the EPSG 25832 projection.
+Recall the definition of the z-score for hypothesis testing: 
 
-When you do this, make sure to save the coordinates "X" and "Y" in the resulting `sf` object so that you can use them later if needed (some forms of Kriging rely on them directly).
+$$z_{score}=\frac{\text { point estimate }-\text { null value }}{S E}$$
+Recall how we compute a standard error of a difference in means:
+
+$$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s^2_2}{n_2}}$$
+First let's compute the SE by hand:
+
+```{r}
+
+```
+And now the test statistic:
+
+```{r}
+
+```
+Can you explain the z-score in words?
+
+## Step 4: Quantify the probability that your sample statistic differs from the null
+
+Use the z-score calculated in step 3 to compute the p-value which is is the probability of getting a point estimate at least as extreme as ours if the null hypothesis were true:
+$$p \text { - value }=\operatorname{Pr}(Z<-|z| \text { or } Z>|z|)=2 * \operatorname{Pr}(Z>|z|)$$
+Make use of the function `pnorm()` to access the normal distribution.^[Recall: `pnorm()` gives you the probability mass below a certain cutoff in a probability distribution with a mean and standard deviation you can control. You can use `lower.tail=FALSE` to get the mass above a given cutoff.]
 
 ```{r}
 
 ```
 
-2. Use the function `variogram` from the `gstat` package to generate an empirical variogram. These are just the points describing how the semivariance (recall: variance in the difference in "Z" between two points _h_ distance apart). We will fit a curve to that variogram next. 
+## Step 5: Evaluate whether you can reject or fail to reject your null hypothesis 
 
-Annoyingly, `gstat` only plays nicely with `sp` objects instead of `sf` objects, so we'll have to transform our `sf` into an `sp` for this operation.
+Use the p_value determined in step 4 to evaluate whether you can reject or fail to reject the null hypothesis at a 95% confidence level (i.e., $\alpha = .05$). State precisely the conclusion of your hypothesis test. 
 
-The first argument of `variogram` is the variogram formula defining the response variable we're interested in and any possible regressors which determine the mean. Here, we will assume we are only using our monitoring wells to interpolate, so we have no other regressors to include in our estimate of the mean. Therefore, use `Z~1` as the formula.
+# Using `t.test()` to implement a hypothesis test in `R`
 
-```{r}
+Let's repeat the above steps using the canned function in `R` that allows you to perform hypothesis tests for comparing one or two means. 
 
-```
+Again, we want to know if there is a statistically significant difference in baby birth weight across smoking and non-smoking mothers. 
 
-3. Now we have to move to estimating a variogram model through these points, to be able to interpolate to all points in the region of interest. Here we will use the function `autofitVariogram` from the `automap` package do the work for us. 
-
-Recall that you can choose the type of variogram model you want to fit, such as spherical or Gaussian. However, here we will let `autofitVariogram` choose the model that best fits the data for us.
-
-Save the column `var_model` from the output; lots of other things are also stored that we don't want to worry about.
+First, take a look at `t.test()` documentation to see how the function works. 
 
 ```{r}
 
 ```
 
-4. Plot this variogram model on top of your empirical variogram using `plot()` and passing the full model as an argument. Does it seem to fit the data well? 
+We can implement our t-test in multiple ways using `t.test()`. First, let's use the `formula` object, as I think this is the nicest approach. To use this method, we first enter the variable we are interested in evaluating means of (i.e., `weight`), then use a tilde `~` like in regression analysis, followed by the variable indicating the groups for which we are testing for differences in means (`habit`).
+
+```{r}
+
+```
+Note that we obtain nearly the same p-value and test-statistic (shown as `t`) as we did above, although it's slightly different as this is using the t-distribution and we used the normal.^[By the time $n=1000$, the t-distribution and normal are very very similar.] 
+
+Another way to execute this test is to pass the two vectors of data into `t.test()` as the first two arguments. This works the same way, it's just uglier.
 
 ```{r}
 
 ```
 
-# Section 3: Define a target grid
+Finally, note that you **do not** want to enter the difference in the means directly into `t.test()`, since it will treat your second mean as a constant and not a random variable, giving you far too much confidence in your point estimate. 
 
-In order to interpolate we need a target grid with a target set of coordinates (“X”, “Y”) for which the modeled variable (“Z”) to be interpolated. This means we come up with an empty grid or raster. This holds true for Kriging with `gstat`, too, except everything is a little bit more complicated, because we need to do it in `sp`.
+To see this, try entering $\mu_{nonsmoker} - \mu_{smoker}$ directly into the function:
+```{r}
 
-1. Define a grid based on the bounding box of our observations. Use a 100 unit pixel size and set `what = "centers"` to center the X-Y coordinates on the middle of each grid cell.
+```
+
+
+# Section 2: Confidence Intervals
+
+The above analysis revealed a statistically significant difference in birth weight between the two groups of mothers. Is this a meaningful difference? P-values tell us nothing about whether it's an effect size we should be concerned about or not! 
+
+Here, we'll build a confidence interval around our point estimate. Recall that a confidence interval gives us a range of values that is likely to contain the true population parameter.
+
+## Construct a 95% confidence interval by hand
+
+First, we'll do this by hand. Recall the formula for a confidence interval:
+
+$$ \text{point_estimate} \pm z_{\alpha/2}*SE$$
+What is $z_{\alpha/2}$? It is the z-score for which there is an $\alpha$ probability of observing a point estimate as extreme as yours. 
+
+We would like to construct a 95% confidence interval. This means we want a 5% probability of observing a point estimate as extreme as ours. What z-score gives us this 5%? 
+
+It must be close to 2, since we know the 68-95-99.7 rule is a close rule of thumb...to get the exact number, we can use the `qnorm()` function (or look it up in a z-table).
+
+`qnorm()` tells us the quantile of the normal distribution, which is what we're after. Note that we will pass `qnorm()` the 2.5% quantile, since we have a symmetric distribution and we want a 5% probability the z-score is at least as far from the null (in either direction) as our point estimate is.
 
 ```{r}
 
 ```
 
-2. Make the grid work for gstat by converting it to `sp`, telling `R` and `sp` that this object _is_ gridded, then finally convert to `SpatialPixels`. Yes, this is annoying. No, I don't know a better way than `gstat` to do Kriging!
+Now we can construct the 95% confidence interval:
 
 ```{r}
 
 ```
 
-# Section 4: Ordinary Kriging
+[If we have time, discuss effect sizes.]
 
-Kriging comes in several flavors, as discussed in class. We will here only focus on Ordinary Kriging -- please see [here](https://swilke-geoscience.net/post/2020-09-10-kriging_with_r/kriging/) for more tutorial details on other types of Kriging. 
+Note that you got this output for free from `t.test()` earlier. You can change the confidence level reported by `t.test()` by using the `conf.level` argument. 
 
-Ordinary Kriging assumes that the mean in your target grid is constant and but not known to you. 
-
-In `gstat`, the main way to differentiate between different kinds of Kriging (or any of the implemented algorithms) is controlled by the formula supplied. We have already seen that syntax when fitting the variogram -- we use `Z~1` to indicate Ordinary Kriging. 
-
-1. Use the `krige()` function from `gstat` to generate a full set of predictions of groundwater levels at all locations across the region.
+Use `t.test()` to compute the 90% confidence interval around your point estimate. Does the interval get wider or tighter? Why?
 
 ```{r}
 
 ```
-
-2. Take a look at your predictions (_always_ a good idea) by plotting the raw monitoring data next to a raster of your Kriging-based predictions. For the kriging output, use the `plot_my_gstat_output()` function you generated earlier. Pass `OK` into this function as a raster.
-
-```{r}
-
-```
-
-Based on this visual, how well do you think ordinary kriging worked? What other methods would you try next?
