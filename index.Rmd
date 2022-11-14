@@ -104,8 +104,8 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 6 (10/24)   | Nonlinear relationships      | Midterm Exam     |
 | 7 (10/31)   | Nonlinear regression models         | Logistic regression in `R`     |
 | 8 (11/07)   | Statistical inference         | Hypothesis testing in `R`      |
-| 9 (11/14)   | Time series in OLS       |  Forecasting in `R`    |
-| 10 (11/21)  | Intro to Bayesian stats        |   No class   |
+| 9 (11/14)   | Time series in OLS       |  Spatial interpolation    |
+| 10 (11/21)  | Kriging in `R`        |   No class   |
 | 11 (11/28)   | TBD          | Statistics in climate change research      |
 | Finals   | Final project presentations (Dec 6)        | n/a     |
 

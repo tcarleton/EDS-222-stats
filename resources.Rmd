@@ -123,20 +123,23 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Lab:** Inference and hypothesis testing in `R` [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html)
 
 - **Assignment:** Assignment 4 (posted 11/9, due 11/23)
-
+s
 - **Exam answer key:** Available [here](exams/EDS222_midterm_2022_ANSWERKEY.pdf)
 
-<!--
+
 ### Week 9
 
-- **Slides 07**: Time series analysis [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf)
+- **Slides 09:** Time series analysis (to be posted) <!-- [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf) -->
 
-- **Slides 08**: Spatial interpolation [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf)
+- **Slides 10:** Spatial interpolation and kriging (to be posted) <!-- [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf) -->
+
+- **Reading:** Chapters 2 and 3 in [Hyndman & Athanasopoulos](https://otexts.com/fpp3/)
 
 - **Lab:** Kriging in `R` [**delayed** to Week 10]
   
-- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
 
+<!--
 ### Week 10
 
 - **Lab:** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-eight-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html).
