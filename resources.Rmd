@@ -129,7 +129,7 @@ s
 
 ### Week 9
 
-- **Slides 09:** Time series analysis (to be posted) <!-- [html](slides/07-timeseries/07-timeseries.html) [pdf](slides/07-timeseries/07-timeseries.pdf) -->
+- **Slides 09:** Time series analysis [html](slides/09-timeseries/09-timeseries.html) [pdf](slides/09-timeseries/09-timeseries.pdf)
 
 - **Slides 10:** Spatial interpolation and kriging (to be posted) <!-- [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf) -->
 
