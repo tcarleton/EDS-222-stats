@@ -3,7 +3,7 @@ title: "Spatial interpolation and kriging"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2021"
+date: "Fall 2022"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -73,12 +73,11 @@ theme_simple <- theme_bw() + theme(
 
 # Announcements/check-in
 
-- **Change in office hours** today 1:30pm-2:30pm (by appointment) in Bren Hall 4327
+- **Change in office hours** next week: 12-1pm Monday 11/21 on Zoom (happy Thanksgiving!)
 
 --
 
-- **Remote class** 11/23 (recorded), **no class** 11/25
-
+- Remember to look at final project guidelines for details on presentation, writeup, etc.
 
 ---
 name: Overview
@@ -123,23 +122,12 @@ An **alternative framing**: <i>object view</i> versus <i>field view</i>
 --
 
 - .pink[**Object View**]: The study region (and world) is a series of entities located in space.
+Examples: Points representing cities. Non-continuous polygons representing cities.
 
---
-
-Examples
---
-
-: Points representing cities. Non-continuous polygons representing cities.
 --
 
 - .pink[**Field View**]: Every location within the study region (and world) has a measurable value.
-
---
-
-Examples
---
-
-: Elevation. Temperature. Wind direction.
+Examples: Elevation. Temperature. Wind direction.
 
 ---
 # Spatial data
@@ -240,7 +228,7 @@ include_graphics("spatialinterp_picture.png")
 ---
 # Interpolation in one dimension
 
-Consider one-dimensional space where values $y$ depend on location $x$ 
+Consider one-dimensional space where values $z$ depend on location $x$ 
 
 ```{r, fig.height=2, echo=FALSE}
 set.seed(1234)
@@ -322,7 +310,7 @@ mod = lm(z~poly(x,8))
 predictions = augment(mod)$.fitted
 ```
 
-```{r, fig.height=0.25, echo=FALSE}
+```{r, out.width="80%", echo=FALSE}
 ggplot(data = data, aes(x,z)) + geom_point(color="seagreen", size=2.5) + 
   geom_smooth(method = lm, formula = y ~ poly(x,8), se = FALSE, color = "lightcoral", size=2) + 
   theme_bw() + theme(
@@ -815,8 +803,8 @@ exclude: true
 
 ```{R, printpdfs, echo = F, eval = F}
 pagedown::chrome_print(
-  input = "08-kriging.html",
-  output = "08-kriging.pdf",
+  input = "10-kriging.html",
+  output = "10-kriging.pdf",
   timeout = 60
 )
 ```

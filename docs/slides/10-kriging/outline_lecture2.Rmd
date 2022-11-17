@@ -1,0 +1,147 @@
+---
+title: "scrap"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+---
+layout: false
+class: clear, middle, inverse
+# Kriging
+
+---
+# Kriging: an origin story
+
+GOLD MINING ORIGIN STORY
+
+---
+# Correlations in space
+
+VISUAL of no corr
+
+---
+# Correlations in space
+
+VISUAL of corr
+
+---
+# Variogram: quantifying spatial correlation
+
+DEFINITIONS
+
+---
+# Variogram
+
+Variogram: A function describing spatial dependence. It shows the variance within groups of observations as a function of distance between them.
+
+Example: “In the case of a concrete example from the field of gold mining, a variogram will give a measure of how much two samples taken from the mining area will vary in gold percentage depending on the distance between those samples. Samples taken far apart will vary more than samples taken close to each other.” - Wikipedia
+
+Key concept: Variograms give us a way of understanding how correlated spatial observations (values) are to those around them, and how that correlation “decays” as points get further apart 
+
+---
+# Variogram: in pictures
+
+SHOW SILL EXAMPLE
+
+---
+# Estimating a (semi)variogram
+
+Formal definition in words (you can find the formal definition [here](https://www.sciencedirect.com/topics/mathematics/variogram))
+
+**Empirical semivariogram**
+$$\hat\gamma(h \pm \delta) = \frac{1}{2N(h\pm\delta)} \sum_{(i,j)\in N(h\pm\delta)} |z_i - z_j|^2$$ 
+---
+# Estimating a (semi)variogram
+
+That is a lot of math...how would I actually do this?
+
+--
+
+1.
+
+--
+
+2.
+
+--
+
+3.
+
+---
+# Variogram to Kriging 
+
+Variogram gives us XX
+
+Kriging needs YY
+
+**The variogram is a key input into a kriging model**
+
+---
+# Kriging
+
+Simple weighted average definition, use Allison's pictures of PPM and then abstract Z
+
+---
+# Kriging
+
+Choose a set of weights $\bm w$ that minimizes the ...
+
+https://www.publichealth.columbia.edu/research/population-health-methods/kriging-interpolation
+
+Basically, variogram informs the lambdas in a complex way we won't get into here.
+
+---
+# Note of caution on interpolation
+
+All spatial interpolation approaches work best if:
+
+The observed data are pretty dense and well distributed through the region in which you’re interpolating
+You have a lot of observations
+
+All spatial interpolation approaches should be used cautiously, especially if: 
+
+You have highly clustered data with a lot of open 
+space between them
+You don’t have very many observations
+
+---
+# Benefits of kriging
+
+Kriging, along with improved correlation information:
+
+Better predicts values when data are clustered (less weight per individual observation when they’re closely clustered)
+
+Finds errors associated with values
+
+If lots of data, well dispersed, will give very similar results to other interpolation methods
+
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+Some slide components were borrowed from [Ed Rubin](https://github.com/edrubin/EC421S20) and Allison Horst.
+
+---
+exclude: true
+
+
+```{R, printpdfs, echo = F, eval = F}
+pagedown::chrome_print(
+  input = "08-kriging.html",
+  output = "08-kriging.pdf",
+  timeout = 60
+)
+```
+
+
+
+- Blue = low value; Red = high value
+- Zero correlation between values in nearby locations
+- Can you predict the value in location A based on this sample? 

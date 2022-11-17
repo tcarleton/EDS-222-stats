@@ -131,7 +131,7 @@ s
 
 - **Slides 09:** Time series analysis [html](slides/09-timeseries/09-timeseries.html) [pdf](slides/09-timeseries/09-timeseries.pdf)
 
-- **Slides 10:** Spatial interpolation and kriging (to be posted) <!-- [html](slides/08-kriging/08-kriging.html) [pdf](slides/08-kriging/08-kriging.pdf) -->
+- **Slides 10:** Spatial interpolation and kriging [html](slides/10-kriging/10-kriging.html) [pdf](slides/10-kriging/10-kriging.pdf) 
 
 - **Reading:** Chapters 2 and 3 in [Hyndman & Athanasopoulos](https://otexts.com/fpp3/)
 
