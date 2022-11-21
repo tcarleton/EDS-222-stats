@@ -73,11 +73,19 @@ theme_simple <- theme_bw() + theme(
 
 # Announcements/check-in
 
-- **Change in office hours** next week: 12-1pm Monday 11/21 on Zoom (happy Thanksgiving!)
+### Final Projects:
+
+- 3-minute in-class presentation: 12/6, 8-11am, Bren Hall 1424 -- with snacks! 
+  + I will randomly allocate slots and post the presentation order by 12/5
+  
+--
+
+- Blog post/write up: due 12/9, 5pm, send to me via email in `.html` and `.pdf` formats
 
 --
 
-- Remember to look at final project guidelines for details on presentation, writeup, etc.
+- See guidelines for details on expectations for presentation and write up
+- If you are not a MEDS student and/or do not want a blog post, the `.pdf` alone is fine 
 
 ---
 name: Overview

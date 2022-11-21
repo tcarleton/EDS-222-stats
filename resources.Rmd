@@ -123,7 +123,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Lab:** Inference and hypothesis testing in `R` [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html)
 
 - **Assignment:** Assignment 4 (posted 11/9, due 11/23)
-s
+
 - **Exam answer key:** Available [here](exams/EDS222_midterm_2022_ANSWERKEY.pdf)
 
 
@@ -139,13 +139,16 @@ s
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
 
-<!--
+
 ### Week 10
 
-- **Lab:** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-eight-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html).
-  
-- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/24, 5pm)
+- **Slides 10:** Spatial interpolation and kriging [html](slides/10-kriging/10-kriging.html) [pdf](slides/10-kriging/10-kriging.pdf) 
 
+- **Lab:** Kriging in `R` [**delayed** to Week 11] <!-- [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-eight-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html). -->
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
+
+<!--
 ### Week 11
 
 - **Slides 09**: Applying environmental data science to climate change [pdf](https://www.dropbox.com/s/25aodsxxgugo42g/EDS222_SCC_overview.pdf?dl=0)
