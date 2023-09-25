@@ -10,21 +10,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 All lecture slides, readings, and labs will be posted here each week. Assignments will be mentioned here, but all assignments will be posted, submitted, and graded through Github Classrooms.
 
-### Week 1
+### Week 0
 
-- **Slides**: No class on Tuesday 9/20
+- **Slides**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
 
 - **Reading:** 
-  + [Preface, Chapters 1.1-1.3](https://openintro-ims.netlify.app/preface.html), _Introduction to Modern Statistics_
+  + [Preface, Chapters 1-2](https://openintro-ims.netlify.app/preface.html), _Introduction to Modern Statistics_
+  + (Optional) [Gender Shades](http://gendershades.org/)
+  + (Optional) [RCTs](https://www.youtube.com/watch?v=0zvrGiPkVcs)
 
-- **Lab:** EDS 222 Lab setup and Github Classrooms demo (taught by TA, Sandy Sum)
+<!-- - **Lab:** EDS 222 Lab setup and Github Classrooms demo (taught by TA, Sandy Sum)
   + [Lab markdown](labs/01-week-one/week-1-lab.Rmd)
   + [Lab html](labs/01-week-one/week-1-lab.html)
-  + [`_common.R` setup script](labs/_common.R) 
+  + [`_common.R` setup script](labs/_common.R) -->
   
-- **Assignment:** Assignment 1 posted 9/22; due 10/04, 9am
+- **Assignment:** Assignment 1 posted 9/28; due 10/06, 5pm
 
-
+<!--
 ### Week 2
 
 - **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
@@ -41,7 +43,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + Optional watching: Esther Duflo on [Randomized Control Trials](https://www.youtube.com/watch?v=0zvrGiPkVcs)
   
 - **Assignment:** Assignment 1 due 10/04, 9am
-
+-->
 <!--
 - **Reading:** 
   
@@ -50,7 +52,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 2 posted 9/30; due 10/7, 5pm
 -->
-
+<!--
 ### Week 3
 
 - **Slides 03**: Ordinary Least Squares [html](slides/03-ols/03-ols.html) [pdf](slides/03-ols/03-ols.pdf)
@@ -62,8 +64,8 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Lab:** OLS in `R` [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
   
 - **Assignment:** Assignment 2 posted 10/5; due 10/13, 9am 
-
-
+-->
+<!--
 ### Week 4
 
 - **Slides 04**: Ordinary Least Squares, continued [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf) 
@@ -75,8 +77,8 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Lab:** OLS in `R`, continued [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html). 
   
 - **Assignment:** Assignment 2 due 10/13, 9am
-
-
+-->
+<!--
 ### Week 5
 
 - **Slides 05**: Multiple linear regression and interaction models [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
@@ -90,15 +92,16 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Assignment:** Assignment 3 posted 10/18, see lecture slides for details on timing and grading 
 
 - **Extra exam study material:** Here is an example of how you can evaluate the plausibility of OLS Assumption #4, which is necessary to ensure that OLS is the lowest variance estimator of all the unbiased estimators: [html](labs/05-week-five/example_OLS_assumptions.html), [markdown](labs/05-week-five/example_OLS_assumptions.Rmd)
-
-
+-->
+<!--
 ### Week 6
 
 - Review \& Midterm Exam
 
 - **Assignment 3 answer key:** [html](labs/assignment-03-answers.html) [rmd](labs/assignment-03-answers.Rmd)
 
-
+-->
+<!--
 ### Week 7
 
 - **Slides 07**: Logistic regression and other nonlinear models [html](slides/07-nonlinearmodels/07-nonlinearmodels.html) [pdf](slides/07-nonlinearmodels/07-nonlinearmodels.pdf)
@@ -109,8 +112,8 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Lab:** Logistic regressions in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html) 
   
 - **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
-
-
+-->
+<!--
 ### Week 8
 
 - **Slides 08:** Inference and hypothesis testing [html](slides/08-inference/08-inference.html) [pdf](slides/08-inference/08-inference.pdf)
@@ -118,15 +121,15 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapters 13, 19.2](https://openintro-ims.netlify.app/foundations-mathematical.html)
   
-<!--  + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_ -->
+ + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_ 
 
 - **Lab:** Inference and hypothesis testing in `R` [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html)
 
 - **Assignment:** Assignment 4 (posted 11/9, due 11/23)
 
 - **Exam answer key:** Available [here](exams/EDS222_midterm_2022_ANSWERKEY.pdf)
-
-
+-->
+<!--
 ### Week 9
 
 - **Slides 09:** Time series analysis [html](slides/09-timeseries/09-timeseries.html) [pdf](slides/09-timeseries/09-timeseries.pdf)
@@ -138,17 +141,18 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Lab:** Kriging in `R` [**delayed** to Week 10]
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
-
-
+-->
+<!--
 ### Week 10
 
 - **Slides 10:** Spatial interpolation and kriging [html](slides/10-kriging/10-kriging.html) [pdf](slides/10-kriging/10-kriging.pdf) 
 
-- **Lab:** Kriging in `R` [**delayed** to Week 11] <!-- [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html). -->
+- **Lab:** Kriging in `R` [**delayed** to Week 11]  [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html).
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
 
-
+-->
+<!--
 ### Week 11
 
 - **Lab (Tuesday 11/29):** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/10-week-ten/week-10-lab.Rmd), [answers](labs/10-week-ten/week-10-lab-answers.Rmd), [answers in html](labs/10-week-ten/week-10-lab-answers.html). 
@@ -158,7 +162,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Further reading for those interested**: [Rode et al. (2021)](https://www.nature.com/articles/s41586-021-03883-8); [Carleton et al. (2022)](https://academic.oup.com/qje/article-abstract/137/4/2037/6571943); [Carleton \& Greenstone (2022)](https://doi.org/10.1086/720988)
 
 - **Final projects!** Presentations: 12/6 [TBD on Zoom vs in-person]
-
+-->
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)

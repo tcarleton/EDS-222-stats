@@ -52,12 +52,12 @@ Add your course description here. -->
 
 Tamma Carleton (tcarleton\@ucsb.edu)
 
--   **Office:** Bren Hall 3418
--   **Office hours:** 3:30pm-4:30pm Tuesdays, 3526 Bren Hall (Pine Room)
+-   **Office:** 3418 Bren Hall 
+-   **Office hours:** 3:30pm-4:30pm Thursdays, 3526 Bren Hall (Pine Room)
 
 ## Important links
 
--   Syllabus [link](https://www.dropbox.com/s/xc6d2xag7bn8fae/EDS%20222%20Syllabus%20Fall%202022.pdf?dl=0) <!-- (here is the [MEDS optional syllabus template](https://docs.google.com/document/d/1b2CElvwKk-haEA1axY5KvTEBbiSPUf7dIRUNX7gCI6w/edit?usp=sharing)) -->
+-   Syllabus [link](https://www.dropbox.com/scl/fi/pvfengvjl4upf7n4upyi8/EDS-222-Syllabus-Fall-2023.pdf?rlkey=ynr8g259hk59d503mkoyvht3z&dl=0) <!-- (here is the [MEDS optional syllabus template](https://docs.google.com/document/d/1b2CElvwKk-haEA1axY5KvTEBbiSPUf7dIRUNX7gCI6w/edit?usp=sharing)) -->
 
 -   [UCSB Code of Conduct](https://www.sa.ucsb.edu/regulations/student-conduct-code/student-conduct-code)
 
@@ -66,8 +66,8 @@ Tamma Carleton (tcarleton\@ucsb.edu)
 
 ## Weekly course schedule
 
--   **Lectures:** Tuesday 9:30am - 10:45am (4016 Bren Hall)
--   **Labs:** Thursdays 9:30am - 10:45am (4016 Bren Hall)
+-   **Lectures:** Tuesdays 2:00pm - 3:15pm (1424 Bren Hall)
+-   **Labs:** Thursdays 2:00pm - 3:15pm (1424 Bren Hall)
 
 ## Learning objectives
 
@@ -96,17 +96,17 @@ The goal of this course is to enable MEDS students to confidently and competentl
 
 | Week | Lecture topics (Tues) | Lab topics (Thurs) |
 |------|----------------|----------------|
-| 1 (9/19)   | No class        |  Lab setup (taught by Sandy Sum)       |
-| 2 (9/26)   | Class intro, sampling, study design  | Summary stats in `R`  |
-| 3 (10/03)   |  Ordinary Least Squares        | OLS in `R`     |
-| 4 (10/10)   |  Multiple linear regression      | Regression in `R`, continued     |
-| 5 (10/17)   | Interaction models and model fit         |   Interactions in `R`  |
-| 6 (10/24)   | Nonlinear relationships      | Midterm Exam     |
-| 7 (10/31)   | Nonlinear regression models         | Logistic regression in `R`     |
-| 8 (11/07)   | Statistical inference         | Hypothesis testing in `R`      |
-| 9 (11/14)   | Time series in OLS       |  Spatial interpolation    |
-| 10 (11/21)  | Kriging in `R`        |   No class   |
-| 11 (11/28)   | TBD          | Statistics in climate change research      |
-| Finals   | Final project presentations (Dec 6)        | n/a     |
+| 0 (9/25)   | No class        |  Course intro, sampling, study design       |
+| 1 (10/02)   | Data types, summary stats  | Summary stats in `R`  |
+| 2 (10/09)   |  Ordinary Least Squares        | OLS in `R`     |
+| 3 (10/16)   |  Multiple linear regression      | Regression in `R`, continued     |
+| 4 (10/23)   | Interaction models         |   Interactions in `R`  |
+| 5 (10/30)   | Nonlinear relationships      | Midterm Exam     |
+| 6 (11/06)   | Nonlinear regression models         | Logistic regression in `R`     |
+| 7 (11/13)   | Statistical inference         | Hypothesis testing in `R`      |
+| 8 (11/20)   | Time series in OLS       |  No class    |
+| 9 (11/27)  | Spatial interpolation       |   Kriging in `R`   |
+| 10 (12/04)   |    Statistics in climate change research      | TBD        |
+| Finals   | Final project presentations (Dec 12)        | n/a     |
 
 **This webpage was designed following [a template](https://github.com/allisonhorst/meds-distill-template) by Dr. Allison Horst.**
