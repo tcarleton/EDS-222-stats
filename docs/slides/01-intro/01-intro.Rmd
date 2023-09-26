@@ -3,7 +3,7 @@ title: "Course intro & motivation"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2022"
+date: "Fall 2023"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -144,7 +144,7 @@ knitr::include_graphics("The_Scientific_Method.svg")
 - Designed to build your fundamental statistical toolkit
 - Designed to teach you to _apply_ statistics in `R` 
 - Designed to show you key spatio-temporal methods that come up frequently in environmental data science
-- **Still new!** $\longrightarrow$ We are actively adjusting based on last year's test run. Your feedback will help shape the curriculum!
+- **Still new!** $\longrightarrow$ We are actively adjusting based on student feedback. Your input will help shape the curriculum!
 
 ### This course is **not**:
 - A programming class $\longrightarrow$ I will make mistakes. I don't know all the new exciting things. I will learn from you!
@@ -165,6 +165,8 @@ Syllabus can always be found on our [course website.](https://tcarleton.github.i
 - If you are sick (with anything), **please stay home** and just let me know ahead of time. We will get you caught up with notes from classmates, extra office hours, etc.
 
 - If you test positive for COVID-19, stay home for at least 5 days, and follow UCSB protocol. In this case, I will provide a personal Zoom link for you to join, but cannot guarantee all lecture content (e.g., writing on the white board) will be perfectly visible via Zoom
+
+- I will likely make the Tuesday lecture before Thanksgiving remote, as in the past many people have requested this (for health and for travel reasons)
 
 ---
 
@@ -499,13 +501,13 @@ par(par_og) # restore original par
 ---
 # Homework 1 (warmup): Logistics
 
-### Deadline: 10/04, 9am (before class)
+### Deadline: 10/09, 5pm 
 
 ### Where are the data?
 
 - All the data for homework will be on Taylor
 
-- See MEDS summer coursework for a refresher on how to access Taylor, compute on Taylor, and pull data to/from Taylor (**if you are not a MEDS student** please reach out to Sandy for help getting access to Taylor)
+- See MEDS summer coursework for a refresher on how to access Taylor, compute on Taylor, and pull data to/from Taylor (**if you are not a MEDS student** please reach out to Sandy and/or Kat Le for help getting access to Taylor)
 
 ---
 # Homework 1 (warmup): Logistics
@@ -517,6 +519,8 @@ par(par_og) # restore original par
 - But you're welcome to work on Taylor with an RStudio GUI or Workbench, etc.
 
 - You won't have write access to our class directory, but you do have your own directories on Taylor
+
+- Sandy will walk you through all of this in your first Discussion section
 
 ---
 # Github in this class

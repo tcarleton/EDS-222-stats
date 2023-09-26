@@ -24,7 +24,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + [Lab html](labs/01-week-one/week-1-lab.html)
   + [`_common.R` setup script](labs/_common.R) -->
   
-- **Assignment:** Assignment 1 posted 9/28; due 10/06, 5pm
+- **Assignment:** Assignment 1 posted 9/28; due 10/09, 5pm (note: usually will be Fridays, this deadline allows you more time to get set up on GitHub Classrooms)
 
 <!--
 ### Week 2
