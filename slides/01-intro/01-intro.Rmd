@@ -97,21 +97,22 @@ knitr::include_graphics("cropmodel.jpeg")
 ### **Step three:**  Form a hypothesis / testable explanation (sounding somewhat stats-like, but still no pre-req's here)
 
 #### Ex: Did less sunlight from Mt. Pinatubo's aerosols lead to lower crop yields?
-```{r, out.width = "45%", echo=FALSE, fig.align='center'}
+```{r, out.width = "40%", echo=FALSE, fig.align='center'}
 knitr::include_graphics("proctoretalfig2.png")
 ```
+<font size="3"> Source: Proctor et al. (Nature, 2018)</font> 
 
-_Source_: Proctor et al. (_Nature_, 2018)
 ---
 
 # The scientific method: Example
 
-### **Steps four/five:**  Analyze data & test the hypothesis (** !! NEED STATISTICS !! **)
+### **Steps four/five:**  Analyze data & test the hypothesis (** NEED STATISTICS!! **)
 
 #### Ex: Assemble spatio-temporal dataset, run multivariate linear regression, test statistical significance of regression parameters
-```{r, out.width = "60%", echo=FALSE, fig.align='center'}
+```{r, out.width = "50%", echo=FALSE, fig.align='center'}
 knitr::include_graphics("proctoretalfig3.png")
 ```
+<font size="3"> Source: Proctor et al. (Nature, 2018)</font> 
 
 ---
 
@@ -120,9 +121,10 @@ knitr::include_graphics("proctoretalfig3.png")
 ### **Step six:**  Report conclusions & what they mean for your question
 
 #### Ex: Run simulation to consider the implications for solar radiation management (a form of geo-engineering)
-```{r, out.width = "75%", echo=FALSE, fig.align='center'}
+```{r, out.width = "70%", echo=FALSE, fig.align='center'}
 knitr::include_graphics("proctoretalfig4.png")
 ```
+<font size="3"> Source: Proctor et al. (Nature, 2018)</font> 
 
 ---
 # Statistics and the scientific method
@@ -533,7 +535,7 @@ Github will be used in multiple ways in this class:
 
 --
 
-2. Github Classrooms. All homework assignments will be accessed via GH Classrooms. You will pull the assignment from GH, edit and push your code by the submission deadline, and then pull again once grades are posted to see your grade and to get feedback.
+2. Github Classroom. All homework assignments will be accessed via GH Classroom. You will pull the assignment from GH, edit and push your code by the submission deadline, and then pull again once grades are posted to see your grade and to get feedback.
 
 --
 

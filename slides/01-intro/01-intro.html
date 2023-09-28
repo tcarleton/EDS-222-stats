@@ -14,10 +14,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Course intro &amp; motivation
+]
+.subtitle[
 ## EDS 222
+]
+.author[
 ### Tamma Carleton
+]
+.date[
 ### Fall 2023
+]
 
 ---
 
@@ -80,17 +88,18 @@ The science of **collecting**, **manipulating**, and **analyzing** empirical dat
 ### **Step three:**  Form a hypothesis / testable explanation (sounding somewhat stats-like, but still no pre-req's here)
 
 #### Ex: Did less sunlight from Mt. Pinatubo's aerosols lead to lower crop yields?
-&lt;img src="proctoretalfig2.png" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="proctoretalfig2.png" width="40%" style="display: block; margin: auto;" /&gt;
+&lt;font size="3"&gt; Source: Proctor et al. (Nature, 2018)&lt;/font&gt; 
 
-_Source_: Proctor et al. (_Nature_, 2018)
 ---
 
 # The scientific method: Example
 
-### **Steps four/five:**  Analyze data &amp; test the hypothesis (** !! NEED STATISTICS !! **)
+### **Steps four/five:**  Analyze data &amp; test the hypothesis (** NEED STATISTICS!! **)
 
 #### Ex: Assemble spatio-temporal dataset, run multivariate linear regression, test statistical significance of regression parameters
-&lt;img src="proctoretalfig3.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="proctoretalfig3.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;font size="3"&gt; Source: Proctor et al. (Nature, 2018)&lt;/font&gt; 
 
 ---
 
@@ -99,7 +108,8 @@ _Source_: Proctor et al. (_Nature_, 2018)
 ### **Step six:**  Report conclusions &amp; what they mean for your question
 
 #### Ex: Run simulation to consider the implications for solar radiation management (a form of geo-engineering)
-&lt;img src="proctoretalfig4.png" width="75%" style="display: block; margin: auto;" /&gt;
+&lt;img src="proctoretalfig4.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;font size="3"&gt; Source: Proctor et al. (Nature, 2018)&lt;/font&gt; 
 
 ---
 # Statistics and the scientific method
@@ -382,7 +392,7 @@ Github will be used in multiple ways in this class:
 
 --
 
-2. Github Classrooms. All homework assignments will be accessed via GH Classrooms. You will pull the assignment from GH, edit and push your code by the submission deadline, and then pull again once grades are posted to see your grade and to get feedback.
+2. Github Classroom. All homework assignments will be accessed via GH Classroom. You will pull the assignment from GH, edit and push your code by the submission deadline, and then pull again once grades are posted to see your grade and to get feedback.
 
 --
 
@@ -445,6 +455,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
