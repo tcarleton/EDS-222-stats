@@ -14,10 +14,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Summarizing data
+]
+.subtitle[
 ## EDS 222
+]
+.author[
 ### Tamma Carleton
-### Fall 2022
+]
+.date[
+### Fall 2023
+]
 
 ---
 
@@ -52,7 +60,7 @@ layout: false
 class: clear, middle, inverse
 # Assignment #1 check-in: How's it going?
 
-### Reminder: OH Tuesdays, Pine Room, 3:30-4:30pm
+### Reminder: OH Thursdays, Pine Room, 3:30-4:30pm
 
 ---
 layout: false
@@ -102,7 +110,7 @@ class: clear, middle, inverse
 --
  
 - Examples: 
-  + States of the US
+  + Land use type
   + Species of tree
   + Age group (e.g., &lt;15, 15-64, 65+) (watch out! continuous numerical data can often be stored as a categorical variable!)
 
@@ -130,6 +138,30 @@ class: clear, middle, inverse
 layout: false
 class: clear, middle, inverse
 # Probability density functions
+
+---
+# Probability density functions
+
+Remember: when we do statistics, we use _statistics_ from a sample to learn about _parameters_ of a population.
+
+--
+
+A **variable** is a representation of something we care about in a population (e.g., nitrate concentration of groundwater). 
+
+--
+
+Many parameters we care about tell us something about what values we might see for our variable in the population (e.g., average nitrate concentrations). 
+
+--
+
+**Probability density functions** are mathematical functions that tell us: how likely are we to see values of a given range? 
+
+---
+# Probability density functions
+
+**Probability density functions** are mathematical functions that tell us: how likely are we to see values of a given range? 
+
+&lt;img src="drinkingwater.jpeg" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Probability density functions
@@ -180,8 +212,7 @@ P.d.f.'s help us characterize the distribution of our population. The most commo
 The probability this normally distributed variable takes on a value between -2 and 0 is shown in pink:
 
 &lt;img src="02-summstats_files/figure-html/examplepdf-1.svg" style="display: block; margin: auto;" /&gt;
-
-`\(^*\)`This distribution happens to be what's called "standard" normal. We'll get into the weeds later!
+&lt;font size="3"&gt; `\(^*\)`This distribution happens to be what's called "standard" normal. We'll get into the weeds later!&lt;/font&gt; 
 ---
 # Probability density functions (visual)
 
@@ -190,7 +221,7 @@ The probability this normally distributed variable takes on a value between -2 a
 
 &lt;img src="02-summstats_files/figure-html/examplepdf2-1.svg" style="display: block; margin: auto;" /&gt;
 
-`\(^*\)`Yep, still a "standard" normal. Details later. 
+&lt;font size="3"&gt; `\(^*\)`Yep, still a "standard" normal. Details later. &lt;/font&gt;
 ---
 # The normal distribution
 
@@ -413,7 +444,7 @@ Common quantiles have names you have head of, such as _quartiles_ for `\(q=4\)`:
 
 #### Examples of percentiles:
 - At 5'3", my height is the 40th percentile of the U.S. adult female height distribution `\(\rightarrow\)` 40% of American female adults are shorter than me
-- At 31 lbs, my son is the 90th percentile of U.S. male 2 year old weight distribution `\(\rightarrow\)` 90% of American male 2 year olds are lighter than my son
+- At 36 lbs, my son is the 90th percentile of U.S. male 3 year old weight distribution `\(\rightarrow\)` 90% of American male 3 year olds are lighter than my son
 
 &gt; Exercise: Draw approximately where you think the 1st, 10th, 20th, 50th, 80th, 90th and 99th percentiles would be on a normal distribution. 
 
@@ -522,7 +553,7 @@ $$\bar{x} \rightarrow \mu \hskip2mm \text{as} \hskip2mm n \rightarrow \infty $$
 
 ### Intro to ordinary least squares 
 
-### Correlations and linear regressions in `R` (Thursday lab)
+### Summarizing categorical and numerical data in `R` (Thursday lab)
 
 ---
 
@@ -584,6 +615,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

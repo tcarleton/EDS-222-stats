@@ -10,11 +10,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<meta name="author" content="YOUR NAME HERE" />
+<meta name="author" content="{Student name}" />
 
 <meta name="date" content="2023-10-01" />
 
-<title>EDS 222 Week 1 Lab: Summarizing Categorical Variables</title>
+<title>EDS 222: Week 1: Discussion Section Lab Setup</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -89,15 +89,54 @@ if (window.hljs) {
 
 
 
-<h1 class="title toc-ignore">EDS 222 Week 1 Lab: Summarizing Categorical Variables</h1>
-<h4 class="author">YOUR NAME HERE</h4>
+<h1 class="title toc-ignore">EDS 222: Week 1: Discussion Section Lab Setup</h1>
+<h4 class="author">{Student name}</h4>
 <h4 class="date">2023-10-01</h4>
 
 
 
-<div id="section-0-getting-set-up" class="section level1">
-<h1>Section 0: Getting set up</h1>
-<p>Load all the packages you need, plus the <code>_common.R</code> source file.</p>
+<div id="getting-set-up-for-labs-in-eds-222" class="section level1">
+<h1>Getting set up for Labs in EDS 222</h1>
+<p>In EDS 222 labs, we will often be working with exercises based on Introduction to Modern Statistics (Çetinkaya-Rundel and Hardin, 2021). To be able to access the data and custom packages these exercises sometimes rely on, we need to do a bit of setup. This will get you all set for all future labs; you won’t need to do it each time.</p>
+<div id="step-1-create-a-labs-folder-where-you-will-store-all-your-lab-materials-for-eds-222." class="section level2">
+<h2>Step 1: Create a <em>Labs/</em> folder where you will store all your lab materials for EDS 222.</h2>
+</div>
+<div id="step-2-download-_common.r-from-our-course-website-and-put-it-in-the-labs-folder." class="section level2">
+<h2>Step 2: Download <code>_common.R</code> from our course website and put it in the <em>Labs/</em> folder.</h2>
+</div>
+<div id="step-3-install-the-following-packages-if-they-are-not-already-installed" class="section level2">
+<h2>Step 3: Install the following packages, if they are not already installed:<label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> Note: This will take a minute or two!</span></h2>
+<pre class="r"><code>suppressMessages({
+  install.packages(c(
+    &quot;tidymodels&quot;,
+    &quot;gghighlight&quot;,
+    &quot;glue&quot;,
+    &quot;ggmosaic&quot;,
+    &quot;ggridges&quot;,
+    &quot;gridExtra&quot;,
+    &quot;infer&quot;,
+    &quot;janitor&quot;,
+    &quot;knitr&quot;,
+    &quot;kableExtra&quot;,
+    &quot;maps&quot;,
+    &quot;openintro&quot;,
+    &quot;patchwork&quot;,
+    &quot;quantreg&quot;,
+    &quot;tidyverse&quot;,
+    &quot;scales&quot;,
+    &quot;skimr&quot;,
+    &quot;caret&quot;,
+    &quot;palmerpenguins&quot;,
+    &quot;survival&quot;,
+    &quot;waffle&quot;,
+    &quot;ggrepel&quot;,
+    &quot;ggpubr&quot;,
+    &quot;openintro&quot;
+  ))
+})</code></pre>
+</div>
+<div id="step-4-load-all-the-packages-you-need-plus-the-_common.r-source-file." class="section level2">
+<h2>Step 4: Load all the packages you need, plus the <code>_common.R</code> source file.<label for="tufte-sn-2" class="margin-toggle sidenote-number">2</label><input type="checkbox" id="tufte-sn-2" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">2</span> Note: If you get a <code>namespace load</code> error for <code>tidyverse</code>, you want to remove the problem package, reinstall it, and then load <code>tidyverse</code> again.</span></h2>
 <pre class="r"><code># You probably already have these packages installed, so let&#39;s just load them
 library(tidyverse)</code></pre>
 <pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
@@ -122,112 +161,21 @@ library(openintro)</code></pre>
 ## The following object is masked from &#39;package:gt&#39;:
 ## 
 ##     sp500</code></pre>
-<pre class="r"><code># Where is the root directory where all your labs live? If you want to set up as an .RProj, go for it. 
-rootdir &lt;- &quot;~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data/&quot;
+<pre class="r"><code># Where is the root directory where all your labs live? Change this filepath to work on your computer.
+rootdir &lt;- &quot;~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data&quot; #~/Dropbox/EDS222_data/&quot;</code></pre>
+<p>Take a look at the help files for <code>source()</code> and <code>file.path()</code> functions. We will use these a lot in Labs and homework assignments.</p>
+<pre class="r"><code># `source()` is a helpful function for calling and running other R scripts.
+?source
 
-# This runs the script _common.R, which loads all the packages we&#39;ll need for today and does some extra stuff we won&#39;t really use, at least for now.
-source(file.path(rootdir,&quot;labs&quot;,&quot;_common.R&quot;))</code></pre>
+# `file.path()` is a helpful function for creating file paths from directory and file names
+?file.path</code></pre>
+<p>Now, use <code>source</code> to run the script <code>_common.R</code>, which loads all the packages we’ll need for our labs and does some extra stuff we won’t use today. You’ll <code>source()</code> this setup script before running all your labs.</p>
+<pre class="r"><code>source(file.path(rootdir,&quot;labs&quot;,&quot;_common.R&quot;))</code></pre>
 <pre><code>## Warning: package &#39;glue&#39; was built under R version 4.0.5</code></pre>
 <pre><code>## Warning: package &#39;caret&#39; was built under R version 4.0.5</code></pre>
-<pre class="r"><code># For labs, we want to see all our code
-knitr::opts_chunk$set(echo = TRUE)</code></pre>
+<p>For labs, we want to see all our code. Set your <code>knitr</code> options to <code>echo=TRUE</code> so you see all your code and output.</p>
+<p>Done! First real lab on Thursday in class.</p>
 </div>
-<div id="section-1-summarize-and-describe-categorical-variables" class="section level1">
-<h1>Section 1: Summarize and describe <strong>categorical</strong> variables</h1>
-<p>We spent most of class on Tuesday discussing how to summarize <em>numerical</em> variables. In contrast, <em>categorical</em> variables can only take on one of a fixed number of values, so it doesn’t make sense to do things like take averages (e.g., What is the “average” state in the US? What is the “average” tree species? These are not sensible questions!). Here, we will learn some helpful ways to summarize and display categorical variables.<label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> Note: this section follows <a href="https://openintro-ims.netlify.app/explore-categorical.html">IMS Chapter 4</a> very closely! Lots more fun examples in their text if you want more practice.</span></p>
-<p>First, let’s take a look at some data with categorical variables in it. Load the <code>loans_full_schema</code> data provided in the <code>openintro</code> package. Description from IMS:</p>
-<blockquote>
-<p>“This data set represents thousands of loans made through the Lending Club platform, which is a platform that allows individuals to lend to other individuals. Of course, not all loans are created equal. Someone who is a essentially a sure bet to pay back a loan will have an easier time getting a loan with a low interest rate than someone who appears to be riskier. And for people who are very risky? They may not even get a loan offer, or they may not have accepted the loan offer due to a high interest rate. It is important to keep that last part in mind, since this data set only represents loans actually made, i.e. do not mistake this data for loan applications!”</p>
-</blockquote>
-<p>We will focus on two variables:</p>
-<ul>
-<li><p><code>homeownership</code>, which indicates whether the loan applicant owns, has a mortgage on, or rents their home.</p></li>
-<li><p><code>application_type</code>, which indicates whether the applicant is applying as an individual, or joint with a partner.</p></li>
-</ul>
-<div id="take-a-look-at-your-data" class="section level2">
-<h2>Take a look at your data</h2>
-<p>Let’s investigate these variable types as stored in <code>R</code>. Do they make sense to you?<label for="tufte-sn-2" class="margin-toggle sidenote-number">2</label><input type="checkbox" id="tufte-sn-2" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">2</span> Are these “ordinal” or “nominal” categorical variables?</span> What about the variable <code>interest_rate</code>?</p>
-<p>Create a dataframe called <code>loans</code> that cleans up the full dataset <code>loans_full_schema</code> to a) make the <code>homeownership</code> variable lower case (all caps is intense…), and b) reorder the “levels” of each variable into a sensible order.<label for="tufte-sn-3" class="margin-toggle sidenote-number">3</label><input type="checkbox" id="tufte-sn-3" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">3</span> Note: reordering levels with <code>fct_relevel()</code> is helpful if your variable has a natural ordering to it, as all visuals will follow the order of the factor levels.</span></p>
-</div>
-<div id="bar-plots" class="section level2">
-<h2>Bar plots</h2>
-<p>A bar plot is a common way to display a single categorical variable. The left panel below shows a bar plot for the homeownership variable. In the right panel, the counts are converted into proportions, showing the proportion of observations that are in each level.<label for="tufte-sn-4" class="margin-toggle sidenote-number">4</label><input type="checkbox" id="tufte-sn-4" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">4</span> Note: The following chunk of code calls a matrix called <code>IMSCOL</code> which contains a bunch of color hex codes for colors used frequently in the IMS book. Type <code>IMSCOL</code> in your console to see all the colors you can pick from.</span></p>
-<blockquote>
-<p>Question: When might you prefer the left version of the bar plot? When might you prefer the right?</p>
-</blockquote>
-</div>
-<div id="contingency-tables" class="section level2">
-<h2>Contingency tables</h2>
-<p>We often care about how two categorical variables interact with one another. For example, are homeowners more likely to apply for a loan with a partner than are renters? A <strong>contingency table</strong> summarizes the distribution of our data across the two categories jointly.</p>
-<p>Each value in the table represents the number of times a particular combination of variable outcomes occurred.</p>
-<p>For example, the value 3496 corresponds to the number of loans in the dataset where the borrower rents their home and the application type was by an individual. Row and column totals are also included. The row totals provide the total counts across each row and the column totals down each column.</p>
-<div id="optional-bonus-exercise" class="section level3">
-<h3>[Optional, bonus exercise]</h3>
-<p>Often, we are more interested in the <em>proportion</em> of our sample that falls into each category, as opposed to the total count. Recreate the above table, but now replace in each cell the counts of observations with the proportion of each application type that comes from applicants that rent, own, or have a mortgage on their home.</p>
-<p>Answer:</p>
-</div>
-</div>
-<div id="bar-plots-with-two-variables" class="section level2">
-<h2>Bar plots with two variables</h2>
-<p>We can display the distributions of two categorical variables on a bar plot at the same time. These plots are generally useful for visualizing the relationship between two categorical variables.</p>
-<p>For example, here we create three bar plots that visualize the relationship between <code>homeownership</code> and <code>application_type</code> variables.</p>
-<ul>
-<li>First, we make a <strong>stacked bar plot</strong>, which simply stacks the count of observations in each <code>homeownership</code> type, coloring by <code>application_type</code>. We can see that most of the loan applicants live in mortgaged homes, but it’s hard to say if a joint versus individual applicant is more or less likely to rent, own, or have a mortgage.</li>
-</ul>
-<div id="exercise-work-solo-or-with-neighbors" class="section level3">
-<h3>Exercise (work solo or with neighbors):</h3>
-<p>Refer to the documentation for <code>geom_bar()</code> to make two different versions of the stacked bar plot, each of which communicates these two categorical variables differently.</p>
-<ol style="list-style-type: decimal">
-<li><p>Make a <strong>dodged bar plot</strong>, which has two bars for each homeownership category, one next to each other (or, “dodged”). One bar is the count of applicants in that homeownership category that are individual applicants, and the other that are joint applicants.</p></li>
-<li><p>Make a <strong>standardized bar plot</strong> (also known as <strong>filled bar plot</strong>), which shows two bars stacked on top of each other, each indicating the proportion of loan applicants in each homeownership category that are joint (one color) versus individual (a second color).</p></li>
-</ol>
-<blockquote>
-<p>What do you notice about each bar plot type? When might one version be helpful and another not?</p>
-</blockquote>
-</div>
-<div id="answers" class="section level3">
-<h3>Answers:</h3>
-<ul>
-<li><p>Here’s a <strong>dodged bar plot</strong>, which puts the “stacks” by applicant type next to each other. It’s often easier to see the total quantity in each category this way.</p></li>
-<li><p>Here is a <strong>standardized bar plot</strong>. It’s easiest to see the relationships <em>between</em> the two categories here, but you can’t learn about the total number of applications.</p></li>
-</ul>
-</div>
-</div>
-</div>
-<div id="section-2-summarizing-numerical-data-in-r" class="section level1">
-<h1>Section 2: Summarizing numerical data in <code>R</code></h1>
-<div id="histograms" class="section level2">
-<h2>Histograms</h2>
-<p>As we discussed in class, we can make a histogram from our <em>sample</em> to learn about what the probability density function of our <em>population</em> is likely to look like. For example, you might want to know if your variable follows a normal distribution or not.</p>
-<p>A histogram plots the count (or proportion) of your data that fall into a set of user-specified bins.<label for="tufte-sn-5" class="margin-toggle sidenote-number">5</label><input type="checkbox" id="tufte-sn-5" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">5</span> Note: Even if you’re working with continuous data, any histogram function in <code>R</code> will bin up your continuous data into discrete bins, and then plot the proportion of your data in that bin.</span></p>
-<p>We’ll use <code>ggplot</code> and the <code>geom_histogram</code> function to make a histogram of the interest rate associated with all the loans in our loan database.</p>
-<div id="exercise" class="section level3">
-<h3>Exercise</h3>
-<p>The above plot showed us <em>counts</em> in each bin, where the bins were left unspecified.<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><input type="checkbox" id="tufte-sn-6" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">6</span> <code>R</code> will remind you to change bin values if you leave them unspecified, since the default is rarely appropriate for your data.</span> The command <code>breaks = seq(5, 27.5, 2.5)</code> creates a vector called <code>breaks</code> that goes from 5 to 25 in intervals of 2.5. Generate this vector and use it within <code>geom_histogram()</code> to create new bin widths in your histogram.</p>
-<p>This new histogram describes our data more clearly. What do you see? Use terms from class (e.g., symmetric, skew, tails, etc.) to describe the distribution of the interest rate in this sample of loans. Is the interest rate approximately normally distributed?</p>
-</div>
-<div id="optional-exercise" class="section level3">
-<h3>[Optional exercise]</h3>
-<p>Often, we care about <em>proportions</em> instead of counts, as described above for categorical data. Remake the last histogram (with custom break points), but now show the proportion of the data that fall into each bin instead of the total number of observations.<label for="tufte-sn-7" class="margin-toggle sidenote-number">7</label><input type="checkbox" id="tufte-sn-7" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">7</span> Hint: Since proportions indicates probability densities, you will want to look in function documentation for “density” in a histogram.</span></p>
-</div>
-</div>
-<div id="box-plots-a-nice-way-to-look-at-quantiles" class="section level2">
-<h2>Box plots: A nice way to look at quantiles</h2>
-<p>Box plots are a standard way for us to visualize quantiles of a variable. Recall, quantiles tell us how much of our data sit below a certain value (e.g., the first tercile or first 3-quantile tells us the value at which 1/3 of the data sit below.).</p>
-<p>In their most standard form, box plots show a <em>box</em> where the outer edges of the box indicate the 1st and 3rd quartiles of the data (i.e., 25th and 75th percentiles).<label for="tufte-sn-8" class="margin-toggle sidenote-number">8</label><input type="checkbox" id="tufte-sn-8" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">8</span> Note: The range from the 25th to 75th percentile is called the “inter-quartile range” or IQR – you’ll see that lingo a lot!</span> A vertical line is shown through the box indicating the 2nd quartile (i.e., 50th percentile or median). Lines outside the box are called “whiskers” and indicate the median minus (or plus) 1.5 times the IQR. While this is the most standard boxplot, you can customize these cutoffs to any quantiles you’d like.</p>
-<p>Here, we repeat the histogram above, showing the distribution of the <code>interest_rate</code> variable in the data. We then make a boxplot using the standard quantiles. Note that outliers beyond the median + 1.5<span class="math inline">\(\times\)</span>IQR are shown as individual points.</p>
-<p>What do you notice in the boxplot? Do you prefer communicating skew, tails, and symmetry with the histogram or the boxplot? Why?</p>
-</div>
-</div>
-<div id="optional-section-3-law-of-large-numbers" class="section level1">
-<h1>[Optional] Section 3: Law of Large Numbers</h1>
-<p>The Law of Large Numbers tells us that as a randomly drawn sample increases in size, the sample average <span class="math inline">\(\bar x\)</span> converges towards the true population mean <span class="math inline">\(\mu\)</span>. Here, we are going to show that this is true through running a “simulation” in <code>R</code>. That is, we will specify the true population mean, generate some fake data that are randomly drawn, and see how <span class="math inline">\(\bar x\)</span> compares to <span class="math inline">\(\mu\)</span> for different population sizes. We are hoping that as our sample size <span class="math inline">\(n\)</span> grows, our sample mean gets closer and closer to the true <span class="math inline">\(\mu\)</span>.</p>
-<p>To do this follow the following steps:</p>
-<ol style="list-style-type: decimal">
-<li><p>For each <span class="math inline">\(n\)</span> from 1 to 1,000, randomly draw a sample size of <span class="math inline">\(n\)</span> from the standard normal distribution, which we know has <span class="math inline">\(\mu=0\)</span> and <span class="math inline">\(\sigma=1\)</span>.<label for="tufte-sn-9" class="margin-toggle sidenote-number">9</label><input type="checkbox" id="tufte-sn-9" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">9</span> Hint: <code>rnorm(x)</code> is a function that randomly draws <span class="math inline">\(x\)</span> numbers from the normal distribution.</span></p></li>
-<li><p>For each of your 1,000 samples, compute the sample mean <span class="math inline">\(\bar x_n\)</span>.</p></li>
-<li><p>Plot on a graph the sample mean (<span class="math inline">\(y\)</span>-axis) against the sample size (<span class="math inline">\(x\)</span>-axis). Use `graphically that the mean of the samples will approach the expected value of the mean and standard deviation of the population.</p></li>
-</ol>
 </div>
 
 

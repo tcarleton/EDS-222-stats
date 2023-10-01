@@ -3,7 +3,7 @@ title: "Summarizing data"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2022"
+date: "Fall 2023"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -88,7 +88,7 @@ layout: false
 class: clear, middle, inverse
 # Assignment #1 check-in: How's it going?
 
-### Reminder: OH Tuesdays, Pine Room, 3:30-4:30pm
+### Reminder: OH Thursdays, Pine Room, 3:30-4:30pm
 
 ---
 layout: false
@@ -137,7 +137,7 @@ knitr::include_graphics("numerical.jpg")
 --
  
 - Examples: 
-  + States of the US
+  + Land use type
   + Species of tree
   + Age group (e.g., <15, 15-64, 65+) (watch out! continuous numerical data can often be stored as a categorical variable!)
 
@@ -164,6 +164,32 @@ knitr::include_graphics("categorical.jpg")
 layout: false
 class: clear, middle, inverse
 # Probability density functions
+
+---
+# Probability density functions
+
+Remember: when we do statistics, we use _statistics_ from a sample to learn about _parameters_ of a population.
+
+--
+
+A **variable** is a representation of something we care about in a population (e.g., nitrate concentration of groundwater). 
+
+--
+
+Many parameters we care about tell us something about what values we might see for our variable in the population (e.g., average nitrate concentrations). 
+
+--
+
+**Probability density functions** are mathematical functions that tell us: how likely are we to see values of a given range? 
+
+---
+# Probability density functions
+
+**Probability density functions** are mathematical functions that tell us: how likely are we to see values of a given range? 
+
+```{r, out.width = "80%", echo=FALSE, fig.align='center'}
+knitr::include_graphics("drinkingwater.jpeg")
+```
 
 ---
 # Probability density functions
@@ -224,8 +250,7 @@ geom_polygon(data = tmp %>% filter(between(x, -2, 0)), fill = red_pink) +
 geom_hline(yintercept = 0, color = "black") +
 theme_simple
 ```
-
-$^*$This distribution happens to be what's called "standard" normal. We'll get into the weeds later!
+<font size="3"> $^*$This distribution happens to be what's called "standard" normal. We'll get into the weeds later!</font> 
 ---
 # Probability density functions (visual)
 
@@ -244,7 +269,7 @@ geom_hline(yintercept = 0, color = "black") +
 theme_simple
 ```
 
-$^*$Yep, still a "standard" normal. Details later. 
+<font size="3"> $^*$Yep, still a "standard" normal. Details later. </font>
 ---
 # The normal distribution
 
@@ -602,7 +627,7 @@ $q$ The k_th_ $q$-quantile tells us the value for which $\frac{k}{q}\times 100$%
 
 #### Examples of percentiles:
 - At 5'3", my height is the 40th percentile of the U.S. adult female height distribution $\rightarrow$ 40% of American female adults are shorter than me
-- At 31 lbs, my son is the 90th percentile of U.S. male 2 year old weight distribution $\rightarrow$ 90% of American male 2 year olds are lighter than my son
+- At 36 lbs, my son is the 90th percentile of U.S. male 3 year old weight distribution $\rightarrow$ 90% of American male 3 year olds are lighter than my son
 
 > Exercise: Draw approximately where you think the 1st, 10th, 20th, 50th, 80th, 90th and 99th percentiles would be on a normal distribution. 
 
@@ -777,7 +802,7 @@ knitr::include_graphics("lln.png")
 
 ### Intro to ordinary least squares 
 
-### Correlations and linear regressions in `R` (Thursday lab)
+### Summarizing categorical and numerical data in `R` (Thursday lab)
 
 ---
 

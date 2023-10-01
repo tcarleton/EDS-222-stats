@@ -19,12 +19,23 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + (Optional) [Gender Shades](http://gendershades.org/)
   + (Optional) [RCTs](https://www.youtube.com/watch?v=0zvrGiPkVcs)
 
-<!-- - **Lab:** EDS 222 Lab setup and Github Classrooms demo (taught by TA, Sandy Sum)
-  + [Lab markdown](labs/01-week-one/week-1-lab.Rmd)
-  + [Lab html](labs/01-week-one/week-1-lab.html)
-  + [`_common.R` setup script](labs/_common.R) -->
-  
 - **Assignment:** Assignment 1 posted 9/28; due 10/09, 5pm (note: usually will be Fridays, this deadline allows you more time to get set up on GitHub Classroom)
+
+### Week 1
+
+- **Slides**: Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf)
+
+- **Reading:** 
+  + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+
+- **Discussion Section (Wednesday)**: EDS 222 Lab setup and Github Classrooms demo (taught by TA, Sandy Sum)
+  + [Lab markdown](labs/01-week-week-1-discussion.Rmd)
+  + [Lab html](labs/01-weekweek-1-discussion.html)
+  + [`_common.R` setup script](labs/_common.R) 
+
+- **Lab (Thursday)**: TO BE POSTED. <!-- Data visualization with categorical variables [html](labs/02-week-two/week-2-categorical-data.html) [Rmd](labs/02-week-two/week-2-categorical-data.Rmd) -->
+
+- **Assignment:** Assignment 1 due 10/09, 5pm 
 
 <!--
 ### Week 2
