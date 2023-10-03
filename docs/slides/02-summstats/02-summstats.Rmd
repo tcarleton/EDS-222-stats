@@ -250,7 +250,7 @@ geom_polygon(data = tmp %>% filter(between(x, -2, 0)), fill = red_pink) +
 geom_hline(yintercept = 0, color = "black") +
 theme_simple
 ```
-<font size="3"> $^*$This distribution happens to be what's called "standard" normal. We'll get into the weeds later!</font> 
+<font size="3"> *This distribution happens to be what's called "standard" normal. We'll get into the weeds later!</font> 
 ---
 # Probability density functions (visual)
 
@@ -269,7 +269,7 @@ geom_hline(yintercept = 0, color = "black") +
 theme_simple
 ```
 
-<font size="3"> $^*$Yep, still a "standard" normal. Details later. </font>
+<font size="3"> *Yep, still a "standard" normal. Details later. </font>
 ---
 # The normal distribution
 
@@ -282,7 +282,6 @@ where $\mu$ is the mean (i.e., average) and $\sigma$ is the standard deviation (
 knitr::include_graphics("normals.png")
 ```
 #### Many results in statistics rely on the assumption that our data are normally distributed. We will return to this distribution **frequently!**
-
 ---
 # Shapes of probability distributions
 
@@ -292,6 +291,20 @@ Key terms to describe p.d.f.'s:
 2. A distribution can have a long **right tail** or **left tail** (e.g., fat-tailed climate sensitivity distributions!)
 3. A distribution can be **symmetric**
 4. A distribution can be **unimodal**, **bimodal**, or **multimodal**
+
+---
+# Shapes of probability distributions
+
+Key terms to describe p.d.f.'s:
+
+1. A distribution can have **skew** (e.g., log-normal)
+  + Skew means the distribution is asymmetric around its mean
+2. A distribution can have a long **right tail** or **left tail** (e.g., fat-tailed climate sensitivity distributions!)
+  + Long tails is a general term implying there is a lot of mass far away from the mean (not a precise defn.)
+3. A distribution can be **symmetric**
+  + The distribution is symmetric around its mean (Q: what does this imply about skew?)
+4. A distribution can be **unimodal**, **bimodal**, or **multimodal**
+  + A distribution with one (unimodal), two (bimodal), or more (multimodal) "peaks"
 
 ---
 # Shapes of probability distributions
@@ -411,7 +424,7 @@ ggplot(data = samp, aes(x=x)) +
 ---
 # Median = middle value 
 
-In a **population**, the median $m$ is defined as: $$P(X\leq m) = \int_{-\infty}^m f(x)dx = \frac{1}{2} = \int_m^{\infty} f(x)dx = P(X\geq m)$$
+In a **population**, the median is defined as the value $m$ for which half the distribution falls below $m$ and half above $m$: $$P(X\leq m) = \int_{-\infty}^m f(x)dx = \frac{1}{2} = \int_m^{\infty} f(x)dx = P(X\geq m)$$
 
 --
 
@@ -605,10 +618,28 @@ knitr::include_graphics("quantiles_normal.png")
 
 **Interpretation:** Q1 = first quartile, Q2 = second quartile, etc. The area below the red curve is the same below Q1 as it is between Q1 and Q2, between Q2 and Q3, and above Q3. 
 ---
+# The Inter-quartile Range
+
+The **inter-quartile range** (often called the IQR) is the 3rd quartile minus the 1st quartile (i.e., the range of the "middle" 50% of the data)
+
+--
+
+This is another measure of variability, like variance. Larger IQR = more variable data.
+
+--
+
+Often used as the edges of the box in a boxplot (we will do this in Lab!):
+
+
+```{r, out.width = "70%", echo=FALSE, fig.align='center'}
+knitr::include_graphics("boxplot.png")
+```
+
+---
 # Common quantiles and interpretation
 
 ### Common quantiles have names you have heard of: 
-- $q=2$ **Median** tells us the value for which 50% of our sample sits _below_ (and 50% above). This is quantile 0.5 (or 50% quantile)
+- $q=2$ **Median** tells us the value for which 50% of our sample sits _below_ (and 50% above)
 - $q=3$ **Terciles**: tell us the values for which 33.33% (1st tercile) and 66.66% (2nd tercile) of our sample sits _below_
 - $q=4$ **Quartiles**: tell us the values for which 25% (1st quartile), 50% (2nd quartile), and 75% (3rd quartile) of our sample sits _below_
 - $q=10$ **Deciles**: tell us the values for which 10% (1st decile), ..., 50% (5th decile), ..., and 90% (9th decile) of our sample sits _below_
