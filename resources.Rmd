@@ -40,24 +40,20 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Assignment:** Assignment 1 due 10/09, 5pm 
 
-<!--
+
 ### Week 2
 
-- **Slides 01**: Course intro [html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf)
-
-- **Slides 02**: Summary statistics [html](slides/02-summstats/02-summstats.html) [pdf](slides/02-summstats/02-summstats.pdf) 
-
-- **Optional lab material**: Data visualization with categorical variables [html](labs/02-week-two/week-2-categorical-data.html) [Rmd](labs/02-week-two/week-2-categorical-data.Rmd)
+- **Slides**: Ordinary Least Squares <!--[html](slides/01-intro/01-intro.html) [pdf](slides/01-intro/01-intro.pdf) -->
 
 - **Reading:** 
-  + (For Tuesday) [Chapter 2](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
-  + (For Thursday) [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
-  + Optional reading: Rolf et al. (2021) ["Representation matters"](https://arxiv.org/abs/2103.03399)
-  + Optional reading/watching: ["Gender shades"](http://gendershades.org/)
-  + Optional watching: Esther Duflo on [Randomized Control Trials](https://www.youtube.com/watch?v=0zvrGiPkVcs)
-  
-- **Assignment:** Assignment 1 due 10/04, 9am
--->
+  + [Chapter 7](https://openintro-ims.netlify.app/model-slr), _Introduction to Modern Statistics_
+
+- **Discussion Section (Wednesday)**: Law of Large Numbers, simulation in `R`
+
+- **Lab (Thursday)**: Correlations and ordinary least squares in `R`
+
+- **Assignment:** Assignment 1 due 10/09, 5pm. Assignment 2 posted 10/10 and due 10/20 at 5pm.
+
 <!--
 - **Reading:** 
   
