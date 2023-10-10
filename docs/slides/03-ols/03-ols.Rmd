@@ -3,7 +3,7 @@ title: "Ordinary Least Squares"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2022"
+date: "Fall 2023"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -70,7 +70,7 @@ name: Overview
 
 --
 
-#### Ordinary Least Squares
+#### Ordinary Least Squares (OLS)
 - Finding the "best fit" line, properties of OLS, assumptions of OLS
 
 --
@@ -82,11 +82,11 @@ name: Overview
 
 # Announcements/check-in
 
-- Assignment #1: Grading and answers early next week 
+- Assignment #1: Grading next week, some review in Discussion Section
 
 --
 
-- Assignment #2: To be posted this week, due 10/13, 9am 
+- Assignment #2: To be posted this week, due 10/20, 5pm 
 
 --
 
@@ -317,8 +317,11 @@ $$\rho_{X,Y} = corr(X,Y) = \frac{cov(X,Y)}{\sigma_x \sigma_y}$$
 
 In the sample:
 $$r_{x,y} = \frac{s_{x,y}}{s_x s_y} = \frac{1}{(n-1)s_x s_y}\sum_{i=1}^n (x_i - \bar x)(y_i - \bar y)$$
+
+Note: $\sigma_x$= population variance of $x$; $s_x$ = sample estimate of variance
+
 .footnote[
-Want to proove that $-1 \leq r_{x,y} \leq 1$ ? Key result: Cauchy-Schwarz Inequality tells us that $|cov(X,Y)|^2 \leq var(X)var(Y)$.
+Want to prove that $-1 \leq r_{x,y} \leq 1$ ? Key result: Cauchy-Schwarz Inequality tells us that $|cov(X,Y)|^2 \leq var(X)var(Y)$.
 ]
 
 ---
@@ -421,6 +424,8 @@ $$y = \beta_0 + \beta_1 x + u $$
 --
 
 ### Can we use our sample to estimate $\beta_0$ (the intercept) and $\beta_1$ (the slope)? 
+
+(Call these estimates $\hat\beta_0$ and $\hat\beta_1$, respectively)
 
 ---
 # Finding a "best fit" line
@@ -550,10 +555,10 @@ theme_bw() + theme(line = element_blank(),
 ---
 # Ordinary Least Squares
 
-### OLS chooses a line that minimizes the **sum of squared errors**:
+### OLS chooses a line that minimizes the **sum of squared errors** (SSE):
 
 $$SSE = \sum_i e_i^2 = \sum_i (y_i - \hat{y}_i)^2 = \sum_i (y_i - \hat{\beta}_0 - \hat{\beta}_1 x_i)^2$$
-#### In other words, OLS gives us a combination of $\hat\beta_0$ and $\hat\beta_1$ that minimizes the SSE.
+Where $i$ indicates one observation in our data. In other words, OLS gives us a combination of $\hat\beta_0$ and $\hat\beta_1$ that minimizes the SSE.
 
 #### Now you see where "least squares" comes from! 
 
@@ -638,7 +643,7 @@ $$  \min_{\hat{\beta}_0,\, \hat{\beta}_1} \sum_i e_i^2 $$
 
 --
 
-**See extra slides** if you want the full derivation. Basically, we take the first derivatives of the SSE above with respect to $\beta_0$ and $\beta_1$, set them equal to zero, and solve for $\beta_0$ and $\beta_1$.
+**See extra slides** if you want the full derivation. Basically, we take the first derivatives of the SSE above with respect to $\hat\beta_0$ and $\hat\beta_1$, set them equal to zero, and solve for $\hat\beta_0$ and $\hat\beta_1$.
 
 ---
 # OLS, formally
@@ -660,17 +665,17 @@ Note that the expression for $\hat\beta_0$ can be rearranged to show us that our
 # Let's collect some definitions
 
 True **population** relationship:
-$$ y_i = \beta_0 + \beta_1 x_i + u_i $$
+$$ y = \beta_0 + \beta_1 x + u $$
 
 --
 
 Estimated **sample** relationship:
-$$ \hat y_i = \hat\beta_0 + \hat\beta_1 x_i  $$
+$$ \hat y = \hat\beta_0 + \hat\beta_1 x + e $$
 --
 
 - **Dependent variable** = regressand = $y$
 - **Independent variable** = explanatory variable = regressor = $x$
-- **Residual** = sample error = $y_i - \hat y_i$
+- **Residual** = sample error = $y - \hat y$ (for one observation $i$, sample error is $y_i-\hat y_i$)
 - Estimated **intercept** coefficient = $\hat\beta_0$
 - Estimated **slope** coefficient = $\hat\beta_1$
 
@@ -892,7 +897,7 @@ These very nice properties depend on a key set of assumptions:
 
 3. The $X$ variable has variation. 
 
-4. The population disturbances $u_i$ are independently and identically distributed as **normal** random variables with mean zero $\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)$ and variance $\sigma^2$ (_i.e._,  $\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2$)
+4. The population disturbance $u$ is independently and identically distributed as a **normal** random variable with mean zero $\left( \mathop{\boldsymbol{E}}\left[ u \right] = 0 \right)$ and variance $\sigma^2$ (_i.e._,  $\mathop{\boldsymbol{E}}\left[ u^2 \right] = \sigma^2$)
   + Independently distributed and mean zero jointly imply $\mathop{\boldsymbol{E}}\left[ u_i u_j \right] = 0$ for any $i\neq j$
   + Constant variance means errors cannot vary with $X$ (this is called "homoskedasticity")
   
@@ -961,7 +966,7 @@ You can look at your data to see if this might be reasonable.
 
 - Note: this assumption does not require your model to be linear in $X$! As we discuss later, nonlinear relationships in $X$ _can_ be easily accommodated with OLS:
 
-$$y_i = \beta_0 + \beta_1 x + \beta_2 x^2 + \varepsilon_i$$
+$$y = \beta_0 + \beta_1 x + \beta_2 x^2 + \varepsilon$$
 
 This equation was estimated using OLS to give the nonlinear relationship on the next slide.
 
@@ -1000,6 +1005,18 @@ theme_empty
 Example of a population relationship that is _not_ linear in parameters:
 
 $Y = e^{\beta_0 + \beta_1 X + u}$
+
+```{R, exponential, echo = F, dev = "svg", fig.height=3}
+set.seed(444)
+xe = seq(0.01,10,by=.01)
+ye = exp(.2*xe +.2*rnorm(1000))
+yhat = exp(.2*xe)
+edf = as.data.frame(cbind(xe,ye,yhat))
+ggplot(data=edf,aes(xe, ye)) +
+geom_point(color = "darkslategrey", alpha = 0.9, size=4) +
+  geom_line(aes(x=xe,y=yhat), color="lightcoral", size=3) +
+theme_empty
+```
 
 ---
 # OLS: Assumptions
@@ -1157,14 +1174,14 @@ $$ Ozone_i = \beta_0 + \beta_1 Temp_i + \varepsilon_i $$
 knitr::include_graphics("ozone_temp_coeffs.png")
 ```
 
-- Standard error, t-value, and Pr(>t): These all concern **uncertainty** around our parameter estimates. We will tackle these fully in a week or so.
+- Standard error, t-value, and Pr(>t): These all concern **uncertainty** around our parameter estimates. We will tackle these fully after the midterm.
 
 ---
 # Interpreting OLS results
 
 Visualizing our predicted model using `geom_smooth()`
 
-> Where is $\beta_0$? Where is $\beta_1$?
+> Where is $\hat\beta_0$? Where is $\hat\beta_1$?
 
 ```{R, nycfit, echo = F, dev = "svg", fig.height=5}
 ggplot(data=airquality,aes(Temp, Ozone)) +
@@ -1237,7 +1254,7 @@ We're getting close. We need to **minimize SSE**. We've showed how SSE relates t
 
 $$ \text{SSE} = \sum_i e_i^2 = \sum_i \left( y_i^2 - 2 y_i \hat{\beta}_0 - 2 y_i \hat{\beta}_1 x_i + \hat{\beta}_0^2 + 2 \hat{\beta}_0 \hat{\beta}_1 x_i + \hat{\beta}_1^2 x_i^2 \right) $$
   
-For the first-order conditions of minimization, we now take the first derivates of SSE with respect to $\hat{\beta}_0$ and $\hat{\beta}_1$.
+For the first-order conditions of minimization, we now take the first derivate of SSE with respect to $\hat{\beta}_0$ and $\hat{\beta}_1$.
 
 $$
   \begin{aligned}
