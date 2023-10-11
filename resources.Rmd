@@ -49,6 +49,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + [Chapter 7](https://openintro-ims.netlify.app/model-slr), _Introduction to Modern Statistics_
 
 - **Discussion Section (Wednesday)**: Law of Large Numbers, simulation in `R`
+  + [HW 1 Answers](https://www.dropbox.com/scl/fi/38irxdig9ln9bfk38jhk3/assignment-01-answers.Rmd?rlkey=s5wk2ebdemsgkzehizzipe8l4&dl=0)
 
 - **Lab (Thursday)**: Correlations and ordinary least squares in `R`
 
