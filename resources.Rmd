@@ -52,6 +52,9 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + [HW 1 Answers](https://www.dropbox.com/scl/fi/38irxdig9ln9bfk38jhk3/assignment-01-answers.Rmd?rlkey=s5wk2ebdemsgkzehizzipe8l4&dl=0)
 
 - **Lab (Thursday)**: Correlations and ordinary least squares in `R`
+  + [Lab markdown](labs/02-week-two/week-2-lab.Rmd)
+  + [Lab answers](labs/02-week-two/week-2-lab-answers.Rmd)
+  + [Lab answers in html](labs/02-week-two/week-2-lab-answers.html)
 
 - **Assignment:** Assignment 1 due 10/09, 5pm. Assignment 2 posted 10/10 and due 10/20 at 5pm.
 
