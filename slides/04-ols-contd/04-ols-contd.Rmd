@@ -3,7 +3,7 @@ title: "Ordinary Least Squares, continued"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2022"
+date: "Fall 2023"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -65,15 +65,21 @@ theme_simple <- theme_bw() + theme(
 - Assignment #1: Grades posted
   + Please ensure your `.html` file is compiled and pushed to GitHub
   + Please do not push data to GitHub (generally a good rule to follow)
-  + Sampling with vs. without replacement: careful! 
+  + Sandy to go over some areas of confusion
+
+- Assignment #2: Due 10/20, 5pm
 
 --
 
-- Assignment #2: Due 10/13, 9am
+- Final project guidelines posted (under "Important Links" on homepage and on Resources tab)
 
 --
 
-- Feedback forms for all fall classes coming end of this week
+- Practice midterm questions posted sometime this week
+
+--
+
+- Reiteration of COVID/illness policy
 
 ---
 name: Overview
@@ -186,7 +192,7 @@ theme_empty
 --
 
 - In OLS, we often rely on $R^2$, the **coefficient of determination**. In simple linear regression, this is simply the square of the correlation.
-- Interpretation of $R^2$: **share of the variance in $y$ that is explained by $x$**
+- Interpretation of $R^2$: **share of the variance in $y$ that is explained by your regression model**
 
 --
 $$
@@ -238,7 +244,7 @@ knitr::include_graphics("ozone_temp_r2.png")
 
 - Higher $R^2$ does not mean a model is "better" or more appropriate
   + Predictive power is not often the goal of regression analysis (e.g., you may just care about getting $\beta_1$ right)
-  + If you are focused on predictive power, many other measures of fit are appropriate (to discuss in machine learning)
+  + If you are focused on predictive power, many other measures of fit can be appropriate (to discuss in machine learning)
   + Always look at your data and residuals! 
   
 --
@@ -248,7 +254,7 @@ knitr::include_graphics("ozone_temp_r2.png")
 ---
 # Coefficient of determination 
 
-Here, $R^2=0.94$. Does that mean a linear model is appropriate?
+Here, $R^2=0.94$ for a model of $y = \beta_0 + \beta_1 x + \epsilon$. Does that mean a linear relationship with $x$ is appropriate?
 
 
 ```{R, rsq, echo = F, dev = "svg", fig.height=5}
@@ -266,7 +272,7 @@ theme_empty
 ---
 # Coefficient of determination 
 
-Here, $R^2=0$. Does that mean there is no relationship between these variables?
+Here, $R^2=0$ for a model of $y = \beta_0 + \beta_1 x + \epsilon$. Does that mean there is no relationship between these variables?
 
 
 ```{R, rsq2, echo = F, dev = "svg", fig.height=5}
@@ -292,7 +298,7 @@ class: clear, middle, inverse
 
 We have been talking a lot about **numerical** variables in linear regression...
   + Ozone levels
-  + Possom tail lengths
+  + Crab size
   + Temperature and precipitation amounts
   + etc.
 
@@ -315,7 +321,7 @@ We use **dummy** or **indicator** variables in linear regression to capture the 
 
 --
 
-For example, let _x_ be a categorical variable indicating the gender of an individual. Suppose we are interested in the "gender wage gap", so _y_ is wages. We estimate:
+For example, let _x_ be a categorical variable indicating the gender of an individual. Suppose we are interested in the "gender wage gap", so _y_ is income We estimate:
 
 $$y_i = \beta_0 + \beta_1 MALE_i + \varepsilon_i $$
 --
@@ -724,20 +730,20 @@ As it's name suggests, this situation leads to bias in our estimate of $\beta_j$
 
 **Example**
 
-Let's imagine a simple model for the amount individual $i$ gets paid
+Let's imagine a simple model for the cancer rates in census tract $i$:
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \text{School}_i + \beta_2 \text{Male}_i + u_i $$
+$$ \text{Cancer rate}_i = \beta_0 + \beta_1 \text{UV radiation}_i + \beta_2 \text{TRI}_i + u_i $$
 
 where
 
-- $\text{School}_i$ gives $i$'s years of schooling
-- $\text{Male}_i$ denotes an indicator variable for whether individual $i$ is male.
+- $\text{UV radiation}_i$ gives the average UV radiation in tract $i$ (mW/cm$^2$) 
+- $\text{TRI}_i$ denotes an indicator variable for whether tract $i$ has a Toxics Release Inventory facility 
 
 thus
 
-- $\beta_1$: the returns to an additional year of schooling (*ceteris paribus*)
-- $\beta_2$: the premium for being male (*ceteris paribus*)
-<br>If $\beta_2 > 0$, then women are receiving less pay based upon gender
+- $\beta_1$: the change in cancer rate associated with a 1 mW/cm$^2$ increase in UV radiation (*ceteris paribus*)
+- $\beta_2$: the difference in avg. cancer rates between TRI and non-TRI census tracts (*ceteris paribus*)
+<br>If $\beta_2 > 0$, then TRI tracts have higher cancer rates
 
 ---
 
@@ -753,31 +759,31 @@ n <- 1e3
 beta0 <- 20; beta1 <- 0.5; beta2 <- 10
 # Dataset
 omit_df <- tibble(
-  male = sample(x = c(F, T), size = n, replace = T),
-  school = runif(n, 3, 9) - 3 * male,
-  pay = beta0 + beta1 * school + beta2 * male + rnorm(n, sd = 7)
+  TRI = sample(x = c(F, T), size = n, replace = T),
+  uv = runif(n, 3, 9) - 3 * TRI,
+  cancer = beta0 + beta1 * uv + beta2 * TRI + rnorm(n, sd = 7)
 )
-lm_bias <- lm(pay ~ school, data = omit_df)
+lm_bias <- lm(cancer ~ uv, data = omit_df)
 bb0 <- lm_bias$coefficients[1] %>% round(1)
 bb1 <- lm_bias$coefficients[2] %>% round(1)
-lm_unbias <- lm(pay ~ school + male, data = omit_df)
+lm_unbias <- lm(cancer ~ uv + TRI, data = omit_df)
 bu0 <- lm_unbias$coefficients[1] %>% round(1)
 bu1 <- lm_unbias$coefficients[2] %>% round(1)
 bu2 <- lm_unbias$coefficients[3] %>% round(1)
 ```
 
 
-**"True" relationship:** $\text{Pay}_i = `r beta0` + `r beta1` \times \text{School}_i + `r beta2` \times \text{Male}_i + u_i$
+**"True" relationship:** $\text{Cancer rate}_i = `r beta0` + `r beta1` \times \text{UV radiation}_i + `r beta2` \times \text{TRI}_i + u_i$
 
-The relationship between pay and schooling.
+The relationship between cancer rates and UV radiations:
 
-```{R, plotovb1, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
+```{R, plotovb1, echo = F, dev = "svg", fig.height = 5}
+ggplot(data = omit_df, aes(x = uv, y = cancer)) +
 geom_point(size = 2.5, color = "black", alpha = 0.4, shape = 16) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
-xlab("Schooling") +
-ylab("Pay") +
+xlab("UV radiation") +
+ylab("Cancer rate") +
 theme_empty +
 theme(
   axis.title = element_text(size = 18),
@@ -787,16 +793,16 @@ theme(
 ---
 # Omitted-variable bias
 
-Biased regression estimate: $\widehat{\text{Pay}}_i = `r bb0` + `r bb1` \times \text{School}_i$
+Biased regression estimate: $\widehat{\text{Cancer rate}}_i = `r bb0` + `r bb1` \times \text{UV radiation}_i$
 
-```{R, plotovb2, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
+```{R, plotovb2, echo = F, dev = "svg", fig.height = 5}
+ggplot(data = omit_df, aes(x = uv, y = cancer)) +
 geom_point(size = 2.5, color = "black", alpha = 0.4, shape = 16) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
 geom_smooth(se = F, color = "orange", method = lm) +
-xlab("Schooling") +
-ylab("Pay") +
+xlab("UV radiation") +
+ylab("Cancer rate") +
 theme_empty +
 theme(
   axis.title = element_text(size = 18),
@@ -806,33 +812,33 @@ theme(
 ---
 # Omitted-variable bias
 
-Recalling the omitted variable: Gender (**<font color="#e64173">female</font>** and **<font color="#314f4f">male</font>**)
+Recalling the omitted variable: TRI (**<font color="#e64173">non-TRI</font>** and **<font color="#314f4f">TRI</font>**)
 
-```{R, plotovb3, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, alpha = 0.8, aes(color = male, shape = male)) +
+```{R, plotovb3, echo = F, dev = "svg", fig.height = 5}
+ggplot(data = omit_df, aes(x = uv, y = cancer)) +
+geom_point(size = 2.5, alpha = 0.8, aes(color = TRI, shape = TRI)) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
 geom_line(stat = "smooth", color = "orange", method = lm, alpha = 0.5, size = 1) +
-xlab("Schooling") +
-ylab("Pay") +
+xlab("UV radiation") +
+ylab("Cancer rate") +
 theme_empty +
 theme(
   axis.title = element_text(size = 18),
   plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
 ) +
-scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("Female", "Male")) +
-scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
+scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("non-TRI", "TRI")) +
+scale_shape_manual("", values = c(16, 1), labels = c("non-TRI", "TRI"))
 ```
 
 ---
 # Omitted-variable bias
 
-Recalling the omitted variable: Gender (**<font color="#e64173">female</font>** and **<font color="#314f4f">male</font>**)
+Recalling the omitted variable: TRI (**<font color="#e64173">non-TRI</font>** and **<font color="#314f4f">TRI</font>**)
 
-```{R, plotovb4, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, alpha = 0.8, aes(color = male, shape = male)) +
+```{R, plotovb4, echo = F, dev = "svg", fig.height = 5}
+ggplot(data = omit_df, aes(x = uv, y = cancer)) +
+geom_point(size = 2.5, alpha = 0.8, aes(color = TRI, shape = TRI)) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
 geom_line(stat = "smooth", color = "orange", method = lm, alpha = 0.2, size = 1) +
@@ -846,25 +852,25 @@ geom_abline(
   slope = lm_unbias$coefficients[2],
   color = "darkslategrey", size = 1
 ) +
-xlab("Schooling") +
-ylab("Pay") +
+xlab("UV radiation") +
+ylab("Cancer rate") +
 theme_empty +
 theme(
   axis.title = element_text(size = 18),
   plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
 ) +
-scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("Female", "Male")) +
-scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
+scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("non-TRI", "TRI")) +
+scale_shape_manual("", values = c(16, 1), labels = c("non-TRI", "TRI"))
 ```
 
 ---
 # Omitted-variable bias
 
-Unbiased regression estimate: $\widehat{\text{Pay}}_i = `r bu0` + `r bu1` \times \text{School}_i + `r bu2` \times \text{Male}_i$
+Unbiased regression estimate: $\widehat{\text{Cancer rate}}_i = `r bu0` + `r bu1` \times \text{UV radiation}_i + `r bu2` \times \text{TRI}_i$
 
-```{R, plotovb5, echo = F, dev = "svg", fig.height = 5.5}
-ggplot(data = omit_df, aes(x = school, y = pay)) +
-geom_point(size = 2.5, alpha = 0.8, aes(color = male, shape = male)) +
+```{R, plotovb5, echo = F, dev = "svg", fig.height = 5}
+ggplot(data = omit_df, aes(x = uv, y = cancer)) +
+geom_point(size = 2.5, alpha = 0.8, aes(color = TRI, shape = TRI)) +
 geom_hline(yintercept = 0) +
 geom_vline(xintercept = 0) +
 geom_line(stat = "smooth", color = "orange", method = lm, alpha = 0.2, size = 1) +
@@ -878,15 +884,15 @@ geom_abline(
   slope = lm_unbias$coefficients[2],
   color = "darkslategrey", size = 1
 ) +
-xlab("Schooling") +
-ylab("Pay") +
+xlab("UV radiation") +
+ylab("Cancer rate") +
 theme_empty +
 theme(
   axis.title = element_text(size = 18),
   plot.margin = structure(c(0, 0, 0.1, 0), unit = "lines", valid.unit = 3L, class = "unit"),
 ) +
-scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("Female", "Male")) +
-scale_shape_manual("", values = c(16, 1), labels = c("Female", "Male"))
+scale_color_manual("", values = c(red_pink, "darkslategrey"), labels = c("non-TRI", "TRI")) +
+scale_shape_manual("", values = c(16, 1), labels = c("non-TRI", "TRI"))
 ```
 
 ---
@@ -896,7 +902,7 @@ class: center, middle
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
 
-Some slides and slide components were borrowed from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
+Some slide components come from [Ed Rubin's](https://github.com/edrubin/EC421S20) awesome course materials.
 
 
 ```{css, echo = FALSE}

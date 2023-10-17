@@ -670,7 +670,7 @@ $$ y = \beta_0 + \beta_1 x + u $$
 --
 
 Estimated **sample** relationship:
-$$ \hat y = \hat\beta_0 + \hat\beta_1 x + e $$
+$$ \hat y = \hat\beta_0 + \hat\beta_1 x  $$
 --
 
 - **Dependent variable** = regressand = $y$

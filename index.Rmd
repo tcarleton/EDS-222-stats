@@ -59,6 +59,8 @@ Tamma Carleton (tcarleton\@ucsb.edu)
 
 -   Syllabus [link](https://www.dropbox.com/scl/fi/pvfengvjl4upf7n4upyi8/EDS-222-Syllabus-Fall-2023.pdf?rlkey=ynr8g259hk59d503mkoyvht3z&dl=0) <!-- (here is the [MEDS optional syllabus template](https://docs.google.com/document/d/1b2CElvwKk-haEA1axY5KvTEBbiSPUf7dIRUNX7gCI6w/edit?usp=sharing)) -->
 
+- Final project guidelines [link](https://www.dropbox.com/scl/fi/3g8oidwst58u2ie0xy9mx/EDS222_final_project_guidelines.pdf?rlkey=urgev9ixns18yjvw305ojgo93&dl=0)
+
 -   [UCSB Code of Conduct](https://www.sa.ucsb.edu/regulations/student-conduct-code/student-conduct-code)
 
 <!-- -   [Link](https://classroom.github.com/classrooms/89556369-eds222-fall-2021) to course GitHub Classroom -->

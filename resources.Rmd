@@ -66,19 +66,24 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 2 posted 9/30; due 10/7, 5pm
 -->
-<!--
+
 ### Week 3
 
-- **Slides 03**: Ordinary Least Squares [html](slides/03-ols/03-ols.html) [pdf](slides/03-ols/03-ols.pdf)
+- **Slides 04**: Ordinary Least Squares, continued [html](slides/04-ols-contd/04-ols-contd.html) [pdf](slides/04-ols-contd/04-ols-contd.pdf) 
 
 - **Reading:** 
-  + [Chapter 7](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + [Chapter 8](https://openintro-ims.netlify.app/model-mlr), _Introduction to Modern Statistics_
+  + [Optional/Extra: Ch 10](https://openintro-ims.netlify.app/model-application.html), _Introduction to Modern Statistics_
 
+- **Discussion Section (Wednesday)**: Materials to be distributed in class
 
-- **Lab:** OLS in `R` [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). Note: all files also on Github [here](https://github.com/tcarleton/EDS-222-stats)
-  
-- **Assignment:** Assignment 2 posted 10/5; due 10/13, 9am 
+- **Lab (Thursday):** OLS in `R`, continued (to be posted)<!-- [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html). 
 -->
+
+- **Final project guidelines:** [link](https://www.dropbox.com/scl/fi/3g8oidwst58u2ie0xy9mx/EDS222_final_project_guidelines.pdf?rlkey=urgev9ixns18yjvw305ojgo93&dl=0)
+
+- **Assignment:** Assignment 2 due 10/20, 5pm 
+
 <!--
 ### Week 4
 
