@@ -77,8 +77,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Discussion Section (Wednesday)**: Materials to be distributed in class
 
-- **Lab (Thursday):** OLS in `R`, continued (to be posted)<!-- [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html). 
--->
+- **Lab (Thursday):** OLS in `R`, continued (to be posted) [markdown](labs/03-week-three/week-3-lab.Rmd), [answers](labs/03-week-three/week-3-lab-answers.Rmd), [answers in html](labs/03-week-three/week-3-lab-answers.html). 
 
 - **Final project guidelines:** [link](https://www.dropbox.com/scl/fi/3g8oidwst58u2ie0xy9mx/EDS222_final_project_guidelines.pdf?rlkey=urgev9ixns18yjvw305ojgo93&dl=0)
 
