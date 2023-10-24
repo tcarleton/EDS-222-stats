@@ -27,6 +27,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Reading:** 
   + [Chapters 4-6](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
+  + **New** [Video on variance](https://dlsun.github.io/probability/variance.html#theory-25)
 
 - **Discussion Section (Wednesday)**: EDS 222 Lab setup and Github Classrooms demo (taught by TA, Sandy Sum)
   + [Lab markdown](labs/01-week-one/week-1-discussion.Rmd)
@@ -47,6 +48,8 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Reading:** 
   + [Chapter 7](https://openintro-ims.netlify.app/model-slr), _Introduction to Modern Statistics_
+  + **New** [Video on covariance](https://dlsun.github.io/probability/covariance.html)
+  + **New** [Linear regression with one regressor](https://www.econometrics-with-r.org/4-lrwor.html) _Econometrics with R_
 
 - **Discussion Section (Wednesday)**: Law of Large Numbers, simulation in `R`
   + [HW 1 Answers](https://www.dropbox.com/scl/fi/38irxdig9ln9bfk38jhk3/assignment-01-answers.Rmd?rlkey=s5wk2ebdemsgkzehizzipe8l4&dl=0)
@@ -74,6 +77,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapter 8](https://openintro-ims.netlify.app/model-mlr), _Introduction to Modern Statistics_
   + [Optional/Extra: Ch 10](https://openintro-ims.netlify.app/model-application.html), _Introduction to Modern Statistics_
+  
 
 - **Discussion Section (Wednesday)**: Materials to be distributed in class
 
@@ -96,8 +100,8 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 2 due 10/13, 9am
 -->
-<!--
-### Week 5
+
+### Week 4
 
 - **Slides 05**: Multiple linear regression and interaction models [html](slides/05-multiplereg/05-multiplereg.html) [pdf](slides/05-multiplereg/05-multiplereg.pdf)
 
@@ -105,12 +109,15 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
   + Note that interaction models are not covered in _IMS_. [This](http://www.jkarreth.net/files/RPOS517_Day11_Interact.html) is a helpful resource that covers interaction models conceptually and shows how to code them up in `R` (note that we will cover the coding in Thursday's lab and please ignore anything after the subsection titled "Obtaining standard errors for marginal effects")
 
-- **Lab:** Interaction models in `R` [markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html). 
+- **Lab:** Interaction models in `R` (to be posted) <!-- [markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html). -->
   
-- **Assignment:** Assignment 3 posted 10/18, see lecture slides for details on timing and grading 
+- **Assignment:** Assignment 3 will be posted on 10/24 and graded pass/fail. See lecture slides for details on timing and grading 
 
-- **Extra exam study material:** Here is an example of how you can evaluate the plausibility of OLS Assumption #4, which is necessary to ensure that OLS is the lowest variance estimator of all the unbiased estimators: [html](labs/05-week-five/example_OLS_assumptions.html), [markdown](labs/05-week-five/example_OLS_assumptions.Rmd)
--->
+- **Extra exam study material:** 
+  + Answers to practice questions [here](https://www.dropbox.com/scl/fi/47ynqlqk7uc8kvnmjhyj2/EDS222_practiceQs_ANSWERKEY.pdf?rlkey=cfgl11v8hfmoyeeu4l6sic6o5&dl=0)
+  + Here is an example of how you can evaluate the plausibility of OLS Assumption #4, which is necessary to ensure that OLS is the lowest variance estimator of all the unbiased estimators: [html](labs/05-week-five/example_OLS_assumptions.html), [markdown](labs/05-week-five/example_OLS_assumptions.Rmd)
+  + Here is a derivation of omitted variables bias [pdf](labs/04-week-four/OVB_derivation.pdf)
+
 <!--
 ### Week 6
 

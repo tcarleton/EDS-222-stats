@@ -14,10 +14,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Multiple Linear Regression and Interactions
+]
+.subtitle[
 ## EDS 222
+]
+.author[
 ### Tamma Carleton
-### Fall 2022
+]
+.date[
+### Fall 2023
+]
 
 ---
 
@@ -26,19 +34,17 @@ class: center, middle, inverse, title-slide
 
 # Announcements/check-in
 
-- Thank you for filling out the survey!
-  + Lectures: 64% (right on), 36% (too fast)
-  + Labs: 96% (right on), 1% (too fast)
-  + HW: 84% (right on), 16% (too fast)
+- Midterm review: In Discussion Section this week and in office hours any time
 
---
+- Extra study resources on our [Resources page](https://tcarleton.github.io/EDS-222-stats/resources.html)
+  + Answer key to practice questions
+  + Example of testing OLS assumptions  
+  + Derivation of omitted variables bias 
 
-- In response to survey:
-  + Adding more examples of applying concepts _during the lecture_
-  + Slightly slower pace in lectures, try to remove jargon where possible, ensure definitions are provided
-  + **Key adjustments to HW3**: due Nov 1, 9am; graded Pass/Fail; answer key posted with HW to aid midterm studying
-  + Extra example of testing OLS assumptions posted on our [Resources page](https://tcarleton.github.io/EDS-222-stats/resources.html)
+- Moving office hours this week for the Mantell Symposium in EJ and Conservation Innovation (please reach out if this is a problem - happy to add time to meet with you as needed)
   
+- Assignment 3: Posted 10/24 **alongside answer key**. Grading will be pass/fail, due 11/7 at 5pm
+
 ---
 # Midterm Exam
 
@@ -46,7 +52,7 @@ class: center, middle, inverse, title-slide
 
 --
 
-**Part 1: Short answer questions (~4)**
+**Part 1: Short answer questions (~3)**
 
   + Focus on definitions of key concepts
   
@@ -54,7 +60,7 @@ class: center, middle, inverse, title-slide
   
   + You do not need to memorize math rules (e.g., `\(var(ax+b)=a^2var(x)\)`)
   
-  + Be able to interpret probability distributions, scatter plots, QQ-plots, boxplots, linear regression output (not `\(p\)`-values or `\(t\)`-statistics)
+  + Be able to interpret probability distributions, scatter plots, Q-Q plots, boxplots, linear regression output (not `\(p\)`-values or `\(t\)`-statistics)
 
 ---
 # Midterm Exam
@@ -106,8 +112,6 @@ class: clear, middle, inverse
 `$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + u_i$$`
 
 `$$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + \beta_3 x_i^3 + \beta_4 x_i^4 + u_i$$`
-
-...
 ---
 # Polynomials
 
@@ -438,35 +442,35 @@ Interactions allow the effect of one variable to change based upon the level of 
 
 **Examples**
 
-1. Does the effect of schooling on pay change by gender?
+1. Does the effect of schooling on pay change by race?
 
-2. Does the effect of gender on pay change by race?
+2. Does the effect of temperature on ozone change by humidity?
 
-3. Does the effect of schooling on pay change by experience?
+3. Does the effect of UV radiation on cancer change by gender?
 
 4. ??
 
 ---
 # Interactions
 
-Previously, we considered a model that allowed women and men to have different average wages, but the model assumed the effect of schooling on pay was the same for everyone:
+Previously, we considered a model that allowed Toxics Release Inventory (TRI) census tracts and non-TRI tracts to have different average cancer rates, but the model assumed the effect of UV radiation on cancer was the same for everyone:
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + u_i $$
+$$ \text{Cancer}_i = \beta_0 + \beta_1 \, \text{UV}_i + \beta_2 \, \text{TRI}_i + u_i $$
 
-but we can also allow the effect of school to vary by gender:
+but we can also allow the effect of UV to vary by TRI status:
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+$$ \text{Cancer}_i = \beta_0 + \beta_1 \, \text{UV}_i + \beta_2 \, \text{TRI}_i + \beta_3 \, \text{UV}_i\times\text{TRI}_i + u_i $$
 
 --
 
-The multiplication of `\(School\)` by `\(Male\)` is called an **interaction term** 
+The multiplication of `\(UV\)` by `\(TRI\)` is called an **interaction term** 
 
 ---
 # Interactions
 
-The model where schooling has the same effect for everyone (**&lt;font color="#e64173"&gt;F&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;M&lt;/font&gt;**):
+The model where UV radiation has the same effect for all tracts (**&lt;font color="#e64173"&gt;non-TRI&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;TRI&lt;/font&gt;**):
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + u_i $$
+$$ \text{Cancer}_i = \beta_0 + \beta_1 \, \text{UV}_i + \beta_2 \, \text{TRI}_i + u_i $$
 
 
 
@@ -475,68 +479,28 @@ $$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_
 ---
 # Interactions
 
-The model where schooling's effect can differ by gender (**&lt;font color="#e64173"&gt;F&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;M&lt;/font&gt;**):
+The model where UV radiation's effect can differ by TRI status of a tract (**&lt;font color="#e64173"&gt;non-TRI&lt;/font&gt;** and **&lt;font color="#314f4f"&gt;TRI&lt;/font&gt;**):
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
+$$ \text{Cancer}_i = \beta_0 + \beta_1 \, \text{UV}_i + \beta_2 \, \text{TRI}_i + \beta_3 \, \text{UV}_i\times\text{TRI}_i + u_i $$
 
 &lt;img src="05-multiplereg_files/figure-html/intplot2-1.svg" style="display: block; margin: auto;" /&gt;
 
 ---
 # Interactions
 
-Interpreting coefficients can be a little tricky -- carefully working through the math helps.
+$$ \text{Cancer}_i = \beta_0 + \beta_1 \, \text{UV}_i + \beta_2 \, \text{TRI}_i + \beta_3 \, \text{UV}_i\times\text{TRI}_i + u_i $$
+Interpreting coefficients can be a little tricky -- carefully working through the math helps. 
 
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
-Expected effect of an additional year of schooling for **women**:
-
-$$
-`\begin{aligned}
-\text{Pay}_i(\text{Female}\hskip1mm,\text{School}_i = \ell + 1)  -
-    \text{Pay}_i(\text{Female}\hskip1mm,\text{School}_i = \ell) &amp;= \\
- (\beta_0 + \beta_1 *(\ell+1) + \beta_2*0 + \beta_3 *(\ell+1)*0 + u_i) &amp;- \\
-    (\beta_0 + \beta_1 * \ell + \beta_2*0 + \beta_3 *\ell*0 + u_i ) &amp;= \\
-     \beta_1 *(\ell+1) - \beta_1 * \ell &amp;= \\
- \beta_1 
-\end{aligned}`
-$$
-
----
-# Interactions
-
-Interpreting coefficients can be a little tricky -- carefully working through the math helps.
-
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
-
-Expected returns for an additional year of schooling for **men**:
-
-$$
-`\begin{aligned}
-\text{Pay}_i(\text{Male}\hskip1mm,\text{School}_i = \ell + 1)  -
-    \text{Pay}_i(\text{Male}\hskip1mm,\text{School}_i = \ell) &amp;= \\
- (\beta_0 + \beta_1 *(\ell+1) + \beta_2 + \beta_3 *(\ell+1) + u_i) &amp;- \\
-    (\beta_0 + \beta_1 * \ell + \beta_2 + \beta_3 *\ell + u_i ) &amp;= \\
-     \beta_1 *(\ell+1) - \beta_1 * \ell +  \beta_3 *(\ell+1) - \beta_3 * \ell &amp;= \\
- \beta_1 + \beta_3 
-\end{aligned}`
-$$
+Basic idea: rearrange to uncover a single "slope" term for your variable of interest.
 
 --
 
-Thus, `\(\beta_3\)` gives the **difference in the returns to schooling** for men versus women.
+- Effect of one more mW/cm^2 of UV radiation on cancer rates:
 
----
-# Interactions
-
-$$ \text{Pay}_i = \beta_0 + \beta_1 \, \text{School}_i + \beta_2 \, \text{Male}_i + \beta_3 \, \text{School}_i\times\text{Male}_i + u_i $$
-
-Another way to do interpretation: rearrange the expression. 
-
---
-
-- Effect of one more year of schooling on expected pay:
-
-$$ Pay_i = \beta_0 + \beta_2 Male_i + (\beta_1 + \beta_3 Male_i)\times School_i + u_i $$
-This helps you see that the effect of `\(School\)` on `\(Pay\)` is `\(\beta_1 + \beta_3 Male\)`, so it will vary based on whether an individual is `\(Male\)` or `\(Female\)`
+$$ Cancer_i = \beta_0 + \beta_2 TRI_i + (\beta_1 + \beta_3 TRI_i)\times UV_i + u_i $$
+This helps you see that the effect of a one unit increase in `\(UV\)` on `\(Cancer\)` is `\(\beta_1 + \beta_3 TRI\)`, so it will vary by `\(TRI\)` status:
+  + Effect for `\(TRI\)` tracts = `\(\beta_1 + \beta_3\)`
+  + Effect for `\(non-TRI\)` tracts = `\(\beta_1\)`
 
 ---
 
@@ -573,15 +537,7 @@ For example: What is the "slope" of the relationship between `\(y\)` and `\(x_1\
 
 --
 
-$$
-`\begin{aligned}
- y_i(x_{i2}, x_{i1} = \ell + 1) -
-     y_i (x_{i2}, x_{i1} = \ell ) &amp;= \\
- (\beta_0 + \beta_1 *(\ell+1) + \beta_2 x_{i2} + \beta_3* (\ell+1) \times x_{i2} + u_i ) &amp;- \\
-    (\beta_0 + \beta_1 * \ell + \beta_2 x_{i2} + \beta_3 * \ell \times x_{i2} + u_i  ) &amp;= \\
- \beta_1 + \beta_3 x_{i2}
-\end{aligned}`
-$$
+$$ {y\_i} =  \beta\_0 + (\beta\_1 + \beta\_3 x\_{2i}) {x\_{1i}} + \beta\_2 {x\_{2i}}   + u\_i $$
 **Key insight: Higher `\(x_{i2}\)` increases the slope of the relationship between `\(y\)` and `\(x_1\)`!** The inverse is also true.
 
 For two continuous random variables, we now have infinitely many slopes for each variable, depending on the level of the other independent variable.
@@ -616,11 +572,10 @@ $$ {y\_i} = \beta\_0 + \beta\_1 {x\_{1i}} + \beta\_2 {x\_{2i}} + \beta\_3 x\_{1i
 ---
 # Interactions in R
 
-This will be the focus of Lab on Thursday.
-
-As a preview...just like many other aspects of regression analysis, interactions are easy to implement but difficult to carefully interpret in `R`:
+This will be the focus of Lab on Thursday. As a preview...just like many other aspects of regression analysis, interactions are easy to implement but difficult to carefully interpret in `R`:
 
 --
+
 
 
 ```r
@@ -637,11 +592,13 @@ summary(lm(hwy ~ displ + year + displ:year, data = mpg))
 #&gt; -7.8595 -2.4360 -0.2103  1.6037 15.3677 
 #&gt; 
 #&gt; Coefficients:
-#&gt;              Estimate Std. Error t value Pr(&gt;|t|)
-#&gt; (Intercept) -40.72485  319.45688  -0.127    0.899
-#&gt; displ       -71.54962   86.41661  -0.828    0.409
-#&gt; year          0.03828    0.15947   0.240    0.811
-#&gt; displ:year    0.03391    0.04313   0.786    0.433
+#&gt;                Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)     35.7922     0.9794  36.546   &lt;2e-16 ***
+#&gt; displ           -3.7684     0.2788 -13.517   &lt;2e-16 ***
+#&gt; year2008         0.3445     1.4353   0.240    0.811    
+#&gt; displ:year2008   0.3052     0.3882   0.786    0.433    
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; Residual standard error: 3.784 on 230 degrees of freedom
 #&gt; Multiple R-squared:  0.6015,	Adjusted R-squared:  0.5963 
@@ -768,6 +725,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
