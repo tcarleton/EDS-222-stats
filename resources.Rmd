@@ -109,9 +109,10 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   + [Chapter 8](https://openintro-ims.netlify.app/data-design.html), _Introduction to Modern Statistics_
   + Note that interaction models are not covered in _IMS_. [This](http://www.jkarreth.net/files/RPOS517_Day11_Interact.html) is a helpful resource that covers interaction models conceptually and shows how to code them up in `R` (note that we will cover the coding in Thursday's lab and please ignore anything after the subsection titled "Obtaining standard errors for marginal effects")
 
-- **Lab:** Interaction models in `R` (to be posted) <!-- [markdown](labs/05-week-five/week-5-lab.Rmd), [answers](labs/05-week-five/week-5-lab-answers.Rmd), [answers in html](labs/05-week-five/week-5-lab-answers.html). -->
+- **Lab:** Interaction models in `R` [markdown](labs/04-week-four/week-4-lab.Rmd), [answers](labs/04-week-four/week-4-lab-answers.Rmd), [answers in html](labs/04-week-four/week-4-lab-answers.html).
   
-- **Assignment:** Assignment 3 will be posted on 10/24 and graded pass/fail. See lecture slides for details on timing and grading 
+- **Assignment:** Assignment 3 will posted 10/24, due 11/07 and graded pass/fail. 
+  + Answer key for exam studying: [markdown](labs/04-week-four/assignment-03-answers.Rmd) [html](labs/04-week-four/assignment-03-answers.html)
 
 - **Extra exam study material:** 
   + Answers to practice questions [here](https://www.dropbox.com/scl/fi/47ynqlqk7uc8kvnmjhyj2/EDS222_practiceQs_ANSWERKEY.pdf?rlkey=cfgl11v8hfmoyeeu4l6sic6o5&dl=0)

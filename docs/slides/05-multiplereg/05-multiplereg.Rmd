@@ -253,7 +253,7 @@ Go back to Algebra II (see [here](http://www.abcte.org/files/previews/math/s4_p2
 $$ area_i = \beta_0 + \beta_1 temperature_i + \beta_2 temperature_i^2 + u_i$$
 
 You can always:
-- Graph your predicted values using `geom_smooth()` (see Lab 5)
+- Graph your predicted values using `geom_smooth()` (see previous labs)
 - Put your coefficients into an automated grapher function (online or on your Mac)
 - Use the regression output directly, along with a little basic math (e.g., predict area at temperature = 15, then at temperature = 16, and take the difference!)
 
