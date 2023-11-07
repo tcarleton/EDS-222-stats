@@ -3,7 +3,7 @@ title: "Logistic Regression (and other nonlinear models)"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2022"
+date: "Fall 2023"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -81,7 +81,7 @@ source("../../labs/_common.R")
 
 # Announcements/check-in
 
-- Assignment 03 pass/fail, due **today** (9am)
+- Assignment 03 pass/fail, due **today** (5pm)
 
 --
 
@@ -89,11 +89,7 @@ source("../../labs/_common.R")
 
 --
 
-- Sandy to return and discuss midterms in Lab this week
-
---
-
-- Final project proposals, due 11/10 (9am)
+- Final project proposals, due 11/10 (5pm)
   + More details in a few slides
 
 
@@ -128,7 +124,7 @@ Apply **some of** the statistical concepts you have learned in this course to **
 
 ### Two parts:
   
-Deliverable 2: Three-minute in-class presentation during final exam slot (8-11am, 12/6)
+Deliverable 2: Three-minute in-class presentation during final exam slot (4-7pm, 12/12)
 
 
 .footnote[
@@ -142,7 +138,7 @@ Deliverable 2: Three-minute in-class presentation during final exam slot (8-11am
 
 Short paragraph (4-5 sentences) describing your proposed project. Motivate the question, describe possible data sources, suggest possible analyses. 
 
-**Email Sandy your proposal** at sandysum@ucsb.edu by 9am on November 10th. 
+**Email Sandy your proposal** at sandysum@ucsb.edu by 5pm on November 10th. 
 
 ---
 # Final project
@@ -155,7 +151,7 @@ Full guidelines on our [Resources Page](https://tcarleton.github.io/EDS-222-stat
 
 --
 
-- Detecting trends in air quality for disadvantaged groups across California
+- Detecting trends in water quality for indigenous communities in Chile
 
 --
 
@@ -262,7 +258,7 @@ In all cases, the effect of a change in $x$ on $y$ will vary depending on your b
 
 You will frequently see logged<sup>*</sup>  outcome variables with linear (non-logged) explanatory variables, _e.g._,
 
-$$ \log(\text{Pay}_i) = \beta_0 + \beta_1 \, \text{School}_i + u_i $$
+$$ \log(\text{area}_i) = \beta_0 + \beta_1 \, \text{temperature}_i + u_i $$
 
 This specification changes our interpretation of the slope coefficients.
 
@@ -272,7 +268,7 @@ This specification changes our interpretation of the slope coefficients.
 
 - A one-unit increase in our explanatory variable increases the outcome variable by approximately $\beta_1\times 100$ percent.
 
-- *Example:* If $\beta_1 = 0.03$, an additional year of schooling increases pay by approximately 3 percent.
+- *Example:* If $\beta_1 = 0.03$, an additional degree of warming increases algal bloom area by approximately 3 percent.
 
 .footnote[
 [*]: When I say "log", I mean "natural log", i.e. $ln(x) = log_e(x)$.
@@ -401,28 +397,12 @@ theme_axes
 
 Similarly, log-log models are those where the outcome variable is logged *and* at least one explanatory variable is logged
 
-$$ \log(\text{Pay}_i) = \beta_0 + \beta_1 \, \log(\text{School}_i) + u_i $$
+$$ \log(\text{log}_i) = \beta_0 + \beta_1 \, \log(\text{temperature}_i) + u_i $$
 
 **Interpretation:**
 
 - A one-percent increase in $x$ will lead to a $\beta_1$ percent change in $y$.
 - Often interpreted as an "elasticity" in economics.
-
----
-# Log-linear with a binary variable
-
-**Note:** If you have a log-linear model with a binary indicator variable, the interpretation for the coefficient on that variable changes.
-
-Consider:
-
-$$\log(y_i) = \beta_0 + \beta_1 x_{1i} + u_i$$
-
-for binary variable $x_1$.
-
-The interpretation of $\beta_1$ is now
-
-- When $x_1$ changes from 0 to 1, $y$ will change by $100 \times \left( e^{\beta_1} -1 \right)$ percent.
-- When $x_1$ changes from 1 to 0, $y$ will change by $100 \times \left( e^{-\beta_1} -1 \right)$ percent.
 
 ---
 # Log-log specification
@@ -447,6 +427,23 @@ xlab("x") +
 ylab("y") +
 theme_axes
 ```
+---
+# Log-linear with a binary variable
+
+**Note:** If you have a log-linear model with a binary indicator variable, the interpretation for the coefficient on that variable changes.
+
+Consider:
+
+$$\log(y_i) = \beta_0 + \beta_1 x_{1i} + u_i$$
+
+for binary variable $x_1$.
+
+The interpretation of $\beta_1$ is now
+
+- When $x_1$ changes from 0 to 1, $y$ will change by $100 \times \left( e^{\beta_1} -1 \right)$ percent.
+- When $x_1$ changes from 1 to 0, $y$ will change by $100 \times \left( e^{-\beta_1} -1 \right)$ percent.
+
+
 ---
 # When the approximation fails
 
@@ -477,7 +474,7 @@ Example: Suppose in $log(y) = \beta_0 + \beta_1 x + \varepsilon$, we estimate th
 --
 
 This looks like a 1 unit change in $x$ causes a 60% change in $y$. But the exact percentage change in $y$ is:
-  + $(e^{0.6}-1)\times 100 = 0.82 \times 100 \implies 82%$ change in $y$
+  + $(e^{0.6}-1)\times 100 = 0.82 \times 100 \implies 82$ percent change in $y$
   + Note that the imprecise approximation for large changes will always be biased _downwards_
 
 --
@@ -622,7 +619,7 @@ We can then write:
 
 $$log\left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ...$$
 
-The logit function is also called "log odds" because the "odds ratio" is the probability of success $p_i$ divided by $1-p_i$
+The logit function is also called "log odds" because the "odds ratio" is the probability of success, $p_i$, divided by the probability of failure, $1-p_i$
 
 --
 
@@ -851,7 +848,7 @@ b.  What would the probability be if the resume name was associated with White i
 ---
 # Logistic regression: Example
 
-**Use the same process** to compute predicted probabilities with multiple independent variables, you just more calculations!
+**Use the same process** to compute predicted probabilities with multiple independent variables, you just have more calculations!
 
 --
 
@@ -922,8 +919,8 @@ exclude: true
 
 ```{R, print pdfs, echo = F, eval = F}
 pagedown::chrome_print(
-  input = "07-nonlinearmodels.html",
-  output = "07-nonlinearmodels.pdf",
+  input = "06-nonlinearmodels.html",
+  output = "06-nonlinearmodels.pdf",
   timeout = 60
 )
 ```

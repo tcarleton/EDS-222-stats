@@ -129,18 +129,17 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Assignment 2 answer key:** [html](labs/05-week-five/assignment-02-answers.html) [rmd](labs/05-week-five/assignment-02-answers.Rmd)
 
 
-<!--
-### Week 7
+### Week 6
 
-- **Slides 07**: Logistic regression and other nonlinear models [html](slides/07-nonlinearmodels/07-nonlinearmodels.html) [pdf](slides/07-nonlinearmodels/07-nonlinearmodels.pdf)
+- **Slides 06**: Logistic regression and other nonlinear models [html](slides/06-nonlinearmodels/06-nonlinearmodels.html) [pdf](slides/06-nonlinearmodels/06-nonlinearmodels.pdf)
 
 - **Reading:** 
   + [Chapter 9](https://openintro-ims.netlify.app/model-logistic.html), _Introduction to Modern Statistics_
 
-- **Lab:** Logistic regressions in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html) 
+- **Lab:** Logistic regressions in `R` (to be posted) <!-- [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html) -->
   
-- **Assignment:** Final project proposal due November 10, 9am. Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
--->
+- **Assignment:** Final project proposal due November 10, 5pm (email to Sandy at sandysum@ucsb.edu). Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
+
 <!--
 ### Week 8
 
