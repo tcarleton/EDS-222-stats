@@ -140,6 +140,8 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Final project proposal due November 10, 5pm (email to Sandy at sandysum@ucsb.edu). Final project guidelines [here](labs/EDS222_final_project_guidelines.pdf)
 
+- **Midterm exam key:** [link](exams/EDS222_midterm_2023_KEY.pdf)
+
 <!--
 ### Week 8
 
