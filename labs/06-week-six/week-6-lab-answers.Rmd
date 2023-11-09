@@ -1,5 +1,5 @@
 ---
-title: "EDS 222: Week 7: In-class Lab"
+title: "EDS 222: Week 6: In-class Lab"
 author: ""
 date: "`r Sys.Date()`"
 output:
@@ -141,7 +141,7 @@ Note that this is the same solution you'd get if you plugged in the equation for
 ```{r}
 toSolve <- function(p) {(1-p)*exp(1.56-0.05847*64) - p}
 
-uniroot(toSolve, interval = c(-1000, 1000))$root
+uniroot(toSolve, interval = c(0, 1))$root
 ```
 
 ## Visualizing logistic regression
@@ -180,13 +180,15 @@ heart_transplant_plus <-  mod_heart %>%
   mutate(odds_hat = y_hat / (1 - y_hat))
 ```
 
-However, it is the odds scale that leads to the most common interpretation of the coefficients in a logistic regression model. As noted previously, interpreting the coefficients on the probability scale is hard because the model is non-linear. However, on the odds scale we can form the ratio of the odds when the explanatory variable increases by one unit. This works out mathematically to be equal to the exponential of $\beta_1$ or $e^{\beta_1}$,[^3] the "slope" coefficient. Our interest is in how this number differs from 1. If it's greater than one, then the odds increase. Conversely, if it's less than one, then the odds decrease. 
+We can use changes in the odds due to a change in an independent variable to interpret coefficients. It turns out mathematically that we can write the change in the relative odds due to a one unit increase in $x$ as the exponential of $\beta_1$ or $e^{\beta_1}$,[^3] the "slope" coefficient. That is, the ratio of the odds _after_ a one unit increase in $x$ to the odds _before_ that one unit change is equal to $e^{\beta_1}$. **Notice this doesn't depend on $x$ anymore!** Therefore, it's a useful interpretation of coefficients. 
 
-[^3]: When $x$ increases by 1 unit from $x$ to $x+1$, the odds ratio goes from $odds_{x}=e^{\beta_0+\beta_1 x}$ to $odds_{x+1}=e^{\beta_0+\beta_1 (x+1)}$. The ratio tells us if the odds has increased or decreased: $\frac{odds_{x+1}}{odds_x}=\frac{e^{\beta_0+\beta_1 (x+1)}}{e^{\beta_0+\beta_1 \cdot x}}=e^{\beta_0+\beta_1 x + \beta_1-(\beta_0+\beta_1 x)} = e^{\beta_1}$. If this ratio is 1, the odds has not change, if this ratio is 9, the odds has increased 9-folds!
+This is an "odds ratio", meaning we care about how this number differs from 1. If it's greater than 1, then the odds increase when $x$ increases. Conversely, if it's less than 1, then the odds decrease. 
+
+[^3]: When $x$ increases by 1 unit from $x$ to $x+1$, the odds ratio goes from $odds_{x}=e^{\beta_0+\beta_1 x}$ to $odds_{x+1}=e^{\beta_0+\beta_1 (x+1)}$. The ratio tells us if the odds has increased or decreased: $\frac{odds_{x+1}}{odds_x}=\frac{e^{\beta_0+\beta_1 (x+1)}}{e^{\beta_0+\beta_1 \cdot x}}=e^{\beta_0+\beta_1 x + \beta_1-(\beta_0+\beta_1 x)} = e^{\beta_1}$. If this ratio is 1, the odds has not changed, if this ratio is 9, the odds has increased 9-folds!
 
 By how much does our model predict that the odds of survival will change with each additional year of age?
 
-**Answer:** Our model estimates that one additional year of age is associated with a change in the odds ratio of $e^{-0.05847}=.94$, ir a 6% decrease in the odds of survival.
+**Answer:** Our model estimates that one additional year of age is associated with a change in the odds ratio of $e^{-0.05847}=.94$, or a 6% decrease in the odds of survival.
 
 # Section 4: Using a logistic model
 
@@ -201,7 +203,7 @@ mod <- glm(is_alive ~ age + transplant,
 exp(coef(mod))
 ```
 
-By including the transplant variable in our model and exponentiating the coefficients, we see a huge effect. Patients who received a heart transplant saw their odds of survival improve by a factor of 6.2, even after controlling for age. Note that as expected, age still has a deleterious effect on mortality.
+By including the transplant variable in our model and exponentiating the coefficients, we see a huge effect. Patients who received a heart transplant saw their odds of survival improve by a factor of 6.2, even after controlling for age. Note that as expected, age still has a deleterious effect on mortality -- odds of survival fall by about 8% for each year of age in this model.
 
 ## Making probabilistic predictions
 

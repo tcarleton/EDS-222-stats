@@ -1,5 +1,5 @@
 ---
-title: "EDS 222: Week 7: In-class Lab"
+title: "EDS 222: Week 6: In-class Lab"
 author: ""
 date: "`r Sys.Date()`"
 output:
@@ -44,7 +44,6 @@ If you fit a simple linear regression line to these data, what would it look lik
 
 ```{r, echo=TRUE}
 
-
 ```
 
 ## Making a binary variable
@@ -61,7 +60,6 @@ Let's check that this transformation worked, and think about how we interpret ou
 
 ```{r}
 
-
 ```
 
 ## Linear regression with a binary response
@@ -71,8 +69,7 @@ Now there is nothing preventing us from fitting a simple linear regression model
 But it's not hard to see that the line doesn't fit very well. There are other problems as well...
 
 ```{r}
-
-
+  
 ```
 
 ## Limitations of regression
@@ -101,8 +98,6 @@ For logistic regression, we specify the `binomial` family,[^1] which uses the lo
 [^1]: Why binomial? Binomial means that the response follows a binomial distribution, where our outcome is a random sample of "trials" where each "trial" has a success probability of $p$. `glm()` can also handle things like Poisson models, where instead of a binary outcome you have an outcome that counts the number of successes for a given "trial".
 
 ```{r}
-# fit model
-
 
 ```
 
@@ -114,11 +109,10 @@ $$
 
 1.  What is the predicted probability of surviving for someone aged 64 at the time of study?
 
+**Answer: Solve for** $\hat p$ plugging in $x=64$ .
 
 $$
-\begin{align}
-\frac{\hat p}{1-\hat p} &= \dots 
-\end{align}
+
 $$
 
 Note that this is the same solution you'd get if you plugged in the equation for $p$ from lecture notes: $$\hat p = \frac{e^{\beta_0 + \beta_1 x}}{1+ e^{\beta_0 + \beta_1 x}}$$ Alternatively, you can solve for $p$ using `R`.[^2]
@@ -126,7 +120,6 @@ Note that this is the same solution you'd get if you plugged in the equation for
 [^2]: The `uniroot` function searches over the provided interval to find the zero value of the function provided. We pass the expression that should equal zero, and it finds us the $p$ that ensures it equals zero.
 
 ```{r}
-# using the uniroot function 
 
 ```
 
@@ -138,9 +131,7 @@ Unfortunately, since our model is now non-linear, it's harder to succinctly char
 
 ```
 
-Now, notice how the logistic regression line is curved---most noticeably at the ends. The red logistic regression line will never reach 0 or 1, eliminating those invalid predicted probabilities. In this case, for most ages, the simple linear regression line and the logistic regression line don't differ by very much, and you might not lose much by using the simpler regression model. But for older people, the logistic model performs much better.
 
-How can we visually assess how well the logistic model fits the data? Since the actual observations are all at 0 or 1, but our predictions are always between 0 and 1, we will always be off by some amount. In particular, our model predicts a 50% chance of survival for patients that are about 27 years old. Is that accurate?
 
 # Section 3: Interpreting coefficients
 
@@ -149,7 +140,7 @@ How can we visually assess how well the logistic model fits the data? Since the 
 To combat the problem of the scale of the y variable, we can change the scale of the variable on the y-axis. Instead of thinking about the probability of survival, we can think about the odds. While these two concepts are often conflated, they are not the same. They are however, related by the simple formula below. The **odds** of a binary event are the ratio of how often it happens, to how often it doesn't happen.
 
 $$
-\operatorname{odds}(\hat{p})=\frac{\hat{p}}{1-\hat{p}}=\exp \left(\hat{\beta}_0+\hat{\beta}_1 x\right)
+\operatorname{odds}(\hat{p})=\frac{\hat{p}}{1-\hat{p}}=\exp \left(\hat{\beta}_0+\hat{\beta}_1 \cdot x\right)
 $$
 
 Thus, if the probability of survival is 75%, then the odds of survival are 3:1, since you are three times more likely to survive than you are to die. Odds are commonly used to express uncertainty in a variety of contexts, most notably gambling.
@@ -158,14 +149,17 @@ Let's create the `odds_hat` variable for predicted odds.
 
 ```{r}
 
-
 ```
 
-However, it is the odds scale that leads to the most common interpretation of the coefficients in a logistic regression model. As noted previously, interpreting the coefficients on the probability scale is hard because the model is non-linear. However, on the odds scale we can form the ratio of the odds when the explanatory variable increases by one unit. This works out mathematically to be equal to the exponential of $\beta_1$ or $e^{\beta_1}$,[^3] the "slope" coefficient. Our interest is in how this number differs from 1. If it's greater than one, then the odds increase. 
+We can use changes in the odds due to a change in an independent variable to interpret coefficients. It turns out mathematically that we can write the change in the relative odds due to a one unit increase in $x$ as the exponential of $\beta_1$ or $e^{\beta_1}$,[^3] the "slope" coefficient. That is, the ratio of the odds _after_ a one unit increase in $x$ to the odds _before_ that one unit change is equal to $e^{\beta_1}$. **Notice this doesn't depend on $x$ anymore!** Therefore, it's a useful interpretation of coefficients. 
 
-[^3]: When $x$ increases by 1 unit from $x$ to $x+1$, the odds ratio goes from $odds_{x}=e^{\beta_0+\beta_1 x}$ to $odds_{x+1}=e^{\beta_0+\beta_1 (x+1)}$. The ratio tells us if the odds has increased or decreased: $\frac{odds_{x+1}}{odds_x}=\frac{e^{\beta_0+\beta_1 (x+1)}}{e^{\beta_0+\beta_1 \cdot x}}=e^{\beta_0+\beta_1 x + \beta_1-(\beta_0+\beta_1 x)} = e^{\beta_1}$. If this ratio is 1, the odds has not change, if this ratio is 9, the odds has increased 9-folds!
+This is an "odds ratio", meaning we care about how this number differs from 1. If it's greater than 1, then the odds increase when $x$ increases. Conversely, if it's less than 1, then the odds decrease. 
+
+[^3]: When $x$ increases by 1 unit from $x$ to $x+1$, the odds ratio goes from $odds_{x}=e^{\beta_0+\beta_1 x}$ to $odds_{x+1}=e^{\beta_0+\beta_1 (x+1)}$. The ratio tells us if the odds has increased or decreased: $\frac{odds_{x+1}}{odds_x}=\frac{e^{\beta_0+\beta_1 (x+1)}}{e^{\beta_0+\beta_1 \cdot x}}=e^{\beta_0+\beta_1 x + \beta_1-(\beta_0+\beta_1 x)} = e^{\beta_1}$. If this ratio is 1, the odds has not changed, if this ratio is 9, the odds has increased 9-folds!
 
 By how much does our model predict that the odds of survival will change with each additional year of age?
+
+**Answer:** 
 
 # Section 4: Using a logistic model
 
@@ -175,10 +169,8 @@ Let's include the `transplant` variable in our model.
 
 ```{r}
 
-
 ```
 
-By including the transplant variable in our model and exponentiating the coefficients, we see a huge effect. Patients who received a heart transplant saw their odds of survival improve by a factor of 6.2, even after controlling for age. Note that as expected, age still has a deleterious effect on mortality.
 
 ## Making probabilistic predictions
 
@@ -187,8 +179,6 @@ By setting the `type.predict` argument to "response", we retrieve the fitted val
 Making predictions about the probability of survival for those patients who took part in the study is of somewhat limited value. We already know whether they survived! Aside from learning about the efficacy of the treatment, another common purpose for modeling is to make predictions for observations that are not part of our data set. These are called **out-of-sample** predictions.
 
 ```{r}
-# probability scale
-
 
 ```
 
@@ -200,10 +190,8 @@ To compute this, we build a data frame with Cheney's data, and run it through ou
 
 ```{r}
 
-
 ```
 
-The results suggest that Cheney had only a 6.8% chance of survival. Either Cheney is quite lucky to be alive, or---more likely---the survival rates of all heart transplant patients have improved considerably since the Stanford study was completed in 1973.
 
 ## Making binary predictions
 
@@ -212,6 +200,5 @@ If our response variable is binary, then why are we making probabilistic predict
 There are a number of different ways in which we could reasonably convert our probabilistic fitted values into a binary decision. The simplest way would be to simply round the probabilities.
 
 ```{r}
-
 
 ```
