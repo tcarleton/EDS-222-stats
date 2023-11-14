@@ -14,10 +14,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Inference and hypothesis testing
+]
+.subtitle[
 ## EDS 222
+]
+.author[
 ### Tamma Carleton
-### Fall 2022
+]
+.date[
+### Fall 2023
+]
 
 ---
 
@@ -38,11 +46,11 @@ class: center, middle, inverse, title-slide
 
 --
 
-- Change in OH this week (individual slots)
+- Change in OH this week (*today* 3:15-4:15pm, Pine Room)
 
 --
 
-- Assignment 4 posted by 11/9, likely due 11/22 but will depend on...
+- Assignment 4 posted this week, likely due 12/01 but will depend on...
 
 --
 
@@ -127,7 +135,7 @@ class: clear, middle, inverse
 
 .pull-left[
   
-&lt;img src="08-inference_files/figure-html/pop1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/pop1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
   
 .center[**Population**]
   
@@ -137,7 +145,7 @@ class: clear, middle, inverse
   
 .pull-right[
     
-&lt;img src="08-inference_files/figure-html/scatter1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/scatter1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
     
 .center[**Population relationship**]
     
@@ -151,7 +159,7 @@ $$ y_i = \beta_0 + \beta_1 x_i + u_i $$
 
 .pull-left[
     
-&lt;img src="08-inference_files/figure-html/sample1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample1-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
     
 .center[**Sample 1:** 30 random individuals]
 ]
@@ -160,7 +168,7 @@ $$ y_i = \beta_0 + \beta_1 x_i + u_i $$
   
 .pull-right[
     
-&lt;img src="08-inference_files/figure-html/sample1 scatter-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample1 scatter-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
     
 .center[
       
@@ -181,7 +189,7 @@ $$ y_i = \beta_0 + \beta_1 x_i + u_i $$
 
 .pull-left[
   
-&lt;img src="08-inference_files/figure-html/sample2-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample2-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
   
 .center[**Sample 2:** 30 random individuals]
   
@@ -189,7 +197,7 @@ $$ y_i = \beta_0 + \beta_1 x_i + u_i $$
 
 .pull-right[
   
-&lt;img src="08-inference_files/figure-html/sample2scatter-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample2scatter-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
   
 .center[
     
@@ -210,7 +218,7 @@ count: false
 
 .pull-left[
   
-&lt;img src="08-inference_files/figure-html/sample3-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample3-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
   
 .center[**Sample 3:** 30 random individuals]
   
@@ -218,7 +226,7 @@ count: false
 
 .pull-right[
   
-&lt;img src="08-inference_files/figure-html/sample3scatter-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample3scatter-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
   
 .center[
   
@@ -238,7 +246,7 @@ count: false
 
 
 .pull-left[
-&lt;img src="08-inference_files/figure-html/sample3scatterrepeat-1.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/sample3scatterrepeat-1.png" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -281,28 +289,34 @@ A **hypothesis test** is a statistical method used to evaluate competing claims 
 ---
 # Hypothesis testing: Example
 
-### Example: Are runners getting slower or faster over time? 
+### Example: Are ducks moving north? 
 
-Random sample of 100 runners from the 2017 Cherry Blossom 10-mile race. 
-  + Mean 2006 finish time for all runners: 93.29 minutes
-  + Mean 2017 finish time: 98.78 minutes
-  + Standard deviation 2017 finish time: 16.59 minutes
+There are reports that Midwestern duck populations are moving northwards in response to climate change. 
 
-- `\(H_0\)`: The average time was the same in the two years. That is, `\(\mu_{2017}-\mu_{2006}=0\)`
+--
 
-- `\(H_A\)`: The average time was not the same in the two years. That is, `\(\mu_{2017}-\mu_{2006} \neq 0\)`
+You have a random sample of 100 tagged ducks in Minnesota from 2010 and 2023. 
+  + Mean 2010 latitude: 44.27 degrees N
+  + Mean 2023 latitude: 46.12 degrees N
+  + Standard deviation 2023 latitude: 0.92 degrees
+
+--
+
+- `\(H_0\)`: The average latitude was the same in the two years. That is, `\(\mu_{2023}-\mu_{2010}=0\)`
+
+- `\(H_A\)`: The average latitude was not the same in the two years. That is, `\(\mu_{2023}-\mu_{2010} \neq 0\)`
 
 ---
 # Hypothesis testing: Example
 
-### Example: Are runners getting slower or faster over time? 
+### Example: Are ducks moving north? 
 
 We call the calculated statistic of interest the **point estimate**
 
 --
 
-Here, the difference in mean finish time between 2017 sample and the 2006 census of runners is: 
-  + 98.78 - 93.29 = 5.49
+Here, the difference in mean latitude between the 2023 sample and the 2010 sample is: 
+  + 46.12 - 44.27 = 1.85
 
 --
 
@@ -323,7 +337,7 @@ For example:
 
 --
 
-- The distribution of 2017 10-mile finish times are so far from the 2006 mean that we can reject the means are the same
+- The distribution of 2023 duck latitudes are so far from the 2010 distribution that we can reject the means are the same
 
 --
 
@@ -419,7 +433,7 @@ For example, recall our regression above, where the population model is:
 $$y_i = 2.53 + 0.57x_i + u_i $$
 --
 
-- A regression using one sample gives us _one_ set of coefficients, called the **point estimates**: `\(\hat\beta_0 = 2.36\)` and `\(\hat\beta_1 = 0.61\)`
+- A regression using one sample gives us _one_ set of coefficients, called the **point estimates**. For example, `\(\hat\beta_0 = 2.36\)` and `\(\hat\beta_1 = 0.61\)`
 
 --
 
@@ -444,8 +458,6 @@ Tells us how certain we are that our sample statistics are informative of a popu
 
 You only have one sample of data! Where does the sampling distribution come from?
 
--- 
-
 **We derive the sampling distribution from applying the Central Limit Theorem** 
 
 ---
@@ -458,11 +470,11 @@ The **Central Limit Theorem (CLT)** establishes that the sampling distribution o
 This is true _even if_ the underlying data are not normally distributed!
 
 .pull-left[ 
-&lt;img src="08-inference_files/figure-html/exampleskew-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/exampleskew-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="08-inference_files/figure-html/examplenormal-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/examplenormal-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 ]
 ---
 # Central Limit Theorem
@@ -506,7 +518,7 @@ For example:
 
 --
 
-- `\(H_0\)`: 10-mile finish times in 2017 have the same mean as 2006. `\(\mu_{2017}-\mu_{2006} = 0\)`
+- `\(H_0\)`: Duck latitudes in 2023 have the same mean as in 2010. `\(\mu_{2023}-\mu_{2010} = 0\)`
 
 --
 
@@ -514,7 +526,7 @@ For example:
 
 --
 
-- `\(H_0\)`: There is _no effect_ of neonicotinoid use on colony collapse disorder. `\(\beta_1 = 0\)`. (Note that linear regression parameters are conditional means) 
+- `\(H_0\)`: There is _no effect_ of neonicotinoid use on colony collapse disorder. `\(\beta_1 = 0\)`. (Note that linear regression parameters are conditional means -- mean of `\(y\)` conditional on a level of `\(x\)`) 
 
 &lt;!-- p-value gives you probability of observing your data given null is true. The standard error gives you a likely range for the statistic if we were actually able to take a bunch of samples --&gt;
 
@@ -531,6 +543,7 @@ How you calculate the standard error depends on the research question.
 
 For example, if we are interested in a sample mean, our friend the **Central Limit Theorem** tells us that:
 `$$SE = \frac{s^2}{\sqrt{n}}$$`
+where `\(s\)` is the sample standard deviation and `\(n\)` is the sample size.
 
 &gt; Q: What happens to the standard error as sample size increases? Why?
 
@@ -543,6 +556,7 @@ How you calculate the standard error depends on the research question.
 
 For example, if we are interested in a regression slope, the CLT plus some algebra tell us that:
 `$$SE = \sqrt{var(\hat\beta_1)} = \sqrt{\frac{s^2}{\sum_i (x_i - \bar{x})^2}}$$`
+where `\(s^2\)` is the sample variance of model errors `\(\hat y_i - y_i\)`
 
 &gt; Q: What happens to the standard error as sample size increases? Why?
 
@@ -553,8 +567,10 @@ For example, if we are interested in a regression slope, the CLT plus some algeb
 
 How you calculate the standard error depends on the research question. 
 
-For example, if we are interested in the difference between two means, the CLT plus some algebra tell us that:
+For example, if we are interested in the *difference* between two means, the CLT plus some algebra tell us that:
 $$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s^2_2}{n_2}} $$
+where `\(s_k\)` is the sample standard deviation in each of the two samples and `\(n_k\)` is the sample size in each sample
+
 &gt; In all these cases, the SE is the standard deviation of the sampling distribution!
 
 ---
@@ -604,13 +620,13 @@ The general framework for implementing a hypothesis test is:
 For a normal distribution:
 
 &lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="08-inference_files/figure-html/er6895997-1.svg" alt="Probabilities for falling within 1, 2, and 3 standard deviations of the mean in a normal distribution." width="100%" /&gt;
+&lt;img src="07-inference_files/figure-html/er6895997-1.svg" alt="Probabilities for falling within 1, 2, and 3 standard deviations of the mean in a normal distribution." width="100%" /&gt;
 &lt;p class="caption"&gt;Probabilities for falling within 1, 2, and 3 standard deviations of the mean in a normal distribution.&lt;/p&gt;
 &lt;/div&gt;
 ---
 # Z-score
 
-- The 68-95-99.7 rule is helpful if your point estimate (sample statistic) is exactly 1, 2, or 3 standard deviations from the mean.
+- The 68-95-99.7 rule is helpful if your point estimate (sample statistic) is exactly 1, 2, or 3 standard deviations from the mean (i.e., the null_
 
 --
 
@@ -621,6 +637,8 @@ For a normal distribution:
 ### Z-score: How many standard deviations is a value from the mean?
 
 `$$z = \frac{x_i-\mu}{\sigma}$$`
+where `\(\mu\)` is the mean and `\(\sigma\)` is the standard deviation
+
 ---
 # Z-score for hypothesis testing
 
@@ -647,18 +665,24 @@ For a normal distribution:
 **_p_-value** is the probability of getting a point estimate _at least as extreme_ as ours **if the null hypothesis were true.** 
 
 `$$p-value = Pr(Z &lt; -|z| \hskip2mm \text{or} \hskip2mm Z &gt; |z|) = 2*Pr(Z &gt; |z|)$$`
+where `\(z\)` is the `\(z\)`-score computed using your point estimate.
+
+--
+
+&gt; Question: What feature of the normal distribution lets us simplify this to `\(2*Pr(Z&gt;|z|)\)`?
+
 ---
 # Quantifying probabilities: _p_-value
 
 `$$p-value = Pr(Z &lt; -|z| \hskip2mm \text{or} \hskip2mm Z &gt; |z|) = 2*Pr(Z &gt; |z|)$$`
 
-&lt;img src="08-inference_files/figure-html/pval-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/pval-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 ---
 # Quantifying probabilities: _p_-value
 
 `$$p-value = Pr(Z &lt; -|z| \hskip2mm \text{or} \hskip2mm Z &gt; |z|) = 2*Pr(Z &gt; |z|)$$`
 
-&lt;img src="08-inference_files/figure-html/pval2-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/pval2-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 ---
 # Hypothesis testing with _p_-values
 
@@ -678,7 +702,7 @@ For a normal distribution:
 ### How do I compute a _p_-value from a test-statistic?
 
 
-&lt;img src="08-inference_files/figure-html/er68959972-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/er68959972-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
 ---
 # Hypothesis testing with _p_-values
 
@@ -717,7 +741,7 @@ The **Central Limit Theorem** has done a lot of work for us so far. However, it 
 When `\(n\)` is relatively small, we can still proceed, we just need to use a _t_-distribution (and T-score -- use `pt()` in `R`) instead of a normal distribution (and Z-score) 
 
 
-&lt;img src="08-inference_files/figure-html/tDistCompareToNormalDist-1.svg" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="07-inference_files/figure-html/tDistCompareToNormalDist-1.svg" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Hypothesis testing in five steps
@@ -846,6 +870,10 @@ You can build a confidence interval for any level of `\(\alpha\)`:
 
 $$ \text{point estimate} ± z_{\alpha/2} * SE$$
 
+where `\(z_{\alpha/2}\)` is a "critical value" that varies with significance level `\(\alpha\)`.
+
+`\(z_{\alpha/2}\)` is the `\(z\)`-score at which `\(\alpha/2\)` percent of the sampling distribution exceeds that `\(z\)`-score
+
 --
 
 For example:
@@ -943,6 +971,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

@@ -3,7 +3,7 @@ title: "Inference and hypothesis testing"
 subtitle: "EDS 222"
 author: "Tamma Carleton"
 #institute: ""
-date: "Fall 2022"
+date: "Fall 2023"
 output:
   xaringan::moon_reader:
     css: ['default', 'metropolis', 'metropolis-fonts', 'my-css.css']
@@ -24,7 +24,7 @@ source(file.path(rootdir,"labs","_common.R"))
 # Define pink color
 red_pink <- "#e64173"
 # Notes directory
-dir_slides <- "~/Dropbox/Teaching/UCSB/EDS_222/EDS222_code/EDS-222-stats/slides/08-inference/"
+dir_slides <- "~/Dropbox/Teaching/UCSB/EDS_222/EDS222_code/EDS-222-stats/slides/07-inference/"
 # Knitr options
 opts_chunk$set(
   comment = "#>",
@@ -78,11 +78,11 @@ theme_simple <- theme_bw() + theme(
 
 --
 
-- Change in OH this week (individual slots)
+- Change in OH this week (*today* 3:15-4:15pm, Pine Room)
 
 --
 
-- Assignment 4 posted by 11/9, likely due 11/22 but will depend on...
+- Assignment 4 posted this week, likely due 12/01 but will depend on...
 
 --
 
@@ -444,28 +444,34 @@ A **hypothesis test** is a statistical method used to evaluate competing claims 
 ---
 # Hypothesis testing: Example
 
-### Example: Are runners getting slower or faster over time? 
+### Example: Are ducks moving north? 
 
-Random sample of 100 runners from the 2017 Cherry Blossom 10-mile race. 
-  + Mean 2006 finish time for all runners: 93.29 minutes
-  + Mean 2017 finish time: 98.78 minutes
-  + Standard deviation 2017 finish time: 16.59 minutes
+There are reports that Midwestern duck populations are moving northwards in response to climate change. 
 
-- $H_0$: The average time was the same in the two years. That is, $\mu_{2017}-\mu_{2006}=0$
+--
 
-- $H_A$: The average time was not the same in the two years. That is, $\mu_{2017}-\mu_{2006} \neq 0$
+You have a random sample of 100 tagged ducks in Minnesota from 2010 and 2023. 
+  + Mean 2010 latitude: 44.27 degrees N
+  + Mean 2023 latitude: 46.12 degrees N
+  + Standard deviation 2023 latitude: 0.92 degrees
+
+--
+
+- $H_0$: The average latitude was the same in the two years. That is, $\mu_{2023}-\mu_{2010}=0$
+
+- $H_A$: The average latitude was not the same in the two years. That is, $\mu_{2023}-\mu_{2010} \neq 0$
 
 ---
 # Hypothesis testing: Example
 
-### Example: Are runners getting slower or faster over time? 
+### Example: Are ducks moving north? 
 
 We call the calculated statistic of interest the **point estimate**
 
 --
 
-Here, the difference in mean finish time between 2017 sample and the 2006 census of runners is: 
-  + 98.78 - 93.29 = 5.49
+Here, the difference in mean latitude between the 2023 sample and the 2010 sample is: 
+  + 46.12 - 44.27 = 1.85
 
 --
 
@@ -486,7 +492,7 @@ For example:
 
 --
 
-- The distribution of 2017 10-mile finish times are so far from the 2006 mean that we can reject the means are the same
+- The distribution of 2023 duck latitudes are so far from the 2010 distribution that we can reject the means are the same
 
 --
 
@@ -582,7 +588,7 @@ For example, recall our regression above, where the population model is:
 $$y_i = 2.53 + 0.57x_i + u_i $$
 --
 
-- A regression using one sample gives us _one_ set of coefficients, called the **point estimates**: $\hat\beta_0 = 2.36$ and $\hat\beta_1 = 0.61$
+- A regression using one sample gives us _one_ set of coefficients, called the **point estimates**. For example, $\hat\beta_0 = 2.36$ and $\hat\beta_1 = 0.61$
 
 --
 
@@ -606,8 +612,6 @@ Tells us how certain we are that our sample statistics are informative of a popu
 ### But how do we obtain one of these?
 
 You only have one sample of data! Where does the sampling distribution come from?
-
--- 
 
 **We derive the sampling distribution from applying the Central Limit Theorem** 
 
@@ -711,7 +715,7 @@ For example:
 
 --
 
-- $H_0$: 10-mile finish times in 2017 have the same mean as 2006. $\mu_{2017}-\mu_{2006} = 0$
+- $H_0$: Duck latitudes in 2023 have the same mean as in 2010. $\mu_{2023}-\mu_{2010} = 0$
 
 --
 
@@ -719,7 +723,7 @@ For example:
 
 --
 
-- $H_0$: There is _no effect_ of neonicotinoid use on colony collapse disorder. $\beta_1 = 0$. (Note that linear regression parameters are conditional means) 
+- $H_0$: There is _no effect_ of neonicotinoid use on colony collapse disorder. $\beta_1 = 0$. (Note that linear regression parameters are conditional means -- mean of $y$ conditional on a level of $x$) 
 
 <!-- p-value gives you probability of observing your data given null is true. The standard error gives you a likely range for the statistic if we were actually able to take a bunch of samples -->
 
@@ -736,6 +740,7 @@ How you calculate the standard error depends on the research question.
 
 For example, if we are interested in a sample mean, our friend the **Central Limit Theorem** tells us that:
 $$SE = \frac{s^2}{\sqrt{n}}$$
+where $s$ is the sample standard deviation and $n$ is the sample size.
 
 > Q: What happens to the standard error as sample size increases? Why?
 
@@ -748,6 +753,7 @@ How you calculate the standard error depends on the research question.
 
 For example, if we are interested in a regression slope, the CLT plus some algebra tell us that:
 $$SE = \sqrt{var(\hat\beta_1)} = \sqrt{\frac{s^2}{\sum_i (x_i - \bar{x})^2}}$$
+where $s^2$ is the sample variance of model errors $\hat y_i - y_i$
 
 > Q: What happens to the standard error as sample size increases? Why?
 
@@ -758,8 +764,10 @@ $$SE = \sqrt{var(\hat\beta_1)} = \sqrt{\frac{s^2}{\sum_i (x_i - \bar{x})^2}}$$
 
 How you calculate the standard error depends on the research question. 
 
-For example, if we are interested in the difference between two means, the CLT plus some algebra tell us that:
+For example, if we are interested in the *difference* between two means, the CLT plus some algebra tell us that:
 $$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s^2_2}{n_2}} $$
+where $s_k$ is the sample standard deviation in each of the two samples and $n_k$ is the sample size in each sample
+
 > In all these cases, the SE is the standard deviation of the sampling distribution!
 
 ---
@@ -840,7 +848,7 @@ abline(h = 0, col = "#AAAAAA")
 ---
 # Z-score
 
-- The 68-95-99.7 rule is helpful if your point estimate (sample statistic) is exactly 1, 2, or 3 standard deviations from the mean.
+- The 68-95-99.7 rule is helpful if your point estimate (sample statistic) is exactly 1, 2, or 3 standard deviations from the mean (i.e., the null_
 
 --
 
@@ -851,6 +859,8 @@ abline(h = 0, col = "#AAAAAA")
 ### Z-score: How many standard deviations is a value from the mean?
 
 $$z = \frac{x_i-\mu}{\sigma}$$
+where $\mu$ is the mean and $\sigma$ is the standard deviation
+
 ---
 # Z-score for hypothesis testing
 
@@ -879,6 +889,12 @@ knitr::include_graphics("null_observed_example.png")
 **_p_-value** is the probability of getting a point estimate _at least as extreme_ as ours **if the null hypothesis were true.** 
 
 $$p-value = Pr(Z < -|z| \hskip2mm \text{or} \hskip2mm Z > |z|) = 2*Pr(Z > |z|)$$
+where $z$ is the $z$-score computed using your point estimate.
+
+--
+
+> Question: What feature of the normal distribution lets us simplify this to $2*Pr(Z>|z|)$?
+
 ---
 # Quantifying probabilities: _p_-value
 
@@ -1157,6 +1173,10 @@ You can build a confidence interval for any level of $\alpha$:
 
 $$ \text{point estimate} ± z_{\alpha/2} * SE$$
 
+where $z_{\alpha/2}$ is a "critical value" that varies with significance level $\alpha$.
+
+$z_{\alpha/2}$ is the $z$-score at which $\alpha/2$ percent of the sampling distribution exceeds that $z$-score
+
 --
 
 For example:
@@ -1209,8 +1229,8 @@ exclude: true
 
 ```{R, print pdfs, echo = F, eval = F}
 pagedown::chrome_print(
-  input = "08-inference.html",
-  output = "08-inference.pdf",
+  input = "07-inference.html",
+  output = "07-inference.pdf",
   timeout = 60
 )
 ```
