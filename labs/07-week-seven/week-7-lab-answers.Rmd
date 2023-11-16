@@ -1,6 +1,6 @@
 ---
-title: "EDS 222: Week 8: In-class Lab"
-author: ""
+title: "EDS 222: Week 7: In-class Lab"
+author: "{ANSWER KEY}"
 date: "`r Sys.Date()`"
 output:
   tufte::tufte_html: default
@@ -42,7 +42,13 @@ First, filter `ncbirths` for rows where the variable `habit` is non-missing (thi
 Use the is.na() function to specify that you want values of habit that are not missing (where is.na() is FALSE).
 
 ```{r}
+# take a look at the documentation to understand variable units, etc.
+?ncbirths
 
+# remove missings
+head(ncbirths)
+ncbirths_complete <- ncbirths %>%
+  filter(is.na(habit) == FALSE)
 ```
 
 ## Step 1: Define the **null** and **alternative** hypotheses: 
@@ -53,12 +59,24 @@ Construct a null and an alternative hypothesis that will allow you to evaluate i
 
 We can write the two hypotheses as:
 
-## Step 2: Collect data and compute the point estimate. 
+$$H_{0}: \mu_{nonsmoker} - \mu_{smoker} = 0$$
+$$H_{A}: \mu_{nonsmoker} - \mu_{smoker} \neq 0$$
 
-Use the complete version of the `ncbirths` data to estimate the "point estimate", which in this case is a difference in means.
+## Step 2: Collect data and compute the point estimate.
+
+Use the complete version of the `ncbirths` data to estimate the "point estimate", which in this case is a difference in means between the two groups of mothers.
 
 ```{r}
+mu_nonsmoker = ncbirths_complete %>% 
+  filter(habit == "nonsmoker") %>% 
+  summarize(mean(weight))
 
+mu_smoker = ncbirths_complete %>% 
+  filter(habit == "smoker") %>% 
+  summarize(mean(weight))
+
+point_est = as.numeric(mu_nonsmoker - mu_smoker)
+print(point_est)
 ```
 
 This doesn't look like "no difference", and it's consistent with our prior that non-smoking mothers should have higher birth weight babies. But remember that to conduct a hypothesis test we need a measure of variability, not just a measure of the mean.
@@ -76,14 +94,22 @@ $$SE = \sqrt{\frac{s_1^2}{n_1} + \frac{s^2_2}{n_2}}$$
 First let's compute the SE by hand:
 
 ```{r}
-
+n1 = ncbirths_complete %>% filter(habit == "nonsmoker") %>% count()
+n2 = ncbirths_complete %>% filter(habit == "smoker") %>% count()
+s1 = ncbirths_complete %>% filter(habit == "nonsmoker") %>% summarize(sd(weight, na.rm = TRUE))
+s2 = ncbirths_complete %>% filter(habit == "smoker") %>% summarize(sd(weight, na.rm = TRUE))
+SE = as.numeric(sqrt(s1^2/n1 + s2^2/n2))
+print(SE)
 ```
 And now the test statistic:
 
 ```{r}
-
+zscore = (point_est - 0)/SE
+print(zscore)
 ```
-Can you explain the z-score in words?
+Can you explain the z-score in words? What does this suggest to you about the evidence against the null?
+
+**Answer: the observed difference in birth weights is 2.36 standard deviations above the null of zero difference.**
 
 ## Step 4: Quantify the probability that your sample statistic differs from the null
 
@@ -92,12 +118,19 @@ $$p \text { - value }=\operatorname{Pr}(Z<-|z| \text { or } Z>|z|)=2 * \operator
 Make use of the function `pnorm()` to access the normal distribution.^[Recall: `pnorm()` gives you the probability mass below a certain cutoff in a probability distribution with a mean and standard deviation you can control. You can use `lower.tail=FALSE` to get the mass above a given cutoff.]
 
 ```{r}
+p_val = 2 * pnorm(zscore, lower.tail=FALSE)
+print(p_val)
 
+# alternative method: use the point estimate on a normal distribution with standard deviation SE
+p_val_alt = 2 * pnorm(point_est, mean = 0, sd = SE, lower.tail=FALSE)
+print(p_val_alt)
 ```
 
 ## Step 5: Evaluate whether you can reject or fail to reject your null hypothesis 
 
 Use the p_value determined in step 4 to evaluate whether you can reject or fail to reject the null hypothesis at a 95% confidence level (i.e., $\alpha = .05$). State precisely the conclusion of your hypothesis test. 
+
+**Answer: Since $p-value = 0.018 < 0.05$ we reject the null that there is no difference in the birth weight of babies born to smoking versus non-smoking mothers. We can say there is a statistically significant difference (at the 5% significance level) in baby birth weight across smoking and non-smoking mothers.**
 
 # Using `t.test()` to implement a hypothesis test in `R`
 
@@ -108,29 +141,28 @@ Again, we want to know if there is a statistically significant difference in bab
 First, take a look at `t.test()` documentation to see how the function works. 
 
 ```{r}
-
+?t.test
 ```
 
 We can implement our t-test in multiple ways using `t.test()`. First, let's use the `formula` object, as I think this is the nicest approach. To use this method, we first enter the variable we are interested in evaluating means of (i.e., `weight`), then use a tilde `~` like in regression analysis, followed by the variable indicating the groups for which we are testing for differences in means (`habit`).
 
 ```{r}
-
+t.test(weight ~ habit, data = ncbirths_complete)
 ```
 Note that we obtain nearly the same p-value and test-statistic (shown as `t`) as we did above, although it's slightly different as this is using the t-distribution and we used the normal.^[By the time $n=1000$, the t-distribution and normal are very very similar.] 
 
 Another way to execute this test is to pass the two vectors of data into `t.test()` as the first two arguments. This works the same way, it's just uglier.
 
 ```{r}
-
+t.test(ncbirths_complete$weight[ncbirths_complete$habit=="nonsmoker"], ncbirths_complete$weight[ncbirths_complete$habit=="smoker"] )
 ```
-
 Finally, note that you **do not** want to enter the difference in the means directly into `t.test()`, since it will treat your second mean as a constant and not a random variable, giving you far too much confidence in your point estimate. 
 
 To see this, try entering $\mu_{nonsmoker} - \mu_{smoker}$ directly into the function:
 ```{r}
-
+t.test(ncbirths_complete$weight[ncbirths_complete$habit=="nonsmoker"] - ncbirths_complete$weight[ncbirths_complete$habit=="smoker"] )
 ```
-
+Look how low your p-value is! And also note that `R` is telling you it's running a one-sample test, which we know we don't want because both variables are random (birth weight for nonsmoking mothers and birth weight for smoking moms).
 
 # Section 2: Confidence Intervals
 
@@ -152,21 +184,23 @@ It must be close to 2, since we know the 68-95-99.7 rule is a close rule of thum
 `qnorm()` tells us the quantile of the normal distribution, which is what we're after. Note that we will pass `qnorm()` the 2.5% quantile, since we have a symmetric distribution and we want a 5% probability the z-score is at least as far from the null (in either direction) as our point estimate is.
 
 ```{r}
-
+crit_val = qnorm(0.025, lower.tail=FALSE)
+print(crit_val)
 ```
 
 Now we can construct the 95% confidence interval:
 
 ```{r}
+ci_lower = round(point_est - crit_val*SE, 2)
+ci_upper = round(point_est + crit_val*SE, 2)
 
+print(paste0("95% probability that [", ci_lower, " ,", ci_upper, "] contains the difference in birth weights across smoking and non smoking mothers."))
 ```
-
-[If we have time, discuss effect sizes.]
 
 Note that you got this output for free from `t.test()` earlier. You can change the confidence level reported by `t.test()` by using the `conf.level` argument. 
 
 Use `t.test()` to compute the 90% confidence interval around your point estimate. Does the interval get wider or tighter? Why?
 
 ```{r}
-
+t.test(weight ~ habit, data = ncbirths_complete, conf.level = 0.90)
 ```

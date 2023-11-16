@@ -150,7 +150,7 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 - **Reading:** 
   + [Chapters 13, 19.2](https://openintro-ims.netlify.app/foundations-mathematical.html)
 
-- **Lab:** Inference and hypothesis testing in `R` (to be posted) <!-- [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html) -->
+- **Lab:** Inference and hypothesis testing in `R` [markdown](labs/07-week-seven/week-7-lab.Rmd), [answers](labs/07-week-seven/week-7-lab-answers.Rmd), [answers in html](labs/07-week-seven/week-7-lab-answers.html)
 
 - **Assignment:** Assignment 4 (posted TBD, due TBD)
 
