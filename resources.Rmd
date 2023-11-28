@@ -167,7 +167,6 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 12/08, 5pm)
 
-
 ### Week 9
 
 - **Slides 09:** Spatial interpolation and kriging [html](slides/09-kriging/09-kriging.html) [pdf](slides/09-kriging/09-kriging.pdf) 

@@ -516,7 +516,11 @@ Our model now looks something like
 
 $$
 `\begin{align}
+<<<<<<< HEAD
  \text{salmon}_t = \beta_0 + \beta_1 \text{passage}_t + u_t
+=======
+ \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 
@@ -525,7 +529,11 @@ or perhaps
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \text{salmon}_t = \beta_0 + \beta_1 \text{passage}_t + \beta_3 \color{#e64173}{\text{passage}_{t-1}} + u_t
+=======
+  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_3 \color{#e64173}{\text{Income}_{t-1}} + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 --
@@ -533,16 +541,27 @@ maybe even
 
 $$
 `\begin{align}
+<<<<<<< HEAD
 \text{salmon}_t = \beta_0 + \beta_1 \text{passage}_t + \color{#e64173}{\beta_3 \text{passage}_{t-1}} + \beta_4 \color{#6A5ACD}{\text{salmon}_{t-1}} + u_t
+=======
+\text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \color{#e64173}{\beta_3 \text{Income}_{t-1}} + \beta_4 \color{#6A5ACD}{\text{Births}_{t-1}} + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 
 --
 
+<<<<<<< HEAD
 where `\(t-1\)` denotes the time period prior to `\(t\)` (*lagged* stream passage or salmon returns).
 ---
 # Time-series models
 ## Updated OLS assumptions
+=======
+where `\(t-1\)` denotes the time period prior to `\(t\)` (*lagged* income or births).
+---
+# Time-series models
+## Assumptions
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 1. .hi[New:] **Weakly persistent outcomes**—essentially, `\(x_{t+k}\)` in the distant period `\(t+k\)` is weakly correlated with period `\(x_t\)` (when `\(k\)` is "big").
 
@@ -560,7 +579,11 @@ where `\(t-1\)` denotes the time period prior to `\(t\)` (*lagged* stream passag
 
 Time-series modeling boils down to two classes of models.
 
+<<<<<<< HEAD
 1. .hi[Static models:] Do not allow for persistent effects.
+=======
+1. .hi[Static models:] Do not allow for persistent effect.
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 2. .hi-purple[Dynamic models:] Allow for persistent effects.
 
@@ -579,6 +602,7 @@ Time-series modeling boils down to two classes of models.
 
 $$
 `\begin{align}
+<<<<<<< HEAD
  \text{salmon}_{\color{#e64173}{t}} = \beta_0 + \beta_1 \text{passage}_{\color{#e64173}{t}} + u_{\color{#e64173}{t}}
 \end{align}`
 $$
@@ -588,6 +612,17 @@ Here, we must believe that stream passage .hi[immediately] affects the number of
 --
 
 We also need to believe current salmon returns do not depend upon previous stream passage conditions.
+=======
+ \text{Births}_{\color{#e64173}{t}} = \beta_0 + \beta_1 \text{Income}_{\color{#e64173}{t}} + u_{\color{#e64173}{t}}
+\end{align}`
+$$
+--
+Here, we must believe that income .hi[immediately] affects the number of births and does not affect on the numbers of births in the future.
+
+--
+
+We also need to believe current births do not depend upon previous births.
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 --
 
@@ -608,6 +643,7 @@ These models allow the outcome to depend upon the .purple[explanatory variable(s
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \text{salmon}_{\color{#e64173}{t}}
   = &amp;\beta_0 + \beta_1 \text{passage}_{\color{#e64173}{t}} + \beta_2 \text{passage}_{\color{#6A5ACD}{t-1}} + \\
   &amp;\beta_3 \text{passage}_{\color{#6A5ACD}{t-2}} + \beta_4 \text{passage}_{\color{#6A5ACD}{t-3}} + u_{\color{#e64173}{t}}
@@ -619,6 +655,17 @@ Here, passage .hi[immediately] affects the number of salmon returns *and* affect
 --
 
 In other words: salmon returns today depend today's stream passage conditions and *lags* of passage—_e.g._, last year's passage, the year before last, etc...
+=======
+  \text{Births}_{\color{#e64173}{t}}
+  = &amp;\beta_0 + \beta_1 \text{Income}_{\color{#e64173}{t}} + \beta_2 \text{Income}_{\color{#6A5ACD}{t-1}} + \\
+  &amp;\beta_3 \text{Income}_{\color{#6A5ACD}{t-2}} + \beta_4 \text{Income}_{\color{#6A5ACD}{t-3}} + u_{\color{#e64173}{t}}
+\end{align}`
+$$
+--
+Here, income .hi[immediately] affects the number of births *and* affects .hi-purple[future] numbers of births.
+--
+ In other words: Births today depend today's income and *lags* of income—_e.g._, last month's income, last year's income, ...
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 --
 
@@ -626,7 +673,11 @@ Estimate *total* effects by summing lags' coefficients, _e.g._, `\(\beta_1 + \be
 
 --
 
+<<<<<<< HEAD
 *Note:* We still assume current salmon returns don't affect future returns. 
+=======
+*Note:* We still assume current births don't affect future births.
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 ---
 # Model options
@@ -651,6 +702,7 @@ These models allow the outcome to depend upon the .purple[explanatory variable(s
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \text{salmon}_{\color{#e64173}{t}} = \beta_0 + \beta_1 \text{passage}_{\color{#e64173}{t}} + \beta_2 \text{passage}_{\color{#6A5ACD}{t-1}} + \beta_3 \text{salmon}_{\color{#6A5ACD}{t-1}} + u_{\color{#e64173}{t}}
 \end{align}`
 $$
@@ -660,6 +712,17 @@ Here, current passage affects .hi[current] salmon and .hi-purple[future] salmon.
 --
 
 In addition, .purple[current salmon returns affect future salmon returns]—we're allowing lags of the outcome variable.
+=======
+  \text{Births}_{\color{#e64173}{t}} = \beta_0 + \beta_1 \text{Income}_{\color{#e64173}{t}} + \beta_2 \text{Income}_{\color{#6A5ACD}{t-1}} + \beta_3 \text{Births}_{\color{#6A5ACD}{t-1}} + u_{\color{#e64173}{t}}
+\end{align}`
+$$
+--
+Here, current income affects affects .hi[current] births and .hi-purple[future] births.
+
+--
+
+In addition, .purple[current births affect future births]—we're allowing lags of the outcome variable.
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 ---
 # Do you need an ADL?
@@ -686,7 +749,11 @@ ADL models are often specified as `\(\text{ADL}(\color{#FFA500}{p},\,\color{#e64
 
 $$
 `\begin{aligned}
+<<<<<<< HEAD
  \text{salmon}_t = \beta_0 + \beta_1 \text{passage}_t + \beta_2 \text{salmon}_{\color{#FFA500}{t-1}} + u_t
+=======
+ \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{\color{#FFA500}{t-1}} + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{aligned}`
 $$
 
@@ -698,9 +765,15 @@ $$
 
 $$
 `\begin{aligned}
+<<<<<<< HEAD
  \text{salmon}_t =
  &amp;\beta_0 + \beta_1 \text{passage}_t + \beta_2 \text{passage}_{\color{#e64173}{t-1}} + \beta_3 \text{passage}_{\color{#e64173}{t-2}} \\
  &amp; + \beta_4 \text{salmon}_{\color{#FFA500}{t-1}} + \beta_5 \text{salmon}_{\color{#FFA500}{t-2}} + u_t
+=======
+ \text{Births}_t =
+ &amp;\beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Income}_{\color{#e64173}{t-1}} + \beta_3 \text{Income}_{\color{#e64173}{t-2}} \\
+ &amp; + \beta_4 \text{Births}_{\color{#FFA500}{t-1}} + \beta_5 \text{Births}_{\color{#FFA500}{t-2}} + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{aligned}`
 $$
 ---
@@ -711,7 +784,11 @@ Due to their lags, ADL models actually estimate even more complex relationships 
 
 --
 
+<<<<<<< HEAD
 Consider ADL(1, 0): `\(\text{salmon}_t = \beta_0 + \beta_1 \text{passage}_t + \beta_2 \text{salmon}_{t-1} + u_t\)`
+=======
+Consider ADL(1, 0): `\(\text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t\)`
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 --
 
@@ -719,18 +796,31 @@ Write out the model for period `\(t-1\)`:
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \text{salmon}_{t-1} = \beta_0 + \beta_1 \text{passage}_{t-1} + \beta_2 \text{salmon}_{t-2} + u_{t-1}
+=======
+  \text{Births}_{t-1} = \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1}
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 
 --
 
+<<<<<<< HEAD
 which we can substitute in for `\(\text{salmon}_{t-1}\)` in the first equation, _i.e._,
 
 $$
 `\begin{align}
  \text{salmon}_t = &amp;\beta_0 + \beta_1 \text{passage}_t + \\
  &amp;\beta_2 \underbrace{\left( \beta_0 + \beta_1 \text{passage}_{t-1} + \beta_2 \text{salmon}_{t-2} + u_{t-1} \right)}_{\text{salmon}_{t-1}} + u_t
+=======
+which we can substitute in for `\(\text{Births}_{t-1}\)` in the first equation, _i.e._,
+
+$$
+`\begin{align}
+ \text{Births}_t = &amp;\beta_0 + \beta_1 \text{Income}_t + \\
+ &amp;\beta_2 \underbrace{\left( \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1} \right)}_{\text{Births}_{t-1}} + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 ---
@@ -739,25 +829,42 @@ Continuing...
 
 $$
 `\begin{align}
+<<<<<<< HEAD
  \text{salmon}_t = &amp;\beta_0 + \beta_1 \text{passage}_t + \\
  &amp;\beta_2 \underbrace{\left( \beta_0 + \beta_1 \text{passage}_{t-1} + \beta_2 \text{salmon}_{t-2} + u_{t-1} \right)}_{\text{salmon}_{t-1}} + u_t \\
  =&amp; \beta_0 \left(1 + \beta_2 \right) + \beta_1 \text{passage}_t + \beta_1 \beta_2 \text{passage}_{t-1} + \\
  &amp;\beta_2^2 \text{salmon}_{t-2} + u_{t} + \beta_2 u_{t-1}
+=======
+ \text{Births}_t = &amp;\beta_0 + \beta_1 \text{Income}_t + \\
+ &amp;\beta_2 \underbrace{\left( \beta_0 + \beta_1 \text{Income}_{t-1} + \beta_2 \text{Births}_{t-2} + u_{t-1} \right)}_{\text{Births}_{t-1}} + u_t \\
+ =&amp; \beta_0 \left(1 + \beta_2 \right) + \beta_1 \text{Income}_t + \beta_1 \beta_2 \text{Income}_{t-1} + \\
+ &amp;\beta_2^2 \text{Births}_{t-2} + u_{t} + \beta_2 u_{t-1}
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 
 --
 
+<<<<<<< HEAD
 We could then substitute in the equation for `\(\text{salmon}_{t-2}\)`, `\(\text{salmon}_{t-3}\)`, ...
+=======
+We could then substitute in the equation for `\(\text{Births}_{t-2}\)`, `\(\text{Births}_{t-3}\)`, ...
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 ---
 # Complexity
 Eventually we arrive at
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \text{salmon}_t =
   &amp;\beta_0 \left( 1 + \beta_2 + \beta_2^2 + \beta_2^3 + \cdots \right) + \\
   &amp;\beta_1 \left( \text{passage}_t + \beta_2 \text{passage}_{t-1} + \beta_2^2 \text{passage}_{t-2} + \cdots \right) +\\
+=======
+  \text{Births}_t =
+  &amp;\beta_0 \left( 1 + \beta_2 + \beta_2^2 + \beta_2^3 + \cdots \right) + \\
+  &amp;\beta_1 \left( \text{Income}_t + \beta_2 \text{Income}_{t-1} + \beta_2^2 \text{Income}_{t-2} + \cdots \right) +\\
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
   &amp; u_t + \beta_2 u_{t-1} + \beta_2^2 u_{t-2} + \cdots
 \end{align}`
 $$
@@ -768,13 +875,21 @@ $$
 
 --
 
+<<<<<<< HEAD
 By including just **one lag of the dependent variable**—as in a ADL(1, 0)—we implicitly include *many lags* of the explanatory variables and disturbances.&lt;sup&gt;.pink[†]&lt;/sup&gt;
+=======
+By including just **one lag of the dependent variable**—as in a ADL(1, 0)—we implicitly include for *many lags* of the explanatory variables and disturbances.&lt;sup&gt;.pink[†]&lt;/sup&gt;
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 .footnote[.pink[†] These lags enter into the equation in a very specific way—not the most flexible specification.]
 
 ---
 # Time-series models
+<<<<<<< HEAD
 ## Updated OLS assumptions
+=======
+## Assumptions
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 1. .hi[New:] **Weakly persistent outcomes**—essentially, `\(x_{t+k}\)` in the distant period `\(t+k\)` is weakly correlated with period `\(x_t\)` (when `\(k\)` is "big").
 
@@ -827,13 +942,19 @@ To see why dynamic models with lagged outcome variables violate our exogeneity a
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \color{#e64173}{\text{salmon}_t} &amp;= \beta_0 + \beta_1 \text{passage}_t + \beta_2 \text{salmon}_{t-1} + \color{#e64173}{u_t} \tag{1}\\[0.3em]
   \text{salmon}_{t+1} &amp;= \beta_0 + \beta_1 \text{passage}_{t+1} + \beta_2 \color{#e64173}{\text{salmon}_t} + u_{t+1} \tag{2}
+=======
+  \color{#e64173}{\text{Births}_t} &amp;= \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + \color{#e64173}{u_t} \tag{1}\\[0.3em]
+  \text{Births}_{t+1} &amp;= \beta_0 + \beta_1 \text{Income}_{t+1} + \beta_2 \color{#e64173}{\text{Births}_t} + u_{t+1} \tag{2}
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 
 --
 
+<<<<<<< HEAD
 In `\((1)\)`, `\(\color{#e64173}{u_t}\)` clearly correlates with `\(\color{#e64173}{\text{salmon}_t}\)`.
 
 --
@@ -843,6 +964,17 @@ However, `\(\color{#e64173}{\text{salmon}_t}\)` is a regressor in `\((2)\)` (lag
 --
 
 ∴ The disturbance in `\(t\)` `\(\left(\color{#e64173}{u_t}\right)\)` correlates with a regressor in `\(t+1\)` `\(\left(\color{#e64173}{\text{salmon}_t}\right)\)`.
+=======
+In `\((1)\)`, `\(\color{#e64173}{u_t}\)` clearly correlates with `\(\color{#e64173}{\text{Births}_t}\)`.
+
+--
+
+However, `\(\color{#e64173}{\text{Births}_t}\)` is a regressor in `\((2)\)` (lagged dependent variable).
+
+--
+
+∴ The disturbance in `\(t\)` `\(\left(\color{#e64173}{u_t}\right)\)` correlates with a regressor in `\(t+1\)` `\(\left(\color{#e64173}{\text{Births}_t}\right)\)`.
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 --
 
@@ -883,7 +1015,11 @@ The time series version of our assumption about OLS errors includes the followin
 
 --
 
+<<<<<<< HEAD
 #### Are we worried? In a static model or with lagged explanatory variables:
+=======
+#### Are we worried? In a static model with lagged explanatory variables:
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 - OLS is .pink[**inefficient**], i.e., no longer the lowest variance unbiased estimator
 - That is, your standard errors are no longer correct
@@ -898,7 +1034,11 @@ Consider a model with one lag of the outcome variable—ADL(1, 0)—model with A
 
 $$
 `\begin{align}
+<<<<<<< HEAD
   \text{salmon}_t = \beta_0 + \beta_1 \text{passage}_t + \beta_2 \text{salmon}_{t-1} + u_t
+=======
+  \text{Births}_t = \beta_0 + \beta_1 \text{Income}_t + \beta_2 \text{Births}_{t-1} + u_t
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 \end{align}`
 $$
 where
@@ -912,7 +1052,11 @@ $$
 
 **Problem:**
 --
+<<<<<<< HEAD
  Both `\(\text{salmon}_{t-1}\)` (a regressor in the model for time `\(t\)`) and `\(u_{t}\)` (the disturbance for time `\(t\)`) depend upon `\(u_{t-1}\)`. *I.e.*, a regressor is correlated with its contemporaneous disturbance.
+=======
+ Both `\(\text{Births}_{t-1}\)` (a regressor in the model for time `\(t\)`) and `\(u_{t}\)` (the disturbance for time `\(t\)`) depend upon `\(u_{t-1}\)`. *I.e.*, a regressor is correlated with its contemporaneous disturbance.
+>>>>>>> a2a4460d8e20d4079eaf7661e8a7871824df4533
 
 --
 
