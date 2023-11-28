@@ -551,7 +551,7 @@ as_tsibble(USAccDeaths) %>%
 
 - **Seasonal and Trend Decomposition using Loess** (STL)
   + Flexible and versatile method
-  + Seasonal compoenent can change over time
+  + Seasonal component can change over time
   + Robust to outliers
   + use `STL()` in place of `classical_decomposition()`
   
