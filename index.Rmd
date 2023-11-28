@@ -103,12 +103,12 @@ The goal of this course is to enable MEDS students to confidently and competentl
 | 2 (10/09)   |  Ordinary Least Squares        | OLS in `R`     |
 | 3 (10/16)   |  Multiple linear regression      | Regression in `R`, continued     |
 | 4 (10/23)   | Interaction models         |   Interactions in `R`  |
-| 5 (10/30)   | Nonlinear relationships      | Midterm Exam     |
+| 5 (10/30)   | Stats in practice: climate change research      | Midterm Exam     |
 | 6 (11/06)   | Nonlinear regression models         | Logistic regression in `R`     |
 | 7 (11/13)   | Statistical inference         | Hypothesis testing in `R`      |
 | 8 (11/20)   | Time series in OLS       |  No class    |
-| 9 (11/27)  | Spatial interpolation       |   Kriging in `R`   |
-| 10 (12/04)   |    Statistics in climate change research      | TBD        |
+| 9 (11/27)  | Time series, cont'd, spatial data       |   Spatial interpolation   |
+| 10 (12/04)   |    Kriging in `R`      | Guest lecture        |
 | Finals   | Final project presentations (Dec 12)        | n/a     |
 
 **This webpage was designed following [a template](https://github.com/allisonhorst/meds-distill-template) by Dr. Allison Horst.**

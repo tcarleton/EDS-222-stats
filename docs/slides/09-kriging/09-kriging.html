@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Spatial interpolation and kriging</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tamma Carleton" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-css.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Spatial interpolation and kriging
+]
+.subtitle[
+## EDS 222
+]
+.author[
+### Tamma Carleton
+]
+.date[
+### Fall 2023
+]
+
+---
+
+
+
+&lt;style type="text/css"&gt;
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+
+# Announcements/check-in
+
+### Final Projects
+
+- 3-minute in-class presentation: 12/12, 4-7pm, Bren Hall 1424 -- with snacks! I will randomly allocate slots and post the presentation order by 12/07
+- Blog post/write up: due 12/9, 5pm, send to me and Sandy via email in `.html` and `.pdf` formats
+- See guidelines for details on expectations for presentation and write up
+- If you are not a MEDS student and/or do not want a blog post, the `.pdf` alone is fine 
+
+---
+# Announcements/check-in
+
+### Course evaluations
+
+- Incredibly valuable for me, this course, and for the development of MEDS more broadly!
+- Some changes from previous years' feedback:
+  + Added logistic regression
+  + Integrated more code snippets into lecture materials
+  + More environmental examples (too much economics...)
+  + Slower pace of lecture content
+  + More definitions of mathematical objects
+  + More lectures on stats in practice
+
+---
+# Announcements/check-in
+
+### Class plan for remainder of the quarter
+
+- 11/28: time series + spatial data
+- 11/30: spatial interpolation
+- 12/05: spatial kriging in `R`
+- 12/07: guest lecture -- stats in ecohydrology! 
+
+---
+name: Overview
+
+# Today
+
+#### Refresher: types of spatial data
+Vectors/objects, rasters/fields
+
+--
+
+#### A common challenge: spatial interpolation
+Sample vs. population, points to fields
+
+--
+
+#### Kriging: a powerful form of interpolation
+Variogram, kriging
+
+---
+layout: false
+class: clear, middle, inverse
+# Types of spatial data
+---
+# Spatial data
+
+## Spatial Data can generally split into:
+
+- .hi[Vector] Data
+--
+: points, lines, and polygons.
+
+--
+
+- .hi[Raster] Data
+--
+: a grid of equally sized rectangles.
+--
+
+
+An **alternative framing**: &lt;i&gt;object view&lt;/i&gt; versus &lt;i&gt;field view&lt;/i&gt; 
+--
+
+- .pink[**Object View**]: The study region (and world) is a series of entities located in space.
+Examples: Points representing cities. Non-continuous polygons representing cities.
+
+--
+
+- .pink[**Field View**]: Every location within the study region (and world) has a measurable value.
+Examples: Elevation. Temperature. Wind direction.
+
+---
+# Spatial data
+
+.hi[Q]: Is there a &lt;i&gt;best&lt;/i&gt; data type to represent objects or fields?
+
+--
+
+.hi[A]: Usually, but it depends. 
+
+
+&lt;img src="Vector_vs_raster.jpg" width="30%" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Usually it will be easier to represent .pink[**objects**] with .hi[vector data] and .pink[**fields**] with .hi[raster] data, but ultimately this depends on what analysis you want to run
+
+--
+
+- Luckily, `R` makes it easy to switch back and forth (but we need to be careful and intentional when transforming!)
+
+---
+layout: false
+class: clear, middle, inverse
+# Spatial interpolation
+
+---
+# Spatial interpolation
+
+### In environmental data science, we are **often interested in modeling fields**
+
+
+&lt;img src="wildfirerisk.png" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+# Spatial interpolation
+
+### But we are doing **statistics!**
+
+--
+
+That means we only have data from a _sample_, not a census of the _population_
+
+&lt;img src="raster_vs_sample.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+---
+# Spatial interpolation
+
+- Samples taken from a continuous spatial field often raise the need for **spatial interpolation**
+
+--
+
+#### Definition:
+#### Spatial interpolation is the process of using a **sample** of observed points to estimate values for **all locations** in a study region
+
+--
+
+For example:
+  + Predicting "gold grades" across South Africa using a few borehole samples (the problem of Daniel _Krige_!)
+  + Predicting depth to groundwater across California using monitoring wells
+  + Predicting air pollution across China using monitoring stations
+  + ??
+
+---
+# Spatial interpolation in math
+
+- Let `\(Z(x_0)\)` indicate the value (e.g., elevation) at a location `\(x_0\)` that was _not_ sampled
+
+--
+
+- Let `\(Z(x_i)\)` for `\(i=1,...m\)` indicate the values for locations `\(i=1,...,m\)` that _were_ sampled
+
+--
+
+**Spatial interpolation** aims to predict `\(Z(x_0)\)` using a linear combination of the values in the sampled locations:
+
+`$$\hat Z(x_0) = \sum_{i=1}^m \lambda_i Z(x_i)$$`
+where `\(\lambda_i\)` are weights applied to each sampled location.
+
+--
+
+- All spatial interpolation methods assume or derive a set of `\(\lambda\)`'s to compute `\(\hat Z\)`'s
+
+---
+# Interpolation in pictures
+
+&lt;img src="spatialinterp_picture.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Interpolation in one dimension
+
+Consider one-dimensional space where values `\(z\)` depend on location `\(x\)` 
+
+&lt;img src="09-kriging_files/figure-html/unnamed-chunk-2-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Interpolation in one dimension
+
+Consider one-dimensional space where values `\(z\)` depend on location `\(x\)` 
+
+&lt;img src="09-kriging_files/figure-html/unnamed-chunk-3-1.svg" width="100%" style="display: block; margin: auto;" /&gt;
+---
+# Interpolation in two dimensions
+
+Often we have data for an outcome `\(z\)` observed in 2-D space: `\(z(x, y)\)`
+
+--
+
+&lt;img src="raster_vs_sample.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Interpolation methods
+
+## Polynomial regression
+
+
+- In one-dimensional space:
+
+$$ \hat Z(x_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2x_0^2 + ... + \hat\beta^px_0^p $$
+- In two-dimensional space with `\((x_{0},y_0)\)` the unknown location: 
+
+$$ \hat Z(x_0,y_0) = \hat\beta_0 + \hat\beta_1x_0 + \hat\beta_2y_0 + \hat\beta_3x_0y_0 + \hat\beta_4x_0^2 + \hat\beta_5y_0^2 + ... $$
+
+--
+
+- **Pros:** Easy, analytical expression, continuous &amp; differentiable surface
+- **Cons:** Errors can be large, _inexact_
+
+--
+
+**Exact:** Predicts a value identical to the measured value.
+
+--
+
+**Inexact:** Does _not_ predict a value identical to the measured value.
+
+---
+# Polynomial regression interpolation 
+
+This is just **multiple linear regression** using spatial information as the independent variables
+
+
+```r
+mod = lm(z~poly(x,8))
+predictions = augment(mod)$.fitted
+```
+
+&lt;img src="09-kriging_files/figure-html/unnamed-chunk-6-1.svg" width="80%" style="display: block; margin: auto;" /&gt;
+
+---
+# Polynomial regression interpolation 
+
+This is just **multiple linear regression** using spatial information as the independent variables.
+
+In 2-D:
+
+
+
+```r
+mod = lm(z~x + y + x*y + x2 + y2 + x2*y2)
+```
+
+
+---
+# Interpolation methods
+
+## Nearest Neighbors (NN) 
+
+--
+
+- Simple: Assign value of nearest observation in space
+
+--
+
+&lt;img src="theissen.png" width="85%" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Creates what are called "Theissen Polygons", which allocate space to the nearest sampled point
+
+---
+# Nearest Neighbor interpolation
+
+.hi[Q:] What would the weight vector `\(\lambda\)` look like for NN interpolation?
+
+--
+
+.hi[Q:] What type of function does NN interpolation produce for 1-D space? [draw it!]
+
+--
+
+- **Pros:** Easy, intuitive, field may actually be discontinuous, exact
+- **Cons:** Discontinuous, error-prone if field is smooth
+
+--
+
+#### Implementation in `R`
+
+- Easy with the `voronoi()` function from the `dismo` package:
+
+
+```r
+library(dismo)
+v &lt;- voronoi(dta)
+plot(v)
+```
+
+--
+
+- Helpful tutorial [here](https://rspatial.org/raster/analysis/4-interpolation.html)
+
+---
+# Interpolation methods 
+
+## Inverse distance weighting
+
+Basic idea: weights are a decreasing function of distance from `\(x_0\)` to `\(x_i\)` 
+
+--
+
+`$$\hat Z(x_0) = \sum_{i=1}^m \frac{Z(x_i)Dist(x_i,x_0)^{-p}}{\sum_{i=1}^m Dist(x_i,x_0)^{-p}}$$`
+
+Equivalently:
+
+`$$\lambda_i^{IDW} = \frac{1/Dist(x_i,x_0)^p}{\sum_{i=1}^m 1/Dist(x_i,x_0)^p}$$` 
+
+where `\(p\)` is the "power parameter" determining how fast the weight declines as the distance between the points grows larger  
+
+---
+# Interpolation methods 
+
+## Inverse distance weighting
+
+- **Pros:** Smooth, exact
+- **Cons:** Difficult/computationally intensive (you need to compute distances for _all_ pairs of points in the region!), all sampled observations influence `\(\hat Z(x_0)\)`, have to choose `\(p\)` somehow, result can be "clumpy"
+
+--
+
+&lt;img src="idw.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+# Interpolation methods 
+
+## Inverse distance weighting
+
+#### Implementation in `R` 
+
+
+```r
+library(phylin)
+idw(values, coords, grid, method = "Shepard", p = 2, R = 2, N = 15,
+    distFUN = geo.dist, ...)
+```
+
+- Note the `method` argument: "Shepard" follows the math on the previous slide
+- Note the `p` argument: Need to specify power parameter
+
+---
+# Interpolation methods
+
+## There are many more! 
+
+- Piecewise linear interpolation / Delany triangulation
+- Local polynomial regression
+- Radial basis function (RBF)
+- Kriging (of many forms)
+- Many new machine-learning based methods
+- Learn more in [Li and Heap (2014)](https://doi.org/10.1016/j.envsoft.2013.12.008)
+
+&lt;!-- ---
+- Polynomial 
+- Nearest neighbor / Theissen polygons
+- Inverse distance weighting
+- Piecewise linear / Delany triangulation
+- KRIGING
+--&gt;
+
+---
+# Enter: Kriging
+
+### Kriging is the most widely used form of spatial interpolation in spatial statistics.
+
+--
+
+### Why? 
+- It is _flexible_ (i.e., less researcher decisions, more data-driven)
+- Under certain assumptions it is the "best linear unbiased estimate" (sound like OLS yet??)
+- You can recover an estimate _and_ a standard error (i.e., it is _stochastic_)
+
+#### Next up: Kriging details!
+
+---
+layout: false
+class: clear, middle, inverse
+# Kriging
+
+---
+# Kriging: an origin story
+
+The Witwatersrand ("Rand") in South Africa is known for its gold content. Mining engineers wanted to know where in the Rand was most likely to have a high gold content per block of ore. 
+
+.pull-left[
+&lt;img src="samap.jpeg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="randwaterfall.jpeg" width="60%" style="display: block; margin: auto;" /&gt;
+]
+---
+# Kriging: an origin story
+
+- Many individual ore samples have been taken (**vector** data -- points)
+- Underlying data is the content of the rock (**raster** data -- field)
+
+--
+
+**Spatial interpolation** is highly valuable!
+
+--
+
+- **Danie Krige's solution:** [in his master's thesis!]
+  + Use an estimator that minimizes the **mean squared prediction error** (very similar to OLS)
+  + Show that it has a bunch of nice properties relative to other forms of spatial interpolation
+
+&lt;img src="krige.png" width="60%" style="display: block; margin: auto;" /&gt;
+---
+# Correlations in space
+
+.hi[Q:] If there is **no correlation** between values in nearby locations, can we predict new values based on our sample? 
+
+.pull-left[
+&lt;img src="zerocorr.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+- Blue = low gold content; Red = high gold content
+- **Zero** correlation between values in nearby locations
+- Can you predict the gold content in location A based on this sample? 
+]
+
+---
+# Correlations in space
+
+.hi[Q:] If there is **no correlation** between values in nearby locations, can we predict new values based on our sample? 
+
+.pull-left[
+&lt;img src="poscorr.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+- Blue = low gold content; Red = high gold content
+- **Positive** correlation between values in nearby locations
+- Now can you predict the gold content in location A based on _this_ sample? 
+- _Why?_
+]
+---
+# Variogram
+
+#### Key takeaway: quantifying spatial dependence is key to spatial interpolation
+
+--
+
+A **variogram** describes spatial dependence:
+
+--
+
+&gt; A **variogram** shows the variance of values within groups of observations as a function of the _distance_ between them
+
+--
+
+**Key concept:** Variograms give us a way of understanding how correlated spatial observations are to those around them, and how that correlation “decays” as points get further apart 
+
+--
+
+**Mining example:** Variogram gives a measure of how much two samples taken from the mining area will vary in gold percentage depending on the distance between the samples. Samples farther apart will vary more than those taken close together.
+
+---
+# Variogram
+
+Let `\(Z(x)\)` be the value at location x, and `\(Z(x+h)\)` be the value at a location `\(h\)` units away from `\(x\)`. 
+
+--
+
+**Variogram:**
+`$$2\gamma(x+h,x)=var(Z(x+h)-Z(x))$$`
+--
+
+We often discuss the **semi-variogram**, which is:
+
+`$$\gamma(x+h,x) = \frac{1}{2}var(Z(x+h)-Z(x))$$` 
+
+--
+
+Why? Recall:
+
+`$$var(a-b) = var(a) + var(b) - 2cov(a,b)$$`
+So, for a "stationary" variogram, we have `\(\gamma(x+h,x) = var(Z(x))-cov(Z(x),Z(x+h))\)`
+
+
+---
+# Variogram: in pictures
+
+&lt;img src="basic_variogram.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+--
+
+- **Nugget:** At `\(h=0\)`, residual variance is from microscale effects or measurement error
+- **Sill:** The stationary maximum variance -- no more covariance 
+- **Range:** Separation distance beyond which there is no covariance 
+
+---
+# Estimating a (semi)variogram
+
+### Empirical semivariogram
+
+`$$\hat\gamma(h \pm \delta) = \frac{1}{2N(h\pm\delta)} \sum_{(i,j)\in N(h\pm\delta)} |z_i - z_j|^2$$` 
+--
+
+Why? 
+- You probably don't have many samples _exactly_ `\(h\)` units apart
+
+--
+
+How? 
+
+- Draw "donuts" of width `\(\delta\)` and average distance `\(h\)` around each point
+- Compute differences in values for each pair of points, square them
+- Take an average! 
+
+---
+# Empirical variogram example
+
+- Bohling's _Introduction to Geostatistics and Variogram Analysis_
+- Porosity values in a bean field
+- 85 wells sampled
+
+&lt;img src="porosity.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+# Empirical variogram example
+
+For various values of `\(h\)` and a fixed `\(\delta\)`, compute semivariance:
+
+&lt;img src="semivariances.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+# Empirical variogram example
+
+**Plot** your semivariances:
+
+&lt;img src="empiricalvariogram.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+# Empirical variogram example
+
+Then choose (or optimize) a **variogram model** to fit through the semivariance points:
+  + Exponential
+  + Spherical
+  + Gaussian
+  + ...
+  
+--
+
+**Many more details** on variograms [here](https://www.sciencedirect.com/topics/mathematics/variogram) or in any geostatistics textbook (e.g., Cressie and Wikle, 2011)
+
+---
+# Back to kriging
+
+Recall that our goal is a prediction of a value `\(\hat Z(x_0)\)` based on observations in all sampled locations: 
+
+`$$\hat Z(x_0)=\sum_i^m \lambda_iZ(x_i)$$`
+
+
+--
+
+In **kriging** (and many spatial interpolation methods), the `\(\lambda_i\)` weights **decay** as distance between `\(x_0\)` and `\(x_i\)` grows larger
+
+-- 
+
+&gt; How do we find the weights in kriging?
+
+---
+# Kriging weights
+
+&gt; How do we find the weights in kriging?
+
+--
+
+### Hint:
+
+&lt;img src="basic_variogram.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+The **variogram** tells us how correlated values are with other values near them, and how this correlation falls as distance grows. It is a **key input** into the kriging solution.
+
+---
+# Deriving the kriging solution
+
+Note: full derivation in Cressie and Wikle (2011) [this is a very shorthand version]
+
+#### Goal: minimize mean squared prediction error
+
+`$$min_\lambda \hskip2mm E[ (Z(x_0)-\sum_i^m \lambda_i Z(x_i))^2 ]\hskip2mm \text{subject to}\hskip2mm \sum_i^m \lambda_i = 1$$`
+--
+
+To solve: 
+
+1. Take derivatives with respect to each `\(\lambda_i\)`
+2. Set each first order condition = 0
+3. Solve system of equations for `\(\lambda_i^*\)` values that minimize mean squared error
+
+---
+# Deriving the kriging solution
+
+### Result:
+
+`$$\hat Z(x_0) = \underbrace{\{\mathbf{\tilde\gamma}(x_0) + \mathbf{1}(1-\mathbf{1}'\mathbf{\Gamma}_Z^{-1}\mathbf{\tilde\gamma}(x_0))/(\mathbf{1}'\mathbf{\Gamma}_Z^{-1}\mathbf{1})\}'\mathbf{\Gamma}_Z^{-1}}_{\hat\lambda}Z$$`
+- where `\(\mathbf{\tilde\gamma}(x_0)\)` is the vector containing the semivariogram evaluated between `\(x_0\)` and every other point, and 
+
+- `\(\mathbf{\Gamma}_Z\)` is the `\(m\times m\)` matrix containing all semivariogram evaluations for all sampled point pairs.
+
+--
+
+- See Cressie and Wikle (2011) for similar derivation for `\(\sigma^2(x_0)\)`, an estimate of the prediction error
+
+--
+
+Other helpful resources [here](https://www.publichealth.columbia.edu/research/population-health-methods/kriging-interpolation)
+
+---
+# Forms of kriging
+
+There are **three** main forms of kriging:
+
+--
+
+1. **Simple:** The mean of the entire field is **constant** and **known** [restrictive, not usually realistic]
+
+--
+
+2. **Ordinary:** The mean of the entire field is **constant** but **unknown** [derivation shown above; most common]
+
+--
+
+3. **Universal:** The mean of the field varies over space and can be estimated using measured variables [requires knowledge of and reason for trend in mean]
+
+--
+
+- There are also other forms! E.g., quantile kriging, log-normal kriging, IRFk-kriging, etc.
+
+--
+
+- We will work on implementation in `R` in the next lab.
+
+---
+# Forms of kriging
+
+&lt;img src="hess-23-1633-2019-f07-thumb.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+_Source: Lebrenz and Bardossy (2019)_
+
+---
+# Kriging summary
+
+#### Pros:
+- Under each set of assumptions specific to the kriging form, kriging is the best linear unbiased predictor ("BLUP")
+- Weights are determined almost entirely by the data, instead of a-priori assumptions 
+- Exact
+- Provides a measure of precision: `\(\sigma^2(x_0)\)`
+
+--
+
+#### Cons:
+- Nonlinear methods may perform better (e.g., [ML methods](https://doi.org/10.1016/j.envsoft.2013.12.008))
+- Variogram has to be approximated/estimated
+- Complex/computationally intensive
+
+---
+# A note of caution on interpolation
+
+#### All spatial interpolation approaches work best if:
+
+- The observed data are relatively **dense and well distributed** throughout the region of interest
+
+--
+
+- You have a lot of observations
+
+--
+
+#### All spatial interpolation approaches should be used cautiously, especially if: 
+
+--
+
+- You have **highly clustered** data with a lot of open space between them
+
+--
+
+- You don’t have very many observations
+
+---
+
+class: center, middle
+
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+
+---
+exclude: true
+
+&lt;style type="text/css"&gt;
+@media print {
+  .has-continuation {
+    display: block;
+  }
+}
+&lt;/style&gt;
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

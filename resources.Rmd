@@ -154,30 +154,28 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
 
 - **Assignment:** Assignment 4 (posted TBD, due TBD)
 
-<!--
-### Week 9
 
-- **Slides 09:** Time series analysis [html](slides/09-timeseries/09-timeseries.html) [pdf](slides/09-timeseries/09-timeseries.pdf)
+### Week 8
 
-- **Slides 10:** Spatial interpolation and kriging [html](slides/10-kriging/10-kriging.html) [pdf](slides/10-kriging/10-kriging.pdf) 
+- **Slides 08:** Time series analysis [html](slides/08-timeseries/08-timeseries.html) [pdf](slides/08-timeseries/08-timeseries.pdf)
+
 
 - **Reading:** Chapters 2 and 3 in [Hyndman & Athanasopoulos](https://otexts.com/fpp3/)
 + [Chapters 2, 3](https://otexts.com/fpp3/), _Forecasting: Principles and Practice_ 
 
-- **Lab:** Kriging in `R` [**delayed** to Week 10]
+- **Lab:** None! Happy Thanksgiving
   
-- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
--->
-<!--
-### Week 10
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 12/08, 5pm)
 
-- **Slides 10:** Spatial interpolation and kriging [html](slides/10-kriging/10-kriging.html) [pdf](slides/10-kriging/10-kriging.pdf) 
 
-- **Lab:** Kriging in `R` [**delayed** to Week 11]  [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html).
+### Week 9
+
+- **Slides 09:** Spatial interpolation and kriging [html](slides/09-kriging/09-kriging.html) [pdf](slides/09-kriging/09-kriging.pdf) 
+
+- **Lab:** Kriging in `R` [**likely postponed** to Week 10]  <!-- [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/08-week-eight/week-8-lab.Rmd), [answers](labs/08-week-eight/week-8-lab-answers.Rmd), [answers in html](labs/08-week-eight/week-8-lab-answers.html). -->
   
-- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 11/23, 5pm)
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 12/08, 5pm)
 
--->
 <!--
 ### Week 11
 
