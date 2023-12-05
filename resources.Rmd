@@ -175,17 +175,17 @@ All lecture slides, readings, and labs will be posted here each week. Assignment
   
 - **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 12/08, 5pm)
 
-<!--
-### Week 11
 
-- **Lab (Tuesday 11/29):** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/10-week-ten/week-10-lab.Rmd), [answers](labs/10-week-ten/week-10-lab-answers.Rmd), [answers in html](labs/10-week-ten/week-10-lab-answers.html). 
+### Week 10
+
+- **Lab (Tuesday 12/05):** Kriging in `R` [data](https://www.dropbox.com/s/ganv3ofxjjobgds/week-ten-data.RDS?dl=0) [markdown](labs/10-week-ten/week-10-lab.Rmd), [answers](labs/10-week-ten/week-10-lab-answers.Rmd), [answers in html](labs/10-week-ten/week-10-lab-answers.html). 
   
-- **Slides (Thursday 12/1)**: Applying environmental data science (lots of stats!) to climate change equity research and policy [pdf](https://www.dropbox.com/s/c75fbsi8pq4m2c5/Climate_equity__EDS_222_lecture.pdf?dl=0) 
+- **Thursday 12/07**: Guest lecture by Anna Boser, Bren PhD student. Stats in ecohydrology!
+  
+- **Assignment:** Assignment 4: Hypothesis testing and time series analysis (due 12/08, 5pm)
 
-- **Further reading for those interested**: [Rode et al. (2021)](https://www.nature.com/articles/s41586-021-03883-8); [Carleton et al. (2022)](https://academic.oup.com/qje/article-abstract/137/4/2037/6571943); [Carleton \& Greenstone (2022)](https://doi.org/10.1086/720988)
+- **Final projects next week!** Presentations: 12/12 4-7pm, see schedule and upload materials [here](https://drive.google.com/drive/folders/1S6VKnQDNLWpJzp-KnVSFJ073Vsv7f1MH?usp=drive_link)
 
-- **Final projects!** Presentations: 12/6 [TBD on Zoom vs in-person]
--->
 <!--
 -   RStudio's [`distill` website](https://rstudio.github.io/distill/)
 -   Inspiration and examples from the [distillery](https://distillery.rbind.io/showcase.html)

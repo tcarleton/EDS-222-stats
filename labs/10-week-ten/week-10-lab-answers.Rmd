@@ -30,7 +30,6 @@ if(length(new.packages)) install.packages(new.packages)
 ```{r, echo = TRUE, eval = TRUE}
 library(tidyverse)
 library(sf)
-library(sp)
 library(raster)
 library(gstat)
 library(automap)
@@ -48,34 +47,15 @@ knitr::opts_chunk$set(echo = TRUE)
 rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
 ```
 
-5. Generate this function. We will use it for plotting later -- it is not necessary at all, it will just make things look pretty.
-
-```{r}
-plot_my_gstat_output <- function(raster_object, object_name){
-  
-  df <- rasterToPoints(raster_object) %>% as_tibble()
-  colnames(df) <- c("X", "Y", "Z")
-  
-  ggplot(df, aes(x = X, y = Y, fill = Z)) +
-    geom_raster() +
-    ggtitle(label = object_name) +
-    scale_fill_viridis(option = "B", limits = c(48, 101)) +
-    theme_void() +
-    theme(
-      plot.title = element_text(hjust = 0.5)
-    )
-}
-```
-
 # Section 1: Spatial point data
 
-The data for this tutorial is a xyz-file giving us the height of the groundwater table in a part of the German state of North Rhine-Westphalia in 1988. 
+The data for this tutorial is a xyz-file giving us the depth of the groundwater table in a part of the German state of North Rhine-Westphalia in 1988. 
 
 We have measures of the groundwater level in 1988 at a limited number of monitoring wells, but our goal is ultimately to estimate the groundwater level throughout the surrounding region. This is often the case when studying groundwater, which is generally measured with a small set of monitoring wells.
 
 Here let's just take a look at our input data:
 
-1. Load the `week-eight-data.RDS` file into R using `readRDS`.
+1. Load the `week-ten-data.RDS` file into R using `readRDS`.
 
 2. Take a look -- what is the format? How many dimensions? Why? 
 
@@ -88,7 +68,7 @@ head(wellobs)
 
 3. Use `ggplot` to plot the locations of the monitoring wells as points, with color indicating depth of the well. I'm going to use `viridis` because it's aesthetically nice and `theme_classic()` to clean up the plot a bit.
 
-```{r}
+```{r, echo=T}
 wellobs %>% 
   ggplot(
   mapping = aes(x = X, y = Y, color = Z)) +
@@ -98,6 +78,8 @@ wellobs %>%
 ```
 
 4. What do you notice about the spatial correlation in this plot? Does it seem reasonable to attempt spatial interpolation in this setting?
+
+**Answer: This looks like ideal data for spatial interpolation. Points are well distributed across the sample (i.e., no clusters with big open white spaces), and there appears to be spatial correlation indicating spatial information will be helpful in estimating depth in unmonitored locations.**
 
 # Section 2: Creating a Variogram
 
@@ -114,19 +96,19 @@ wellobs_sf <- st_as_sf(wellobs, coords = c("X", "Y"), crs = 25832) %>%
 
 2. Second, use the function `autofitVariogram` from the `automap` package to compute semivariances as a function of distance and to fit a variogram model through those points. Recall from class that you can choose the type of variogram model you want to fit to the data, such as spherical or Gaussian. However, here we will let `autofitVariogram` choose the model that best fits the data for us.
 
-The first argument of `autofitVariogram` is the variogram formula defining the response variable we're interested in and any possible regressors which determine the mean. Here, we will assume we are only using our monitoring wells to interpolate, so we have no other regressors to include in our estimate of the mean. Therefore, use `Z~1` as the formula. The second argument is our data -- annoyingly, `automap` only plays nicely with `sp` objects instead of `sf` objects, so we'll have to transform our `sf` into an `sp` within this operation.
+The first argument of `autofitVariogram` is the variogram formula defining the response variable we're interested in and any possible regressors which determine the mean. Here, we will assume we are only using our monitoring wells to interpolate, so we have no other regressors to include in our estimate of the mean. Therefore, use `Z~1` as the formula. The second argument is our data (in `sf` format).
 
 Save the column `var_model` from the output; lots of other things are also stored that we don't want to worry about.
 
 ```{r}
-v_mod_full <- automap::autofitVariogram(Z~1, as(wellobs_sf, "Spatial"))
+v_mod_full <- automap::autofitVariogram(Z~1, wellobs_sf)
 
 v_mod <- v_mod_full$var_model
 head(v_mod)
 ```
 3. Plot this variogram model using `plot()` and passing the full model as an argument. Does it seem to fit the data well? 
 
-```{r}
+```{r, echo=TRUE}
 plot(v_mod_full)
 
 # Note: text next to dots is the number of pairs used to estimate the semi variance!
@@ -134,31 +116,13 @@ plot(v_mod_full)
 
 # Section 3: Define a target grid
 
-In order to interpolate we need a target grid with a target set of coordinates (“X”, “Y”) for which the modeled variable (“Z”) to be interpolated. This means we come up with an empty grid or raster. This holds true for kriging with `gstat`, too, except everything is a little bit more complicated, because we need to do it in `sp`.
+In order to interpolate we need a target grid with a target set of coordinates (“X”, “Y”) for which the modeled variable (“Z”) to be interpolated. This means we come up with an empty grid or raster. Beware -- the finer resolution the grid, the longer kriging will take.
 
-1. Define a grid based on the bounding box of our observations. Use a 100 unit pixel size and set `what = "centers"` to center the X-Y coordinates on the middle of each grid cell.
+1. Define a grid based on the bounding box of our observations. I recommend using a 200 unit cell size (increasing cell size will make kriging run faster, but will lower the resolution of your output).
 
-```{r}
-grd_100_sf <- wellobs_sf %>% 
-  st_bbox() %>% # gets the bbox of our observations
-  st_as_sfc() %>% # make the bbox an sfc object
-  st_make_grid( # make the grid
-  cellsize = c(100, 100), # 100m pixel size
-  what = "centers"
-  ) %>%
-  st_as_sf() %>% # get back to sf object from sfc
-  cbind(., st_coordinates(.)) # ensure you keep tracking your X-Y coordinates
-
-# Make sure you can interpret these figures -- why do these two figures together show an empty X-Y grid? 
-plot(grd_100_sf)
-```
-
-2. Make the grid work for gstat by converting it to `sp`, telling `R` and `sp` that this object _is_ gridded, then finally convert to `SpatialPixels`. Yes, this is annoying. No, I don't know a better way than `gstat` to do kriging! Additional tutorial [here](https://mgimond.github.io/Spatial/interpolation-in-r.html), using similar approaches.
-
-```{r}
-grd_100_sp <- as(grd_100_sf, "Spatial") # converting to {sp} format
-gridded(grd_100_sp) <- TRUE             # informing the object that it is a grid
-grd_100_sp <- as(grd_100_sp, "SpatialPixels") # specifying what kind of grid
+```{r, echo=T}
+grd_sf <- st_make_grid(wellobs_sf, cellsize = 200)
+plot(grd_sf)
 ```
 
 # Section 4: Ordinary Kriging
@@ -171,26 +135,29 @@ In `gstat`, the main way to differentiate between different kinds of kriging (or
 
 1. Use the `krige()` function from `gstat` to generate a full set of predictions of groundwater levels at all locations across the region.
 
-```{r}
+```{r, echo = T}
 OK <- krige(
-  Z~1,                       # Z is our variable and "~1" means "depends on mean"
-  as(wellobs_sf, "Spatial"), # input data in {sp} format
-  grd_100_sp,                # locations to interpolate at
-  model = v_mod           # the variogram model fitted above
-  )
+  Z~1, 
+  wellobs_sf,
+  grd_sf,
+  model = v_mod
+)
+```
 
-# Check out the dimensions of the "OK" object. Does this make sense?
+Investigate the dimensions of the `OK` object. `krige()` will save the predicted value in `OK$var1.pred`, and the estimated variance in `OK$var1.var`. Do these values look like they make sense to you?
+
+```{r, echo=TRUE}
+
 dim(OK)
 
-# krige() will save the predicted value in OK$var1.pred, and the estimated variance in OK$var1.var. Do these values look like they make sense to you?
 head(OK$var1.pred)
 head(OK$var1.var)
 ```
 
-2. Take a look at your predictions (_always_ a good idea) by plotting the raw monitoring data next to a raster of your kriging-based predictions. For the kriging output, use the `plot_my_gstat_output()` function you generated earlier. Pass `OK` into this function as a raster.
+2. Take a look at your predictions (_always_ a good idea) by plotting the raw monitoring data next to a raster of your kriging-based predictions. For the kriging output, use `geom_raster()`.
 
-```{r}
-# Raw wells
+```{r, echo = T}
+# Plot the raw wells using geom_point()
 p_raw = ggplot(
   data = wellobs,
   mapping = aes(x = X, y = Y, color = Z)
@@ -203,10 +170,18 @@ p_raw = ggplot(
       plot.title = element_text(hjust = 0.5)
     )
 
-# Ordinary Kriging output  
-p_kriging = plot_my_gstat_output(raster(OK), "Ordinary Kriging") # a simple `plot(raster(OK))` also works just fine
-  
+# Plot the kriging output using geom_raster()
+p_kriging <-  ggplot(OK, aes(x = x, y = y, fill = var1.pred)) +
+    geom_raster() +
+    ggtitle(label = "Ordinary Kriging") +
+    scale_fill_viridis(option = "B", limits = c(48, 101)) +
+    theme_void() +
+    theme(
+      plot.title = element_text(hjust = 0.5)
+    ) + guides(fill=guide_legend(title="Z", reverse=TRUE))
+
 p_raw + p_kriging
+
 ```
 
-Based on this visual, how well do you think ordinary kriging worked? What other methods would you try next?
+Based on this visual, how well do you think ordinary kriging worked? What other methods would you consider trying?

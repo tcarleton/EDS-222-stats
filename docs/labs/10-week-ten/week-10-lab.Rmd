@@ -1,6 +1,6 @@
 ---
 title: "EDS 222: Week 10: In-class Lab"
-author: "{}"
+author: "{Student Name}"
 date: "`r Sys.Date()`"
 output:
   tufte::tufte_html: default
@@ -30,7 +30,6 @@ if(length(new.packages)) install.packages(new.packages)
 ```{r, echo = TRUE, eval = TRUE}
 library(tidyverse)
 library(sf)
-library(sp)
 library(raster)
 library(gstat)
 library(automap)
@@ -45,47 +44,29 @@ knitr::opts_chunk$set(echo = TRUE)
 4. Set your working directory
 
 ```{r}
-rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data") # you need to change this to fit your local file structure!
-```
-
-5. Generate this function. We will use it for plotting later -- it is not necessary at all, it will just make things look pretty.
-
-```{r}
-plot_my_gstat_output <- function(raster_object, object_name){
-  
-  df <- rasterToPoints(raster_object) %>% as_tibble()
-  colnames(df) <- c("X", "Y", "Z")
-  
-  ggplot(df, aes(x = X, y = Y, fill = Z)) +
-    geom_raster() +
-    ggtitle(label = object_name) +
-    scale_fill_viridis(option = "B", limits = c(48, 101)) +
-    theme_void() +
-    theme(
-      plot.title = element_text(hjust = 0.5)
-    )
-}
+rootdir <- ("~/Dropbox/Teaching/UCSB/EDS_222/EDS222_data")
 ```
 
 # Section 1: Spatial point data
 
-The data for this tutorial is a xyz-file giving us the height of the groundwater table in a part of the German state of North Rhine-Westphalia in 1988. 
+The data for this tutorial is a xyz-file giving us the depth of the groundwater table in a part of the German state of North Rhine-Westphalia in 1988. 
 
 We have measures of the groundwater level in 1988 at a limited number of monitoring wells, but our goal is ultimately to estimate the groundwater level throughout the surrounding region. This is often the case when studying groundwater, which is generally measured with a small set of monitoring wells.
 
 Here let's just take a look at our input data:
 
-1. Load the `week-eight-data.RDS` file into R using `readRDS`.
+1. Load the `week-ten-data.RDS` file into R using `readRDS`.
 
 2. Take a look -- what is the format? How many dimensions? Why? 
 
-```{r}
+```{r, echo=TRUE}
+#wellobs <- readRDS("week-ten-data.RDS") #simple way, put in same directory
 
 ```
 
 3. Use `ggplot` to plot the locations of the monitoring wells as points, with color indicating depth of the well. I'm going to use `viridis` because it's aesthetically nice and `theme_classic()` to clean up the plot a bit.
 
-```{r}
+```{r, echo=T}
 
 ```
 
@@ -105,32 +86,27 @@ When you do this, make sure to save the coordinates "X" and "Y" in the resulting
 
 2. Second, use the function `autofitVariogram` from the `automap` package to compute semivariances as a function of distance and to fit a variogram model through those points. Recall from class that you can choose the type of variogram model you want to fit to the data, such as spherical or Gaussian. However, here we will let `autofitVariogram` choose the model that best fits the data for us.
 
-The first argument of `autofitVariogram` is the variogram formula defining the response variable we're interested in and any possible regressors which determine the mean. Here, we will assume we are only using our monitoring wells to interpolate, so we have no other regressors to include in our estimate of the mean. Therefore, use `Z~1` as the formula. The second argument is our data -- annoyingly, `automap` only plays nicely with `sp` objects instead of `sf` objects, so we'll have to transform our `sf` into an `sp` within this operation.
+The first argument of `autofitVariogram` is the variogram formula defining the response variable we're interested in and any possible regressors which determine the mean. Here, we will assume we are only using our monitoring wells to interpolate, so we have no other regressors to include in our estimate of the mean. Therefore, use `Z~1` as the formula. The second argument is our data (in `sf` format).
 
 Save the column `var_model` from the output; lots of other things are also stored that we don't want to worry about.
 
 ```{r}
 
 ```
+
 3. Plot this variogram model using `plot()` and passing the full model as an argument. Does it seem to fit the data well? 
 
-```{r}
+```{r, echo=TRUE}
 
 ```
 
 # Section 3: Define a target grid
 
-In order to interpolate we need a target grid with a target set of coordinates (“X”, “Y”) for which the modeled variable (“Z”) to be interpolated. This means we come up with an empty grid or raster. This holds true for kriging with `gstat`, too, except everything is a little bit more complicated, because we need to do it in `sp`.
+In order to interpolate we need a target grid with a target set of coordinates (“X”, “Y”) for which the modeled variable (“Z”) to be interpolated. This means we come up with an empty grid or raster. Beware -- the finer resolution the grid, the longer kriging will take.
 
-1. Define a grid based on the bounding box of our observations. Use a 100 unit pixel size and set `what = "centers"` to center the X-Y coordinates on the middle of each grid cell.
+1. Define a grid based on the bounding box of our observations. I recommend using a 200 unit cell size (increasing cell size will make kriging run faster, but will lower the resolution of your output).
 
-```{r}
-
-```
-
-2. Make the grid work for gstat by converting it to `sp`, telling `R` and `sp` that this object _is_ gridded, then finally convert to `SpatialPixels`. Yes, this is annoying. No, I don't know a better way than `gstat` to do kriging! Additional tutorial [here](https://mgimond.github.io/Spatial/interpolation-in-r.html), using similar approaches.
-
-```{r}
+```{r, echo=T}
 
 ```
 
@@ -144,14 +120,20 @@ In `gstat`, the main way to differentiate between different kinds of kriging (or
 
 1. Use the `krige()` function from `gstat` to generate a full set of predictions of groundwater levels at all locations across the region.
 
-```{r}
+```{r, echo = T}
 
 ```
 
-2. Take a look at your predictions (_always_ a good idea) by plotting the raw monitoring data next to a raster of your kriging-based predictions. For the kriging output, use the `plot_my_gstat_output()` function you generated earlier. Pass `OK` into this function as a raster.
+Investigate the dimensions of the `OK` object. `krige()` will save the predicted value in `OK$var1.pred`, and the estimated variance in `OK$var1.var`. Do these values look like they make sense to you?
 
-```{r}
+```{r, echo=TRUE}
 
 ```
 
-Based on this visual, how well do you think ordinary kriging worked? What other methods would you try next?
+2. Take a look at your predictions (_always_ a good idea) by plotting the raw monitoring data next to a raster of your kriging-based predictions. For the kriging output, use `geom_raster()`.
+
+```{r, echo = T}
+
+```
+
+Based on this visual, how well do you think ordinary kriging worked? What other methods would you consider trying?
